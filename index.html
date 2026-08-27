@@ -26,7 +26,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3">
       
       <!-- Brand Logo -->
-      <a href="#" class="flex items-center gap-2.5 group">
+      <a href="#" onclick="filterByTag('all')" class="flex items-center gap-2.5 group">
         <img 
           src="images/logo.jpg" 
           alt="VEHRAAN" 
@@ -38,12 +38,12 @@
 
       <!-- Desktop Nav Links -->
       <nav class="hidden lg:flex items-center gap-8 text-[11px] font-semibold uppercase tracking-[0.15em] text-neutral-400">
-        <a href="#" class="hover:text-white transition">Home</a>
-        <button onclick="filterByTag('men')" class="hover:text-white transition">Men</button>
-        <button onclick="filterByTag('women')" class="hover:text-white transition">Women</button>
-        <a href="#new-arrivals" class="hover:text-white transition">New Arrivals</a>
-        <a href="#best-sellers" class="hover:text-white transition">Best Sellers</a>
-        <button onclick="openSizeGuideModal()" class="hover:text-white transition">Fit Guide</button>
+        <button onclick="filterByTag('all')" class="nav-item hover:text-white transition cursor-pointer">Home</button>
+        <button onclick="filterByTag('men')" class="nav-item hover:text-white transition cursor-pointer">Men</button>
+        <button onclick="filterByTag('women')" class="nav-item hover:text-white transition cursor-pointer">Women</button>
+        <a href="#new-arrivals" onclick="filterByTag('all')" class="hover:text-white transition">New Arrivals</a>
+        <a href="#best-sellers" onclick="filterByTag('all')" class="hover:text-white transition">Best Sellers</a>
+        <button onclick="openSizeGuideModal()" class="hover:text-white transition cursor-pointer">Fit Guide</button>
       </nav>
 
       <!-- Desktop Search -->
@@ -60,12 +60,12 @@
       <!-- User & Cart Actions -->
       <div class="flex items-center gap-2 sm:gap-3">
         <div id="auth-container">
-          <button onclick="openAuthModal()" class="text-neutral-300 hover:text-white uppercase tracking-wider text-[10px] sm:text-[11px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 border border-white/10 rounded-lg hover:border-white/30 transition">
+          <button onclick="openAuthModal()" class="text-neutral-300 hover:text-white uppercase tracking-wider text-[10px] sm:text-[11px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 border border-white/10 rounded-lg hover:border-white/30 transition cursor-pointer">
             Sign In
           </button>
         </div>
 
-        <button onclick="toggleCart(true)" class="relative p-1.5 sm:p-2 text-neutral-300 hover:text-white flex items-center gap-1.5 bg-[#0d0d0d] border border-white/10 rounded-lg">
+        <button onclick="toggleCart(true)" class="relative p-1.5 sm:p-2 text-neutral-300 hover:text-white flex items-center gap-1.5 bg-[#0d0d0d] border border-white/10 rounded-lg cursor-pointer transition hover:border-white/30">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
           </svg>
@@ -105,10 +105,10 @@
       </p>
 
       <div class="flex items-center justify-center gap-3 pt-2">
-        <a href="#new-arrivals" class="px-6 py-2.5 bg-white hover:bg-neutral-200 text-black text-xs font-bold uppercase tracking-[0.15em] rounded-full transition">
+        <a href="#new-arrivals" onclick="filterByTag('all')" class="px-6 py-2.5 bg-white hover:bg-neutral-200 text-black text-xs font-bold uppercase tracking-[0.15em] rounded-full transition">
           Shop Drops
         </a>
-        <button onclick="openSizeGuideModal()" class="px-6 py-2.5 bg-transparent hover:bg-white/5 text-neutral-300 border border-white/15 text-xs font-bold uppercase tracking-[0.15em] rounded-full transition">
+        <button onclick="openSizeGuideModal()" class="px-6 py-2.5 bg-transparent hover:bg-white/5 text-neutral-300 border border-white/15 text-xs font-bold uppercase tracking-[0.15em] rounded-full transition cursor-pointer">
           Fit Guide
         </button>
       </div>
@@ -117,7 +117,7 @@
     <!-- Curated Line Pills -->
     <section class="space-y-3 reveal text-center">
       <div class="flex flex-wrap items-center justify-center gap-2">
-        <button onclick="filterByTag('all')" class="category-pill">All Styles</button>
+        <button onclick="filterByTag('all')" class="category-pill active">All Styles</button>
         <button onclick="filterByTag('men')" class="category-pill">Men</button>
         <button onclick="filterByTag('women')" class="category-pill">Women</button>
         <button onclick="filterByTag('anime')" class="category-pill">Anime</button>
@@ -126,7 +126,7 @@
       </div>
     </section>
 
-    <!-- Fresh Drops -->
+    <!-- Fresh Drops Section -->
     <section id="new-arrivals" class="space-y-6 reveal">
       <div class="flex items-center justify-between border-b border-white/5 pb-3">
         <div>
@@ -143,11 +143,11 @@
       <span class="text-[9px] uppercase tracking-[0.25em] text-neutral-500 font-mono-code">LIMITED ARCHIVE</span>
       <h2 class="text-xl sm:text-3xl font-bold uppercase text-white font-cinzel">Essential Form & Substance.</h2>
       <p class="text-xs text-neutral-400 max-w-sm mx-auto leading-relaxed">
-        Flat 50% introductory pricing across all Drop 001 heavyweight streetwear apparel.
+        Flat introductory pricing across all Drop 001 heavyweight streetwear apparel.
       </p>
     </section>
 
-    <!-- Trending Now -->
+    <!-- Trending Now Section -->
     <section id="best-sellers" class="space-y-6 reveal">
       <div class="flex items-center justify-between border-b border-white/5 pb-3">
         <div>
@@ -195,10 +195,10 @@
       <div class="space-y-2">
         <h4 class="text-xs font-bold uppercase tracking-wider text-white">Policies</h4>
         <ul class="text-[11px] text-neutral-400 space-y-1.5">
-          <li><button onclick="openPolicyModal('about')" class="hover:text-white">About Us</button></li>
-          <li><button onclick="openPolicyModal('shipping')" class="hover:text-white">Shipping & Dispatch</button></li>
-          <li><button onclick="openPolicyModal('returns')" class="hover:text-white">Returns & Exchanges</button></li>
-          <li><button onclick="openSizeGuideModal()" class="hover:text-white">Fit Matrix</button></li>
+          <li><button onclick="openPolicyModal('about')" class="hover:text-white cursor-pointer">About Us</button></li>
+          <li><button onclick="openPolicyModal('shipping')" class="hover:text-white cursor-pointer">Shipping & Dispatch</button></li>
+          <li><button onclick="openPolicyModal('returns')" class="hover:text-white cursor-pointer">Returns & Exchanges</button></li>
+          <li><button onclick="openSizeGuideModal()" class="hover:text-white cursor-pointer">Fit Matrix</button></li>
         </ul>
       </div>
 
@@ -222,18 +222,62 @@
     </div>
   </footer>
 
+  <!-- PRODUCT QUICK-VIEW / DETAILS MODAL -->
+  <div id="product-details-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-[#0c0c0c] border border-white/15 rounded-2xl max-w-2xl w-full p-6 sm:p-8 relative shadow-2xl max-h-[92vh] overflow-y-auto">
+      <button onclick="closeProductDetailsModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-lg p-2 transition cursor-pointer">✕</button>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        <!-- Product Image Preview -->
+        <div class="w-full aspect-[1/1.15] bg-[#060606] rounded-xl border border-white/10 p-4 flex items-center justify-center overflow-hidden">
+          <img id="modal-p-img" src="" alt="Product Image" class="w-full h-full object-contain" />
+        </div>
+
+        <!-- Details & Actions -->
+        <div class="space-y-4 text-left">
+          <div>
+            <span id="modal-p-badge" class="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-mono-code bg-white/5 px-2.5 py-1 rounded border border-white/5 inline-block mb-2">240 GSM HEAVYWEIGHT</span>
+            <h2 id="modal-p-name" class="text-base sm:text-lg font-bold uppercase tracking-wider text-white font-cinzel"></h2>
+            <div class="flex items-center gap-3 mt-1">
+              <span id="modal-p-price" class="text-sm font-bold text-white font-mono-code">₹399</span>
+              <span class="text-[10px] text-emerald-400 font-mono-code">Cash on Delivery Available</span>
+            </div>
+          </div>
+
+          <p id="modal-p-desc" class="text-xs text-neutral-400 leading-relaxed font-sans"></p>
+
+          <!-- Sizing Selection -->
+          <div class="space-y-1.5 pt-2">
+            <div class="flex items-center justify-between">
+              <label class="text-[10px] uppercase font-mono-code text-neutral-300">Select Fit Size</label>
+              <button onclick="openSizeGuideModal()" class="text-[10px] text-neutral-500 hover:text-white underline font-mono-code cursor-pointer">Size Matrix</button>
+            </div>
+            <div id="modal-p-sizes" class="flex gap-2"></div>
+          </div>
+
+          <!-- Add to Bag Button inside Modal -->
+          <div class="pt-3">
+            <button id="modal-p-add-btn" class="w-full py-3.5 bg-white hover:bg-neutral-200 text-black font-bold text-xs uppercase tracking-[0.15em] rounded-xl transition duration-200 shadow-xl cursor-pointer">
+              ADD TO BAG
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- AUTHENTICATION MODAL -->
   <div id="auth-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 hidden">
     <div class="bg-[#0a0a0a] border border-white/10 rounded-2xl max-w-sm w-full p-6 relative space-y-4 shadow-2xl">
-      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm">✕</button>
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm cursor-pointer">✕</button>
       
       <div class="text-center space-y-1">
         <span class="text-[9px] uppercase tracking-[0.3em] text-neutral-500 font-mono-code">MEMBER ACCESS</span>
         <h3 class="text-sm font-bold uppercase tracking-wider text-white">Sign In</h3>
-        <p class="text-[11px] text-neutral-400 leading-relaxed">Sign in with Google to access your bag and checkout.</p>
+        <p class="text-[11px] text-neutral-400 leading-relaxed">Sign in with Google to access your bag and fast checkout.</p>
       </div>
 
-      <button onclick="handleGoogleSignIn()" id="btn-google-auth" class="w-full py-3 bg-white hover:bg-neutral-200 text-black rounded-xl text-xs font-bold uppercase tracking-wider transition duration-200 flex items-center justify-center gap-3 shadow-lg">
+      <button onclick="handleGoogleSignIn()" id="btn-google-auth" class="w-full py-3 bg-white hover:bg-neutral-200 text-black rounded-xl text-xs font-bold uppercase tracking-wider transition duration-200 flex items-center justify-center gap-3 shadow-lg cursor-pointer">
         <svg class="w-4 h-4" viewBox="0 0 24 24">
           <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/>
           <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
@@ -246,7 +290,7 @@
   </div>
 
   <!-- SHOPPING BAG DRAWER -->
-  <div id="cart-drawer-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 hidden transition-opacity"></div>
+  <div id="cart-drawer-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 hidden transition-opacity cursor-pointer"></div>
   <div id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-[#080808] border-l border-white/10 z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between p-6">
     <div>
       <div class="flex items-center justify-between pb-4 border-b border-white/10">
@@ -254,7 +298,7 @@
           <h3 class="text-xs font-bold uppercase tracking-wider text-white font-cinzel">Shopping Bag</h3>
           <span class="text-[10px] text-neutral-400 font-mono-code">(<span id="drawer-count">0</span>)</span>
         </div>
-        <button onclick="toggleCart(false)" class="text-neutral-400 hover:text-white text-sm">✕</button>
+        <button onclick="toggleCart(false)" class="text-neutral-400 hover:text-white text-sm cursor-pointer">✕</button>
       </div>
 
       <div id="cart-items-container" class="mt-4 space-y-3 overflow-y-auto max-h-[55vh]"></div>
@@ -275,7 +319,7 @@
         <span id="cart-total-price" class="font-bold text-white font-mono-code text-sm">₹0</span>
       </div>
 
-      <button id="btn-proceed" onclick="openCheckoutModal()" class="w-full py-3.5 bg-white hover:bg-neutral-200 text-black rounded-xl text-xs font-bold uppercase tracking-[0.2em] transition mt-2">
+      <button id="btn-proceed" onclick="openCheckoutModal()" class="w-full py-3.5 bg-white hover:bg-neutral-200 text-black rounded-xl text-xs font-bold uppercase tracking-[0.2em] transition mt-2 cursor-pointer shadow-xl">
         Proceed to Checkout
       </button>
     </div>
@@ -284,7 +328,7 @@
   <!-- CHECKOUT MODAL -->
   <div id="checkout-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 hidden">
     <div class="bg-[#0d0d0d] border border-white/10 rounded-2xl max-w-md w-full p-6 relative space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
-      <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm">✕</button>
+      <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm cursor-pointer">✕</button>
       
       <div>
         <span class="text-[9px] uppercase tracking-[0.3em] text-neutral-500 font-mono-code">DISPATCH DESK</span>
@@ -298,7 +342,7 @@
         <input type="text" id="order-instagram" placeholder="Instagram Handle (Optional)" class="w-full bg-[#141414] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/30" />
         <textarea id="order-address" required rows="2" placeholder="Full Delivery Address with Landmark & PIN Code" class="w-full bg-[#141414] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/30"></textarea>
         
-        <!-- COD & Delivery Fee Overview -->
+        <!-- COD Summary Box -->
         <div class="p-3.5 bg-[#141414] border border-white/10 rounded-xl space-y-1.5">
           <div class="flex items-center justify-between text-xs">
             <span class="text-white font-semibold">Payment Mode</span>
@@ -314,7 +358,7 @@
           </div>
         </div>
 
-        <button type="submit" id="btn-submit-order" class="w-full py-3.5 bg-white hover:bg-neutral-200 text-black font-bold text-xs uppercase tracking-[0.15em] rounded-xl transition shadow-xl">
+        <button type="submit" id="btn-submit-order" class="w-full py-3.5 bg-white hover:bg-neutral-200 text-black font-bold text-xs uppercase tracking-[0.15em] rounded-xl transition shadow-xl cursor-pointer">
           <span>Place Order (Cash on Delivery)</span>
         </button>
       </form>
@@ -324,7 +368,7 @@
   <!-- FIT MATRIX MODAL -->
   <div id="size-guide-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
     <div class="bg-[#0d0d0d] border border-white/10 rounded-2xl max-w-lg w-full p-6 relative space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
-      <button onclick="closeSizeGuideModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm">✕</button>
+      <button onclick="closeSizeGuideModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm cursor-pointer">✕</button>
       
       <div class="flex items-center justify-between border-b border-white/10 pb-3">
         <div>
@@ -332,8 +376,8 @@
           <h3 class="text-sm font-bold uppercase tracking-wider text-white mt-0.5">Heavyweight Fit Matrix</h3>
         </div>
         <div class="flex bg-[#161616] p-0.5 rounded-lg border border-white/10 text-[10px] font-mono-code">
-          <button id="unit-in-btn" onclick="toggleSizeUnit('in')" class="px-2.5 py-1 bg-white text-black font-bold rounded">IN</button>
-          <button id="unit-cm-btn" onclick="toggleSizeUnit('cm')" class="px-2.5 py-1 text-neutral-400 font-bold rounded">CM</button>
+          <button id="unit-in-btn" onclick="toggleSizeUnit('in')" class="px-2.5 py-1 bg-white text-black font-bold rounded cursor-pointer">IN</button>
+          <button id="unit-cm-btn" onclick="toggleSizeUnit('cm')" class="px-2.5 py-1 text-neutral-400 font-bold rounded cursor-pointer">CM</button>
         </div>
       </div>
 
@@ -356,7 +400,7 @@
   <!-- STUDIO CMS ADMIN MODAL (PIN: 656565) -->
   <div id="admin-modal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-4 hidden">
     <div class="bg-[#0d0d0d] border border-white/15 rounded-2xl max-w-4xl w-full p-6 relative space-y-6 max-h-[92vh] overflow-y-auto shadow-2xl">
-      <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm">✕</button>
+      <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm cursor-pointer">✕</button>
       
       <div class="flex items-center justify-between border-b border-white/10 pb-4">
         <div>
@@ -364,9 +408,9 @@
           <h3 class="text-base font-bold uppercase tracking-wider text-white">Catalog & Orders Management</h3>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="switchAdminTab('add-product')" id="tab-btn-add" class="px-3 py-1.5 bg-white text-black text-xs font-bold uppercase font-mono-code rounded-lg">Add Drop +</button>
-          <button onclick="switchAdminTab('manage-products')" id="tab-btn-manage" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase font-mono-code rounded-lg">Manage Stock</button>
-          <button onclick="switchAdminTab('view-orders')" id="tab-btn-orders" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase font-mono-code rounded-lg">Orders Feed</button>
+          <button onclick="switchAdminTab('add-product')" id="tab-btn-add" class="px-3 py-1.5 bg-white text-black text-xs font-bold uppercase font-mono-code rounded-lg cursor-pointer">Add Drop +</button>
+          <button onclick="switchAdminTab('manage-products')" id="tab-btn-manage" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase font-mono-code rounded-lg cursor-pointer">Manage Stock</button>
+          <button onclick="switchAdminTab('view-orders')" id="tab-btn-orders" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase font-mono-code rounded-lg cursor-pointer">Orders Feed</button>
         </div>
       </div>
 
@@ -388,15 +432,14 @@
 
           <div class="space-y-1">
             <label class="text-[10px] uppercase font-mono-code text-neutral-400">Selling Price (₹ INR)</label>
-            <input type="number" id="adm-price" required placeholder="399" class="w-full bg-[#161616] border border-white/10 rounded-xl px-4 py-2 text-xs text-white focus:outline-none font-mono-code" />
+            <input type="number" id="adm-price" required placeholder="399" value="399" class="w-full bg-[#161616] border border-white/10 rounded-xl px-4 py-2 text-xs text-white focus:outline-none font-mono-code" />
           </div>
 
           <div class="space-y-1">
             <label class="text-[10px] uppercase font-mono-code text-neutral-400">Original Cut Price (₹ INR)</label>
-            <input type="number" id="adm-orig-price" placeholder="799" class="w-full bg-[#161616] border border-white/10 rounded-xl px-4 py-2 text-xs text-white focus:outline-none font-mono-code" />
+            <input type="number" id="adm-orig-price" placeholder="799" value="799" class="w-full bg-[#161616] border border-white/10 rounded-xl px-4 py-2 text-xs text-white focus:outline-none font-mono-code" />
           </div>
 
-          <!-- Gallery Photo Upload Block -->
           <div class="space-y-2 md:col-span-2">
             <label class="text-[10px] uppercase font-mono-code text-neutral-400 block">Product Photo (Gallery Upload)</label>
             <div class="flex items-center gap-4 p-4 bg-[#141414] border border-white/10 rounded-xl">
@@ -414,7 +457,7 @@
           </div>
 
           <div class="md:col-span-2 pt-2">
-            <button type="submit" id="btn-adm-save-product" class="w-full py-3.5 bg-white text-black font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-xl">
+            <button type="submit" id="btn-adm-save-product" class="w-full py-3.5 bg-white text-black font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-xl cursor-pointer">
               Publish Drop Directly to Live Storefront
             </button>
           </div>
@@ -434,7 +477,7 @@
   <!-- POLICY MODAL -->
   <div id="policy-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 hidden">
     <div class="bg-[#0d0d0d] border border-white/10 rounded-2xl max-w-lg w-full p-6 relative space-y-4 shadow-2xl">
-      <button onclick="closePolicyModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm">✕</button>
+      <button onclick="closePolicyModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm cursor-pointer">✕</button>
       <h3 id="policy-modal-title" class="text-xs font-bold uppercase tracking-wider text-white font-cinzel"></h3>
       <div id="policy-modal-body" class="text-[11px] text-neutral-400 space-y-3 leading-relaxed"></div>
     </div>
@@ -443,7 +486,7 @@
   <!-- GLOBAL TOAST -->
   <div id="toast" class="fixed bottom-6 right-6 z-50 bg-[#141414] border border-white/15 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300">
     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-    <span id="toast-msg" class="text-xs text-neutral-200 font-medium"></span>
+    <span id="toast-msg" class="text-xs text-neutral-200 font-medium font-mono-code"></span>
   </div>
 
   <script src="script.js"></script>
