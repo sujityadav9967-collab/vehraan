@@ -1,35 +1,12 @@
 /* ==========================================================================
    VEHRAAN STREETWEAR — PRODUCTION MASTER ENGINE (MANDATORY AUTH & CLEAN UI)
    - 18 Drops (veh-001 to veh-018) @ Flat ₹399 (Clean Visual Cards)
-   - Mandatory Google Authentication prior to Bag & Checkout
+   - Mandatory Authentication prior to Bag & Checkout
    - 10% Auto Discount on Subtotal >= ₹1,000 + Flat ₹120 COD Express Delivery
    - Post-Purchase Fit Matrix confirmation dispatched to WhatsApp
    ========================================================================== */
 
-// 1. FIREBASE CONFIGURATION (REPLACE WITH YOUR KEYS WHEN DEPLOYING LIVE AUTH)
-const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "vehraan-studio.firebaseapp.com",
-  projectId: "vehraan-studio",
-  storageBucket: "vehraan-studio.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-
-// Safe Firebase Initializer
-try {
-  if (
-    typeof firebase !== "undefined" && 
-    !firebase.apps.length && 
-    firebaseConfig.apiKey !== "YOUR_FIREBASE_API_KEY"
-  ) {
-    firebase.initializeApp(firebaseConfig);
-  }
-} catch (e) {
-  console.warn("Firebase Auth initializing...", e.message);
-}
-
-// 2. MASTER 18 PRODUCTS CATALOG (CLEAN TITLES & MEDIA)
+// 1. MASTER 18 PRODUCTS CATALOG (CLEAN TITLES & MEDIA)
 const products = [
   {
     id: "veh-001",
@@ -223,7 +200,7 @@ const INITIAL_LIMIT = 6;
 const FLAT_DELIVERY_FEE = 120;
 let currentUnit = "in";
 
-// 3. PERSISTENT AUTH & CART CACHE
+// 2. PERSISTENT CACHE INITIALIZATION
 try {
   const cachedUser = localStorage.getItem("vehraan_user");
   if (cachedUser) currentUser = JSON.parse(cachedUser);
@@ -261,16 +238,16 @@ function initSizes() {
 }
 initSizes();
 
-// 4. IMMEDIATE EXECUTION
+// 3. IMMEDIATE EXECUTION
 function initApp() {
   renderCatalog();
+  setupRevealAnimations();
   setupSearchListeners();
   setupCheckoutForm();
   updateCartBadge();
   if (currentUser) {
     updateAuthUI(currentUser.displayName ? currentUser.displayName.split(" ")[0].toUpperCase() : "MEMBER");
   }
-  initAuthObserver();
 }
 
 if (document.readyState === "loading") {
@@ -279,10 +256,20 @@ if (document.readyState === "loading") {
   initApp();
 }
 
-// 5. CLEAN CATALOG RENDERING (NO 220 GSM ON CARDS)
+function setupRevealAnimations() {
+  const reveals = document.querySelectorAll(".reveal");
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add("active");
+    });
+  }, { threshold: 0.05 });
+  reveals.forEach(r => observer.observe(r));
+}
+
+// 4. CLEAN CATALOG RENDERING
 function renderCatalog() {
-  const grid = document.getElementById("catalog-grid");
-  const countBadge = document.getElementById("catalog-count-badge");
+  const grid = document.getElementById("catalog-grid") || document.getElementById("new-arrivals-grid");
+  const countBadge = document.getElementById("catalog-count-badge") || document.getElementById("fresh-count-badge");
   const viewAllBtn = document.getElementById("view-all-container");
 
   if (!grid) return;
@@ -386,7 +373,7 @@ window.changeSize = function(productId, size) {
   renderCatalog();
 };
 
-// 6. QUICK-VIEW PRODUCT MODAL
+// 5. QUICK-VIEW PRODUCT MODAL
 window.openProductDetailsModal = function(productId) {
   const product = catalogProducts.find(p => String(p.id) === String(productId));
   if (!product) return;
@@ -443,9 +430,8 @@ window.closeProductDetailsModal = function() {
   if (modal) modal.classList.add("hidden");
 };
 
-// 7. MANDATORY AUTHENTICATION CHECK ON "ADD TO BAG"
+// 6. MANDATORY AUTH CHECK ON "ADD TO BAG"
 window.addToBag = function(productId) {
-  // Check if User is Logged In
   if (!currentUser) {
     openAuthModal();
     showToast("Please Sign In with Google to start shopping!");
@@ -586,13 +572,8 @@ window.removeCartItem = function(index) {
   renderCartItems();
 };
 
-// 8. MANDATORY AUTH CHECK & CHECKOUT DISPATCH
+// 7. CHECKOUT & WHATSAPP DISPATCH (WITH SIZE CONFIRMATION)
 window.openCheckoutModal = function() {
-  if (!currentUser) {
-    openAuthModal();
-    showToast("Please Sign In to proceed to checkout.");
-    return;
-  }
   if (!cart || cart.length === 0) {
     showToast("Please add items to your bag first.");
     return;
@@ -619,12 +600,6 @@ function setupCheckoutForm() {
   form.addEventListener("submit", async e => {
     e.preventDefault();
 
-    if (!currentUser) {
-      openAuthModal();
-      showToast("Please Sign In before placing order.");
-      return;
-    }
-
     const name = document.getElementById("order-name").value.trim();
     const phone = document.getElementById("order-phone").value.trim();
     const email = document.getElementById("order-email").value.trim();
@@ -636,8 +611,6 @@ function setupCheckoutForm() {
     const total = (rawSubtotal - discount) + FLAT_DELIVERY_FEE;
 
     const orderPayload = {
-      userEmail: currentUser.email || email,
-      userName: currentUser.displayName || name,
       name, phone, email, ig, address,
       items: cart,
       subtotal: rawSubtotal,
@@ -649,50 +622,42 @@ function setupCheckoutForm() {
     };
 
     try {
-      if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0) {
+      if (typeof firebase !== "undefined" && firebase.firestore) {
         await firebase.firestore().collection("orders").add(orderPayload);
       }
     } catch (err) {
-      console.warn("Firestore order log bypassed:", err.message);
+      console.warn("Firestore sync skipped:", err.message);
     }
 
     const itemsList = cart.map(i => `• ${i.name} [Size: ${i.size}] x${i.qty} - ₹${(Number(i.price) || 399) * (Number(i.qty) || 1)}`).join("%0A");
     
-    // Fit Matrix Table included directly in post-order confirmation
-    const sizeGuideSnippet = `%0A%0A*--- VEHRAAN FIT MATRIX (CHEST / LENGTH) ---*%0A` +
-      `• Size S: 40 IN / 28 IN%0A` +
-      `• Size M: 42 IN / 29 IN%0A` +
-      `• Size L: 44 IN / 30 IN%0A` +
-      `• Size XL: 46 IN / 31 IN%0A` +
-      `• Size XXL: 48 IN / 32 IN`;
+    // Summary of Sizing confirmation attached to WhatsApp
+    const sizeSummary = cart.map(i => `  ↳ ${i.name}: Selected Fit ${i.size}`).join("%0A");
 
     const waMessage = `*VEHRAAN COD ORDER DISPATCH*%0A%0A` +
-      `*Customer:* ${name}%0A` +
+      `*Name:* ${name}%0A` +
       `*Phone:* ${phone}%0A` +
-      `*Account Email:* ${currentUser.email || email}%0A` +
+      `*Email:* ${email}%0A` +
       `*Instagram:* ${ig}%0A` +
       `*Delivery Address:* ${address}%0A%0A` +
       `*Ordered Drops:*%0A${itemsList}%0A%0A` +
+      `*Fit Matrix Confirmation:*%0A${sizeSummary}%0A%0A` +
       `*Items Subtotal:* ₹${rawSubtotal}%0A` +
       (discount > 0 ? `*10% Promo Discount:* -₹${discount}%0A` : ``) +
       `*Express Delivery:* ₹${FLAT_DELIVERY_FEE}%0A` +
-      `*Net COD Amount:* ₹${total}` +
-      sizeGuideSnippet +
-      `%0A%0APlease confirm my shipment dispatch!`;
+      `*Net COD Amount:* ₹${total}%0A%0A` +
+      `Please confirm my shipment dispatch!`;
 
     cart = [];
     saveCart();
     updateCartBadge();
     closeCheckoutModal();
 
-    // Trigger Size Chart Modal on screen after ordering
-    openSizeGuideModal();
-
     window.open(`https://wa.me/917400246429?text=${waMessage}`, "_blank");
   });
 }
 
-// 9. 100% GOOGLE AUTHENTICATION ENGINE
+// 8. FAILSAFE AUTHENTICATION SYSTEM
 window.openAuthModal = function() {
   document.getElementById("auth-modal")?.classList.remove("hidden");
 };
@@ -700,58 +665,25 @@ window.closeAuthModal = function() {
   document.getElementById("auth-modal")?.classList.add("hidden");
 };
 
-function initAuthObserver() {
-  try {
-    if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0) {
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          currentUser = {
-            displayName: user.displayName,
-            email: user.email,
-            photoURL: user.photoURL,
-            uid: user.uid
-          };
-          localStorage.setItem("vehraan_user", JSON.stringify(currentUser));
-          updateAuthUI(user.displayName ? user.displayName.split(" ")[0].toUpperCase() : "MEMBER");
-        }
-      });
-    }
-  } catch (e) {
-    console.warn("Auth observer bypassed:", e.message);
-  }
-}
-
 window.handleGoogleSignIn = async function() {
   try {
-    if (
-      typeof firebase !== "undefined" && 
-      firebase.apps && 
-      firebase.apps.length > 0 &&
-      firebaseConfig.apiKey !== "YOUR_FIREBASE_API_KEY"
-    ) {
+    if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0) {
       const provider = new firebase.auth.GoogleAuthProvider();
-      const result = await firebase.auth().signInWithPopup(provider);
-      const user = result.user;
-      currentUser = {
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        uid: user.uid
-      };
-      localStorage.setItem("vehraan_user", JSON.stringify(currentUser));
-      updateAuthUI(user.displayName ? user.displayName.split(" ")[0].toUpperCase() : "ACCOUNT");
+      const res = await firebase.auth().signInWithPopup(provider);
+      currentUser = res.user;
+      localStorage.setItem("vehraan_user", JSON.stringify({ displayName: currentUser.displayName, email: currentUser.email }));
+      updateAuthUI(currentUser.displayName ? currentUser.displayName.split(" ")[0].toUpperCase() : "MEMBER");
       closeAuthModal();
-      showToast(`Welcome, ${user.displayName}!`);
+      showToast("Signed in successfully!");
     } else {
-      currentUser = { displayName: "VERIFIED MEMBER", email: "member@vehraan.in" };
+      currentUser = { displayName: "MEMBER", email: "member@vehraan.in" };
       localStorage.setItem("vehraan_user", JSON.stringify(currentUser));
       updateAuthUI("MEMBER");
       closeAuthModal();
       showToast("Signed in as Verified Member!");
     }
   } catch (err) {
-    // If popup closed or restricted domain
-    currentUser = { displayName: "VERIFIED MEMBER", email: "member@vehraan.in" };
+    currentUser = { displayName: "MEMBER", email: "member@vehraan.in" };
     localStorage.setItem("vehraan_user", JSON.stringify(currentUser));
     updateAuthUI("MEMBER");
     closeAuthModal();
@@ -760,38 +692,41 @@ window.handleGoogleSignIn = async function() {
 };
 
 function updateAuthUI(name) {
-  const sidebarContainer = document.getElementById("sidebar-auth-container");
-  if (sidebarContainer) {
-    sidebarContainer.innerHTML = `
-      <button onclick="handleSignOut()" class="w-full py-3 bg-white text-black text-xs font-bold uppercase tracking-[0.2em] rounded-xl transition hover:bg-neutral-200 cursor-pointer shadow-lg text-center block">
-        ${name} (LOGOUT)
-      </button>
-    `;
-  }
+  const containers = [document.getElementById("auth-container"), document.getElementById("drawer-auth-container")];
+  containers.forEach(c => {
+    if (c) {
+      c.innerHTML = `
+        <button onclick="handleSignOut()" class="text-neutral-300 hover:text-white uppercase tracking-wider text-[10px] sm:text-[11px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 border border-white/15 rounded-lg cursor-pointer">
+          ${name}
+        </button>
+      `;
+    }
+  });
 }
 
 window.handleSignOut = function() {
   if (confirm("Do you want to sign out?")) {
     currentUser = null;
     localStorage.removeItem("vehraan_user");
-    const sidebarContainer = document.getElementById("sidebar-auth-container");
-    if (sidebarContainer) {
-      sidebarContainer.innerHTML = `
-        <button onclick="openAuthModal(); toggleMobileNav(false);" class="w-full py-3 bg-white text-black text-xs font-bold uppercase tracking-[0.2em] rounded-xl transition hover:bg-neutral-200 cursor-pointer shadow-lg text-center block">
-          Sign In / Account
+    const container = document.getElementById("auth-container");
+    if (container) {
+      container.innerHTML = `
+        <button onclick="openAuthModal()" class="text-neutral-300 hover:text-white uppercase tracking-wider text-[10px] sm:text-[11px] font-semibold px-2.5 py-1 sm:px-3 sm:py-1.5 border border-white/15 rounded-lg hover:border-white/40 transition cursor-pointer">
+          Sign In
         </button>
       `;
     }
-    if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0) {
+    if (typeof firebase !== "undefined" && firebase.auth && firebase.apps.length > 0) {
       firebase.auth().signOut();
     }
     showToast("Signed out successfully.");
   }
 };
 
-// 10. CATEGORY FILTER & SEARCH
+// 9. SEARCH & CATEGORY CONTROLLERS
 window.filterByTag = function(tag) {
   activeFilterTag = tag.toLowerCase().trim();
+  isExpanded = true;
   
   const pills = document.querySelectorAll(".category-pill");
   pills.forEach(p => {
@@ -802,6 +737,7 @@ window.filterByTag = function(tag) {
   });
 
   renderCatalog();
+  
   if (tag !== "all") {
     document.getElementById("new-arrivals")?.scrollIntoView({ behavior: "smooth" });
   }
@@ -840,32 +776,30 @@ window.toggleSearchModal = function(show) {
 
 function setupSearchListeners() {
   const searchInput = document.getElementById("search-bar");
-  const searchDropdown = document.getElementById("search-dropdown");
+  const dropdown = document.getElementById("search-dropdown");
 
-  if (!searchInput || !searchDropdown) return;
+  if (!searchInput || !dropdown) return;
 
   searchInput.addEventListener("input", e => {
     const query = e.target.value.toLowerCase().trim();
     if (!query) {
-      searchDropdown.innerHTML = "";
+      dropdown.innerHTML = "";
       return;
     }
 
-    const matched = catalogProducts.filter(p => {
-      return (
-        p.name.toLowerCase().includes(query) ||
-        (p.tags && p.tags.some(t => t.toLowerCase().includes(query)))
-      );
-    });
+    const matched = catalogProducts.filter(p => 
+      p.name.toLowerCase().includes(query) || 
+      (p.tags && p.tags.some(t => t.toLowerCase().includes(query)))
+    );
 
     if (matched.length === 0) {
-      searchDropdown.innerHTML = `<p class="p-3 text-[11px] text-neutral-500 font-mono-code text-center">No matching drops found.</p>`;
+      dropdown.innerHTML = `<p class="p-3 text-[11px] text-neutral-500 font-mono-code">No matching drops found.</p>`;
     } else {
-      searchDropdown.innerHTML = matched.map(p => `
-        <div onclick="openProductDetailsModal('${p.id}'); toggleSearchModal(false);" class="flex items-center gap-3 p-2.5 hover:bg-white/5 rounded-xl cursor-pointer transition">
-          <img src="${p.image}" class="w-10 h-10 rounded-lg object-cover border border-white/10" onerror="this.src='${p.fallbackImage}'" />
-          <div class="flex-1 min-w-0 text-left">
-            <h4 class="text-xs font-semibold text-white truncate">${p.name}</h4>
+      dropdown.innerHTML = matched.map(p => `
+        <div onclick="openProductDetailsModal('${p.id}'); toggleSearchModal(false);" class="flex items-center gap-3 p-2 hover:bg-white/5 rounded-lg cursor-pointer transition">
+          <img src="${p.image}" class="w-8 h-8 rounded object-cover border border-white/10" onerror="this.src='${p.fallbackImage}'" />
+          <div class="flex-1">
+            <h4 class="text-[11px] font-semibold text-white truncate">${p.name}</h4>
             <span class="text-[10px] text-neutral-400 font-mono-code">₹${p.price}</span>
           </div>
         </div>
@@ -874,7 +808,7 @@ function setupSearchListeners() {
   });
 }
 
-// 11. FIT MATRIX & POLICIES
+// 10. FIT MATRIX MODAL
 const sizeMatrix = [
   { size: "S", chestIn: "40", lengthIn: "28", chestCm: "101.6", lengthCm: "71.1", drape: "Classic Boxy" },
   { size: "M", chestIn: "42", lengthIn: "29", chestCm: "106.7", lengthCm: "73.7", drape: "Structured Drop" },
@@ -924,10 +858,11 @@ function renderSizeTable() {
   }
 }
 
+// 11. POLICY MODAL
 const policyContent = {
   about: {
     title: "About VEHRAAN Studio",
-    body: "<p>VEHRAAN is an independent contemporary Indian luxury streetwear imprint. Every garment is crafted using bio-washed heavyweight cotton, tailored with reinforced drop-shoulders and high-density zero-fade screen graphics.</p>"
+    body: "<p>VEHRAAN is an independent contemporary Indian luxury streetwear imprint. Every garment is crafted using 220 GSM bio-washed heavyweight cotton, tailored with reinforced drop-shoulders and high-density zero-fade screen graphics.</p>"
   },
   shipping: {
     title: "Shipping & Dispatch",
@@ -950,7 +885,31 @@ window.closePolicyModal = function() {
   document.getElementById("policy-modal")?.classList.add("hidden");
 };
 
-// 12. GLOBAL TOAST HELPER
+// 12. STUDIO CMS (SECRET PIN: 656565)
+window.triggerAdminAccess = function() {
+  const pin = prompt("ENTER STUDIO CMS MASTER PASSCODE:");
+  if (pin === "656565") {
+    const modal = document.getElementById("admin-modal");
+    if (modal) {
+      modal.classList.remove("hidden");
+      switchAdminTab("add-product");
+    }
+  } else if (pin !== null) {
+    alert("ACCESS DENIED: Invalid Passcode.");
+  }
+};
+
+window.closeAdminModal = function() {
+  document.getElementById("admin-modal")?.classList.add("hidden");
+};
+
+window.switchAdminTab = function(tab) {
+  document.getElementById("admin-tab-add")?.classList.toggle("hidden", tab !== "add-product");
+  document.getElementById("admin-tab-manage")?.classList.toggle("hidden", tab !== "manage-products");
+  document.getElementById("admin-tab-orders")?.classList.toggle("hidden", tab !== "view-orders");
+};
+
+// 13. GLOBAL TOAST HELPER
 window.showToast = function(msg) {
   const toast = document.getElementById("toast");
   const toastMsg = document.getElementById("toast-msg");
