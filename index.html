@@ -14,13 +14,13 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
-<body class="bg-black text-white min-h-screen flex flex-col justify-between selection:bg-white selection:text-black">
+<body class="bg-white text-black min-h-screen flex flex-col justify-between selection:bg-black selection:text-white">
 
-  <!-- ================= 1. ANNOUNCEMENT TICKER ================= -->
-  <div class="w-full bg-[#050505] border-b border-white/10 py-2 overflow-hidden text-[10px] tracking-[0.25em] uppercase text-neutral-300 font-mono-code">
+  <!-- ================= 1. ANNOUNCEMENT MARQUEE TICKER ================= -->
+  <div class="w-full bg-white border-b border-black/10 py-2 overflow-hidden text-[10px] tracking-[0.25em] uppercase text-neutral-700 font-mono-code">
     <div class="marquee-container">
       <div class="marquee-content space-x-10">
-        <span class="font-bold text-white">⚡ GET 10% OFF ON ORDERS ABOVE ₹1,000</span>
+        <span class="font-bold text-black">⚡ GET 10% OFF ON ORDERS ABOVE ₹1,000</span>
         <span>•</span>
         <span>CASH ON DELIVERY AVAILABLE ACROSS INDIA</span>
         <span>•</span>
@@ -28,7 +28,7 @@
         <span>•</span>
         <span>ZERO FADE HIGH-DENSITY GRAPHICS</span>
         <span>•</span>
-        <span class="font-bold text-white">⚡ GET 10% OFF ON ORDERS ABOVE ₹1,000</span>
+        <span class="font-bold text-black">⚡ GET 10% OFF ON ORDERS ABOVE ₹1,000</span>
         <span>•</span>
         <span>CASH ON DELIVERY AVAILABLE ACROSS INDIA</span>
       </div>
@@ -36,12 +36,12 @@
   </div>
 
   <!-- ================= 2. 3-COLUMN HEADER ================= -->
-  <header class="sticky top-0 z-40 bg-black/95 backdrop-blur-md border-b border-white/10">
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-black/10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
       
       <!-- Left: 3-Line Menu Trigger -->
       <div class="flex items-center gap-3">
-        <button onclick="toggleMobileNav(true)" class="p-2 -ml-2 text-white hover:text-neutral-300 transition cursor-pointer" aria-label="Open Navigation Menu">
+        <button onclick="toggleMobileNav(true)" class="p-2 -ml-2 text-black hover:text-neutral-600 transition cursor-pointer" aria-label="Open Navigation Menu">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
@@ -51,76 +51,76 @@
       <!-- Center: VEHRAAN Brand Title -->
       <div class="absolute left-1/2 transform -translate-x-1/2 text-center">
         <a href="#" onclick="filterByTag('all')" class="flex items-center gap-2">
-          <span class="text-base sm:text-xl font-black tracking-[0.3em] uppercase text-white font-cinzel">VEHRAAN</span>
+          <span class="text-base sm:text-xl font-black tracking-[0.3em] uppercase text-black font-cinzel">VEHRAAN</span>
         </a>
       </div>
 
       <!-- Right: Search Icon + Cart Bag -->
       <div class="flex items-center gap-2 sm:gap-3">
-        <button onclick="toggleSearchModal(true)" class="p-2 text-neutral-300 hover:text-white transition cursor-pointer" aria-label="Search Drops">
+        <button onclick="toggleSearchModal(true)" class="p-2 text-neutral-700 hover:text-black transition cursor-pointer" aria-label="Search Drops">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </button>
 
-        <button onclick="toggleCart(true)" class="relative p-2 text-neutral-300 hover:text-white transition cursor-pointer" aria-label="Open Bag">
+        <button onclick="toggleCart(true)" class="relative p-2 text-neutral-700 hover:text-black transition cursor-pointer" aria-label="Open Bag">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
           </svg>
-          <span id="cart-badge" class="absolute top-1 right-0.5 bg-white text-black text-[9px] font-bold px-1.5 py-0.2 rounded-full font-mono-code leading-tight">0</span>
+          <span id="cart-badge" class="absolute top-1 right-0.5 bg-black text-white text-[9px] font-bold px-1.5 py-0.2 rounded-full font-mono-code leading-tight">0</span>
         </button>
       </div>
 
     </div>
   </header>
 
-  <!-- ================= SLIDE-OUT NAVIGATION MENU (LEFT DRAWER) ================= -->
-  <div id="nav-drawer-overlay" onclick="toggleMobileNav(false)" class="fixed inset-0 bg-black/80 backdrop-blur-xs z-50 hidden transition-opacity cursor-pointer"></div>
-  <aside id="nav-drawer" class="fixed top-0 left-0 bottom-0 w-4/5 max-w-xs bg-[#080808] border-r border-white/10 z-50 transform -translate-x-full transition-transform duration-300 flex flex-col justify-between p-6">
+  <!-- ================= SLIDE-OUT NAVIGATION MENU ================= -->
+  <div id="nav-drawer-overlay" onclick="toggleMobileNav(false)" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden transition-opacity cursor-pointer"></div>
+  <aside id="nav-drawer" class="fixed top-0 left-0 bottom-0 w-4/5 max-w-xs bg-white border-r border-black/10 z-50 transform -translate-x-full transition-transform duration-300 flex flex-col justify-between p-6 shadow-2xl">
     
     <div class="space-y-6">
-      <div class="flex items-center justify-between pb-4 border-b border-white/10">
-        <span class="text-xs font-bold tracking-[0.25em] uppercase text-white font-cinzel">NAVIGATION</span>
-        <button onclick="toggleMobileNav(false)" class="text-neutral-400 hover:text-white text-base p-1 cursor-pointer">✕</button>
+      <div class="flex items-center justify-between pb-4 border-b border-black/10">
+        <span class="text-xs font-bold tracking-[0.25em] uppercase text-black font-cinzel">NAVIGATION</span>
+        <button onclick="toggleMobileNav(false)" class="text-neutral-500 hover:text-black text-base p-1 cursor-pointer">✕</button>
       </div>
 
-      <nav class="space-y-2 text-xs uppercase tracking-[0.18em] font-semibold text-neutral-300">
-        <button onclick="selectCategory('all')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-white/10 hover:text-white transition flex items-center justify-between cursor-pointer">
+      <nav class="space-y-2 text-xs uppercase tracking-[0.18em] font-semibold text-neutral-800">
+        <button onclick="selectCategory('all')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-neutral-100 transition flex items-center justify-between cursor-pointer">
           <span>All Styles</span>
-          <span class="text-[9px] text-neutral-500 font-mono-code">18 Drops</span>
+          <span class="text-[9px] text-neutral-500 font-mono-code">17 Drops</span>
         </button>
-        <button onclick="selectCategory('men')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-white/10 hover:text-white transition flex items-center justify-between cursor-pointer">
+        <button onclick="selectCategory('men')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-neutral-100 transition flex items-center justify-between cursor-pointer">
           <span>Men</span>
           <span class="text-[9px] text-neutral-500 font-mono-code">Fits</span>
         </button>
-        <button onclick="selectCategory('women')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-white/10 hover:text-white transition flex items-center justify-between cursor-pointer">
+        <button onclick="selectCategory('women')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-neutral-100 transition flex items-center justify-between cursor-pointer">
           <span>Women</span>
           <span class="text-[9px] text-neutral-500 font-mono-code">Fits</span>
         </button>
-        <div class="h-[1px] bg-white/5 my-2"></div>
-        <button onclick="selectCategory('anime')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-white/10 hover:text-white transition flex items-center justify-between cursor-pointer">
+        <div class="h-[1px] bg-black/5 my-2"></div>
+        <button onclick="selectCategory('anime')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-neutral-100 transition flex items-center justify-between cursor-pointer">
           <span>Anime Arc</span>
           <span class="text-[9px] text-neutral-500 font-mono-code">JJK / Solo</span>
         </button>
-        <button onclick="selectCategory('spider')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-white/10 hover:text-white transition flex items-center justify-between cursor-pointer">
+        <button onclick="selectCategory('spider')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-neutral-100 transition flex items-center justify-between cursor-pointer">
           <span>Spiderverse</span>
           <span class="text-[9px] text-neutral-500 font-mono-code">Marvel</span>
         </button>
-        <button onclick="selectCategory('f1')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-white/10 hover:text-white transition flex items-center justify-between cursor-pointer">
+        <button onclick="selectCategory('f1')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-neutral-100 transition flex items-center justify-between cursor-pointer">
           <span>Motorsport</span>
           <span class="text-[9px] text-neutral-500 font-mono-code">Speed</span>
         </button>
-        <div class="h-[1px] bg-white/5 my-2"></div>
-        <button onclick="openSizeGuideModal(); toggleMobileNav(false);" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-white/10 hover:text-white transition cursor-pointer">
+        <div class="h-[1px] bg-black/5 my-2"></div>
+        <button onclick="openSizeGuideModal(); toggleMobileNav(false);" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-neutral-100 transition cursor-pointer">
           <span>Fit Matrix Guide</span>
         </button>
       </nav>
     </div>
 
-    <!-- Working Drawer Sign In Button Target Container -->
-    <div class="border-t border-white/10 pt-4 space-y-3">
+    <!-- Drawer Sign In / Account Container -->
+    <div class="border-t border-black/10 pt-4 space-y-3">
       <div id="sidebar-auth-container">
-        <button onclick="openAuthModal(); toggleMobileNav(false);" class="w-full py-3 bg-white text-black text-xs font-bold uppercase tracking-[0.2em] rounded-xl transition hover:bg-neutral-200 cursor-pointer shadow-lg text-center block">
+        <button onclick="openAuthModal(); toggleMobileNav(false);" class="w-full py-3 bg-black text-white text-xs font-bold uppercase tracking-[0.2em] rounded-xl transition hover:bg-neutral-800 cursor-pointer shadow-lg text-center block">
           Sign In / Account
         </button>
       </div>
@@ -130,16 +130,16 @@
   </aside>
 
   <!-- ================= SEARCH MODAL ================= -->
-  <div id="search-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-start justify-center pt-20 p-4 hidden">
-    <div class="bg-[#0c0c0c] border border-white/15 rounded-2xl max-w-lg w-full p-4 relative shadow-2xl space-y-3">
-      <div class="flex items-center justify-between pb-2 border-b border-white/10">
+  <div id="search-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-start justify-center pt-20 p-4 hidden">
+    <div class="bg-white border border-black/15 rounded-2xl max-w-lg w-full p-4 relative shadow-2xl space-y-3">
+      <div class="flex items-center justify-between pb-2 border-b border-black/10">
         <input 
           type="text" 
           id="search-bar" 
           placeholder="Type anime, toji, spider, f1..." 
-          class="w-full bg-transparent text-sm text-white placeholder-neutral-500 focus:outline-none font-mono-code"
+          class="w-full bg-transparent text-sm text-black placeholder-neutral-400 focus:outline-none font-mono-code"
         />
-        <button onclick="toggleSearchModal(false)" class="text-neutral-400 hover:text-white text-sm p-1 cursor-pointer">✕</button>
+        <button onclick="toggleSearchModal(false)" class="text-neutral-500 hover:text-black text-sm p-1 cursor-pointer">✕</button>
       </div>
       <div id="search-dropdown" class="max-h-72 overflow-y-auto space-y-1"></div>
     </div>
@@ -148,32 +148,32 @@
   <!-- ================= MAIN CONTENT ================= -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-16 flex-1 w-full">
     
-    <!-- ================= 3. CLEAN HERO BANNER (NO 399, NO DROP 001, NO FIT MATRIX) ================= -->
-    <section class="relative rounded-3xl overflow-hidden border border-white/15 bg-black min-h-[520px] sm:min-h-[600px] flex items-end my-4 shadow-2xl">
+    <!-- ================= 3. CLEAN HERO BANNER WITH SLIDE ANIM ================= -->
+    <section class="relative rounded-3xl overflow-hidden border border-black/15 bg-neutral-100 min-h-[520px] sm:min-h-[600px] flex items-end my-4 shadow-xl">
       <div class="absolute inset-0 w-full h-full overflow-hidden z-0">
         <img 
+          id="hero-banner-img"
           src="images/front.png" 
           alt="VEHRAAN Streetwear" 
-          class="w-full h-full object-cover object-top sm:object-center hero-bg-animate opacity-90 grayscale contrast-125"
+          class="w-full h-full object-cover object-top sm:object-center hero-bg-animate opacity-95 contrast-110"
           onerror="this.onerror=null; this.src='images/tee-10.jpg';"
         />
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
-        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-white/80 via-white/20 to-transparent"></div>
       </div>
 
-      <div class="relative z-10 p-6 sm:p-12 lg:p-16 max-w-xl space-y-3 text-left hero-popup-content">
-        
-        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight uppercase text-white font-cinzel leading-[1.02] drop-shadow-2xl">
+      <div class="relative z-10 p-6 sm:p-12 lg:p-16 max-w-xl space-y-3 text-left hero-popup-content hero-slide-anim">
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight uppercase text-black font-cinzel leading-[1.02] drop-shadow-sm">
           FEEL THE <br />
-          <span class="text-neutral-400">WEIGHT.</span>
+          <span class="text-neutral-600">WEIGHT.</span>
         </h1>
 
-        <p class="text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase text-neutral-300 font-mono-code pt-1">
+        <p class="text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase text-neutral-700 font-mono-code pt-1">
           BUILT FOR STREET.
         </p>
 
         <div class="pt-4">
-          <a href="#new-arrivals" onclick="filterByTag('all')" class="inline-block px-9 py-3.5 bg-white hover:bg-neutral-200 text-black text-xs font-bold uppercase tracking-[0.2em] rounded-full transition duration-200 shadow-2xl cursor-pointer">
+          <a href="#new-arrivals" onclick="filterByTag('all')" class="inline-block px-9 py-3.5 bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-[0.2em] rounded-full transition duration-200 shadow-xl cursor-pointer">
             Shop Drops
           </a>
         </div>
@@ -181,30 +181,30 @@
     </section>
 
     <!-- ================= 4. COMPACT 4-BOX TRUST ROW ================= -->
-    <section class="grid grid-cols-2 md:grid-cols-4 gap-3 py-2">
-      <div class="p-4 bg-[#080808] border border-white/10 rounded-xl space-y-1 text-left">
-        <span class="text-xs font-bold text-white uppercase font-mono-code block">10% Off ₹1,000+</span>
-        <p class="text-[10px] text-neutral-400 leading-snug">Auto-applied above ₹1,000.</p>
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-3 py-2 reveal-on-scroll">
+      <div class="p-4 bg-[#f9f9f9] border border-black/10 rounded-xl space-y-1 text-left">
+        <span class="text-xs font-bold text-black uppercase font-mono-code block">10% Off ₹1,000+</span>
+        <p class="text-[10px] text-neutral-600 leading-snug">Auto-applied above ₹1,000.</p>
       </div>
 
-      <div class="p-4 bg-[#080808] border border-white/10 rounded-xl space-y-1 text-left">
-        <span class="text-xs font-bold text-white uppercase font-mono-code block">Express COD</span>
-        <p class="text-[10px] text-neutral-400 leading-snug">Doorstep delivery across India.</p>
+      <div class="p-4 bg-[#f9f9f9] border border-black/10 rounded-xl space-y-1 text-left">
+        <span class="text-xs font-bold text-black uppercase font-mono-code block">Express COD</span>
+        <p class="text-[10px] text-neutral-600 leading-snug">Doorstep delivery across India.</p>
       </div>
 
-      <div class="p-4 bg-[#080808] border border-white/10 rounded-xl space-y-1 text-left">
-        <span class="text-xs font-bold text-white uppercase font-mono-code block">220 GSM Bio-Wash</span>
-        <p class="text-[10px] text-neutral-400 leading-snug">Heavy combed cotton blanks.</p>
+      <div class="p-4 bg-[#f9f9f9] border border-black/10 rounded-xl space-y-1 text-left">
+        <span class="text-xs font-bold text-black uppercase font-mono-code block">220 GSM Bio-Wash</span>
+        <p class="text-[10px] text-neutral-600 leading-snug">Heavy combed cotton blanks.</p>
       </div>
 
-      <div class="p-4 bg-[#080808] border border-white/10 rounded-xl space-y-1 text-left">
-        <span class="text-xs font-bold text-white uppercase font-mono-code block">7-Day Fit Swap</span>
-        <p class="text-[10px] text-neutral-400 leading-snug">Doorstep size exchanges.</p>
+      <div class="p-4 bg-[#f9f9f9] border border-black/10 rounded-xl space-y-1 text-left">
+        <span class="text-xs font-bold text-black uppercase font-mono-code block">7-Day Fit Swap</span>
+        <p class="text-[10px] text-neutral-600 leading-snug">Doorstep size exchanges.</p>
       </div>
     </section>
 
     <!-- ================= 5. CATEGORY FILTER PILLS ================= -->
-    <div class="space-y-3 text-center">
+    <div class="space-y-3 text-center reveal-on-scroll">
       <div class="flex flex-wrap items-center justify-center gap-2">
         <button onclick="filterByTag('all')" class="category-pill active">All Styles</button>
         <button onclick="filterByTag('men')" class="category-pill">Men</button>
@@ -215,60 +215,61 @@
       </div>
     </div>
 
-    <!-- ================= DYNAMIC PRODUCT GRID (INITIAL 6 + VIEW ALL) ================= -->
-    <section id="new-arrivals" class="space-y-6">
-      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+    <!-- ================= DYNAMIC PRODUCT GRID (MOBILE 2-COLUMNS) ================= -->
+    <section id="new-arrivals" class="space-y-6 reveal-on-scroll">
+      <div class="flex items-center justify-between border-b border-black/10 pb-3">
         <div>
-          <h2 class="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-white font-cinzel">Exclusive Drops</h2>
+          <h2 class="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-black font-cinzel">Exclusive Drops</h2>
           <p class="text-[10px] text-neutral-500 font-mono-code mt-0.5">Heavyweight bio-washed streetwear collection</p>
         </div>
-        <span id="catalog-count-badge" class="text-[9px] uppercase font-mono-code text-neutral-400 bg-white/5 px-2.5 py-1 rounded border border-white/10">06 / 18 Drops</span>
+        <span id="catalog-count-badge" class="text-[9px] uppercase font-mono-code text-neutral-600 bg-black/5 px-2.5 py-1 rounded border border-black/10">06 / 17 Drops</span>
       </div>
 
-      <div id="catalog-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"></div>
+      <!-- Mobile grid-cols-2 ensures 2 items side-by-side on mobile screens -->
+      <div id="catalog-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8"></div>
 
       <div id="view-all-container" class="pt-6 text-center">
-        <button onclick="expandFullCatalog()" class="px-8 py-3.5 bg-white/10 hover:bg-white text-white hover:text-black border border-white/20 text-xs font-bold uppercase tracking-[0.2em] rounded-full transition duration-200 cursor-pointer shadow-xl">
-          View All Drops (18)
+        <button onclick="expandFullCatalog()" class="px-8 py-3.5 bg-black hover:bg-neutral-800 text-white border border-black text-xs font-bold uppercase tracking-[0.2em] rounded-full transition duration-200 cursor-pointer shadow-xl">
+          View All Drops (17)
         </button>
       </div>
     </section>
 
     <!-- ================= 6. STREET REVIEWS ================= -->
-    <section class="space-y-6">
-      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+    <section class="space-y-6 reveal-on-scroll">
+      <div class="flex items-center justify-between border-b border-black/10 pb-3">
         <div>
-          <h2 class="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-white font-cinzel">Street Reviews</h2>
+          <h2 class="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-black font-cinzel">Street Reviews</h2>
           <p class="text-[10px] text-neutral-500 font-mono-code mt-0.5">Verified customer drape ratings</p>
         </div>
-        <span class="text-[9px] uppercase font-mono-code text-white">★ 4.9 / 5.0 Rating</span>
+        <span class="text-[9px] uppercase font-mono-code text-black font-bold">★ 4.9 / 5.0 Rating</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="p-5 bg-[#080808] border border-white/10 rounded-2xl space-y-2">
+        <div class="p-5 bg-[#f9f9f9] border border-black/10 rounded-2xl space-y-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-white">Rohit M.</span>
-            <span class="text-white text-xs">★★★★★</span>
+            <span class="text-xs font-bold text-black">Rohit M.</span>
+            <span class="text-black text-xs">★★★★★</span>
           </div>
-          <p class="text-[11px] text-neutral-400 leading-relaxed">"The 220 GSM cotton drape is crazy good. Thick collar ribbing and the Toji back print has zero fade after wash."</p>
+          <p class="text-[11px] text-neutral-600 leading-relaxed">"The 220 GSM cotton drape is crazy good. Thick collar ribbing and the Toji back print has zero fade after wash."</p>
           <span class="text-[9px] font-mono-code text-neutral-500 block">Verified Buyer • Mumbai</span>
         </div>
 
-        <div class="p-5 bg-[#080808] border border-white/10 rounded-2xl space-y-2">
+        <div class="p-5 bg-[#f9f9f9] border border-black/10 rounded-2xl space-y-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-white">Aarav K.</span>
-            <span class="text-white text-xs">★★★★★</span>
+            <span class="text-xs font-bold text-black">Aarav K.</span>
+            <span class="text-black text-xs">★★★★★</span>
           </div>
-          <p class="text-[11px] text-neutral-400 leading-relaxed">"Flat ₹399 with COD is unbelievable quality for this fabric weight. Perfect drop shoulder boxy fit."</p>
+          <p class="text-[11px] text-neutral-600 leading-relaxed">"Flat ₹599 with COD is unbelievable quality for this fabric weight. Perfect drop shoulder boxy fit."</p>
           <span class="text-[9px] font-mono-code text-neutral-500 block">Verified Buyer • Delhi</span>
         </div>
 
-        <div class="p-5 bg-[#080808] border border-white/10 rounded-2xl space-y-2">
+        <div class="p-5 bg-[#f9f9f9] border border-black/10 rounded-2xl space-y-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-white">Sanya P.</span>
-            <span class="text-white text-xs">★★★★★</span>
+            <span class="text-xs font-bold text-black">Sanya P.</span>
+            <span class="text-black text-xs">★★★★★</span>
           </div>
-          <p class="text-[11px] text-neutral-400 leading-relaxed">"Loved the Ghost Spider tee. Shipped in 2 days and the WhatsApp support team is super responsive."</p>
+          <p class="text-[11px] text-neutral-600 leading-relaxed">"Loved the Ghost Spider tee. Shipped in 2 days and the WhatsApp support team is super responsive."</p>
           <span class="text-[9px] font-mono-code text-neutral-500 block">Verified Buyer • Bengaluru</span>
         </div>
       </div>
@@ -277,30 +278,30 @@
   </main>
 
   <!-- ================= 7. FOOTER ================= -->
-  <footer class="bg-black border-t border-white/10 py-12 mt-12">
+  <footer class="bg-white border-t border-black/10 py-12 mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
       
       <div class="space-y-2 md:col-span-2">
-        <span class="text-sm font-bold tracking-[0.3em] uppercase text-white font-cinzel">VEHRAAN</span>
-        <p class="text-[11px] text-neutral-400 leading-relaxed max-w-sm">
+        <span class="text-sm font-bold tracking-[0.3em] uppercase text-black font-cinzel">VEHRAAN</span>
+        <p class="text-[11px] text-neutral-600 leading-relaxed max-w-sm">
           Contemporary Indian luxury streetwear imprint engineered with heavy-gauge 220 GSM bio-washed textiles and high-density screen graphics.
         </p>
       </div>
 
       <div class="space-y-2">
-        <h4 class="text-xs font-bold uppercase tracking-wider text-white">Navigation</h4>
-        <ul class="text-[11px] text-neutral-400 space-y-1.5">
-          <li><button onclick="openPolicyModal('about')" class="hover:text-white cursor-pointer">About Us</button></li>
-          <li><button onclick="openPolicyModal('shipping')" class="hover:text-white cursor-pointer">Shipping & Dispatch</button></li>
-          <li><button onclick="openPolicyModal('returns')" class="hover:text-white cursor-pointer">Returns Policy</button></li>
-          <li><button onclick="openSizeGuideModal()" class="hover:text-white cursor-pointer">Fit Matrix</button></li>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-black">Navigation</h4>
+        <ul class="text-[11px] text-neutral-600 space-y-1.5">
+          <li><button onclick="openPolicyModal('about')" class="hover:text-black cursor-pointer">About Us</button></li>
+          <li><button onclick="openPolicyModal('shipping')" class="hover:text-black cursor-pointer">Shipping & Dispatch</button></li>
+          <li><button onclick="openPolicyModal('returns')" class="hover:text-black cursor-pointer">Returns Policy</button></li>
+          <li><button onclick="openSizeGuideModal()" class="hover:text-black cursor-pointer">Fit Matrix</button></li>
         </ul>
       </div>
 
       <div class="space-y-2">
-        <h4 class="text-xs font-bold uppercase tracking-wider text-white">Support Desk</h4>
-        <ul class="text-[11px] text-neutral-400 space-y-1.5 font-mono-code">
-          <li><a href="https://instagram.com/vehraanstudio_" target="_blank" class="hover:text-white">Instagram @vehraanstudio_</a></li>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-black">Support Desk</h4>
+        <ul class="text-[11px] text-neutral-600 space-y-1.5 font-mono-code">
+          <li><a href="https://instagram.com/vehraanstudio_" target="_blank" class="hover:text-black">Instagram @vehraanstudio_</a></li>
           <li>WhatsApp: +91 7400246429</li>
           <li>Payment: Cash on Delivery (COD)</li>
         </ul>
@@ -308,46 +309,45 @@
 
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 mt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-[10px] text-neutral-500 font-mono-code">
-      <span onclick="triggerAdminAccess()" class="cursor-pointer hover:text-white transition select-none">
+    <!-- Hidden Admin Copyright Bar (PIN: 656565) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 mt-8 border-t border-black/10 flex flex-col sm:flex-row items-center justify-between text-[10px] text-neutral-500 font-mono-code">
+      <span onclick="triggerAdminAccess()" class="cursor-pointer hover:text-black transition select-none py-2 inline-block">
         © 2026 VEHRAAN. ALL RIGHTS RESERVED.
       </span>
       <span>CONTEMPORARY APPAREL</span>
     </div>
   </footer>
 
-  <!-- ================= PRODUCT ON-DEMAND SIZE MODAL ================= -->
-  <div id="product-details-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="bg-[#0c0c0c] border border-white/15 rounded-2xl max-w-2xl w-full p-6 sm:p-8 relative shadow-2xl max-h-[92vh] overflow-y-auto">
-      <button onclick="closeProductDetailsModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-lg p-2 transition cursor-pointer">✕</button>
+  <!-- ================= MODALS & DRAWERS (UNCHANGED WORKING) ================= -->
+  <div id="product-details-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-black/15 rounded-2xl max-w-2xl w-full p-6 sm:p-8 relative shadow-2xl max-h-[92vh] overflow-y-auto">
+      <button onclick="closeProductDetailsModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black text-lg p-2 transition cursor-pointer">✕</button>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-        <div class="w-full aspect-[1/1.15] bg-[#040404] rounded-xl border border-white/10 p-4 flex items-center justify-center overflow-hidden">
+        <div id="modal-image-container" class="w-full aspect-[1/1.15] bg-[#f8f8f8] rounded-xl border border-black/10 p-4 flex items-center justify-center overflow-hidden">
           <img id="modal-p-img" src="" alt="Product Image" class="w-full h-full object-contain" />
         </div>
 
         <div class="space-y-4 text-left">
           <div>
-            <span id="modal-p-badge" class="text-[9px] uppercase tracking-[0.25em] text-neutral-400 font-mono-code bg-white/5 px-2.5 py-1 rounded border border-white/10 inline-block mb-2">220 GSM HEAVYWEIGHT</span>
-            <h2 id="modal-p-name" class="text-base sm:text-lg font-bold uppercase tracking-wider text-white font-cinzel"></h2>
+            <span id="modal-p-badge" class="text-[9px] uppercase tracking-[0.25em] text-neutral-600 font-mono-code bg-black/5 px-2.5 py-1 rounded border border-black/10 inline-block mb-2">220 GSM HEAVYWEIGHT</span>
+            <h2 id="modal-p-name" class="text-base sm:text-lg font-bold uppercase tracking-wider text-black font-cinzel"></h2>
             <div class="flex items-center gap-3 mt-1">
-              <span id="modal-p-price" class="text-sm font-bold text-white font-mono-code">₹399</span>
-              <span class="text-[10px] text-white/70 font-mono-code">Cash on Delivery Available</span>
+              <span id="modal-p-price" class="text-sm font-bold text-black font-mono-code">₹599</span>
+              <span class="text-[10px] text-neutral-600 font-mono-code">Cash on Delivery Available</span>
             </div>
           </div>
 
-          <p id="modal-p-desc" class="text-xs text-neutral-400 leading-relaxed font-sans"></p>
-
           <div class="space-y-1.5 pt-2">
             <div class="flex items-center justify-between">
-              <label class="text-[10px] uppercase font-mono-code text-neutral-300">Select Fit Size</label>
-              <button onclick="openSizeGuideModal()" class="text-[10px] text-neutral-500 hover:text-white underline font-mono-code cursor-pointer">Size Matrix</button>
+              <label class="text-[10px] uppercase font-mono-code text-neutral-700">Select Fit Size</label>
+              <button onclick="openSizeGuideModal()" class="text-[10px] text-neutral-500 hover:text-black underline font-mono-code cursor-pointer">Size Matrix</button>
             </div>
             <div id="modal-p-sizes" class="flex gap-2"></div>
           </div>
 
           <div class="pt-3">
-            <button id="modal-p-add-btn" class="w-full py-3.5 bg-white hover:bg-neutral-200 text-black font-bold text-xs uppercase tracking-[0.15em] rounded-xl transition duration-200 shadow-xl cursor-pointer">
+            <button id="modal-p-add-btn" class="w-full py-3.5 bg-black hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-[0.15em] rounded-xl transition duration-200 shadow-xl cursor-pointer">
               ADD TO BAG
             </button>
           </div>
@@ -356,130 +356,108 @@
     </div>
   </div>
 
-  <!-- ================= AUTH MODAL ================= -->
-  <div id="auth-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="bg-[#0a0a0a] border border-white/15 rounded-2xl max-w-sm w-full p-6 relative space-y-4 shadow-2xl">
-      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm cursor-pointer">✕</button>
-      
+  <div id="auth-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-black/15 rounded-2xl max-w-sm w-full p-6 relative space-y-4 shadow-2xl">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black text-sm cursor-pointer">✕</button>
       <div class="text-center space-y-1">
         <span class="text-[9px] uppercase tracking-[0.3em] text-neutral-500 font-mono-code">MEMBER ACCESS</span>
-        <h3 class="text-sm font-bold uppercase tracking-wider text-white">Sign In</h3>
-        <p class="text-[11px] text-neutral-400 leading-relaxed">Sign in with Google to access your bag and checkout.</p>
+        <h3 class="text-sm font-bold uppercase tracking-wider text-black">Sign In</h3>
+        <p class="text-[11px] text-neutral-600 leading-relaxed">Sign in to start shopping and view your cart.</p>
       </div>
-
-      <button onclick="handleGoogleSignIn()" id="btn-google-auth" class="w-full py-3 bg-white hover:bg-neutral-200 text-black rounded-xl text-xs font-bold uppercase tracking-wider transition duration-200 flex items-center justify-center gap-3 shadow-lg cursor-pointer">
-        <svg class="w-4 h-4" viewBox="0 0 24 24">
-          <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/>
-          <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
-          <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.3s.2-1.6.4-2.3L1.9 7.3C.7 9.7 0 12 0 14.8s.7 5.1 1.9 7.5l3.7-2.9z"/>
-          <path fill="#34A853" d="M12 23.5c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.4-6.4-5.2L1.9 16.5C3.7 20.2 7.5 23.5 12 23.5z"/>
-        </svg>
+      <button onclick="handleGoogleSignIn()" class="w-full py-3 bg-black hover:bg-neutral-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition duration-200 flex items-center justify-center gap-3 shadow-lg cursor-pointer">
         <span>Continue with Google</span>
       </button>
     </div>
   </div>
 
-  <!-- ================= SHOPPING BAG DRAWER ================= -->
-  <div id="cart-drawer-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/80 backdrop-blur-xs z-50 hidden transition-opacity cursor-pointer"></div>
-  <div id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-[#080808] border-l border-white/15 z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between p-6">
+  <div id="cart-drawer-overlay" onclick="toggleCart(false)" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden transition-opacity cursor-pointer"></div>
+  <div id="cart-drawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white border-l border-black/15 z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between p-6 shadow-2xl">
     <div>
-      <div class="flex items-center justify-between pb-4 border-b border-white/10">
+      <div class="flex items-center justify-between pb-4 border-b border-black/10">
         <div class="flex items-center gap-2">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-white font-cinzel">Shopping Bag</h3>
-          <span class="text-[10px] text-neutral-400 font-mono-code">(<span id="drawer-count">0</span>)</span>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-black font-cinzel">Shopping Bag</h3>
+          <span class="text-[10px] text-neutral-500 font-mono-code">(<span id="drawer-count">0</span>)</span>
         </div>
-        <button onclick="toggleCart(false)" class="text-neutral-400 hover:text-white text-sm cursor-pointer">✕</button>
+        <button onclick="toggleCart(false)" class="text-neutral-500 hover:text-black text-sm cursor-pointer">✕</button>
       </div>
-
-      <div id="discount-banner" class="mt-3 p-2.5 bg-white/5 border border-white/10 rounded-xl text-left">
-        <p id="discount-status-text" class="text-[10px] text-neutral-300 font-mono-code"></p>
+      <div id="discount-banner" class="mt-3 p-2.5 bg-black/5 border border-black/10 rounded-xl text-left">
+        <p id="discount-status-text" class="text-[10px] text-neutral-700 font-mono-code"></p>
       </div>
-
       <div id="cart-items-container" class="mt-4 space-y-3 overflow-y-auto max-h-[50vh]"></div>
     </div>
-
-    <div class="border-t border-white/10 pt-4 space-y-2">
+    <div class="border-t border-black/10 pt-4 space-y-2">
       <div class="flex justify-between items-center text-xs">
-        <span class="text-neutral-400 font-mono-code">Subtotal:</span>
-        <span id="cart-subtotal-price" class="text-neutral-300 font-mono-code">₹0</span>
+        <span class="text-neutral-600 font-mono-code">Subtotal:</span>
+        <span id="cart-subtotal-price" class="text-neutral-800 font-mono-code">₹0</span>
       </div>
       <div id="discount-row" class="flex justify-between items-center text-xs hidden">
-        <span class="text-white font-mono-code">10% Promo Discount:</span>
-        <span id="cart-discount-amount" class="text-white font-mono-code">- ₹0</span>
+        <span class="text-black font-mono-code">10% Promo Discount:</span>
+        <span id="cart-discount-amount" class="text-black font-mono-code">- ₹0</span>
       </div>
       <div class="flex justify-between items-center text-xs">
-        <span class="text-neutral-400 font-mono-code">Express Delivery:</span>
-        <span id="cart-shipping-fee" class="text-neutral-300 font-mono-code">₹120</span>
+        <span class="text-neutral-600 font-mono-code">Express Delivery:</span>
+        <span id="cart-shipping-fee" class="text-neutral-800 font-mono-code">₹120</span>
       </div>
-      <div class="flex justify-between items-center text-xs pt-2 border-t border-white/10">
-        <span class="text-white font-bold uppercase tracking-wider font-mono-code">Total (COD):</span>
-        <span id="cart-total-price" class="font-bold text-white font-mono-code text-sm">₹0</span>
+      <div class="flex justify-between items-center text-xs pt-2 border-t border-black/10">
+        <span class="text-black font-bold uppercase tracking-wider font-mono-code">Total (COD):</span>
+        <span id="cart-total-price" class="font-bold text-black font-mono-code text-sm">₹0</span>
       </div>
-
-      <button id="btn-proceed" onclick="openCheckoutModal()" class="w-full py-3.5 bg-white hover:bg-neutral-200 text-black rounded-xl text-xs font-bold uppercase tracking-[0.2em] transition mt-2 cursor-pointer shadow-xl">
+      <button id="btn-proceed" onclick="openCheckoutModal()" class="w-full py-3.5 bg-black hover:bg-neutral-800 text-white rounded-xl text-xs font-bold uppercase tracking-[0.2em] transition mt-2 cursor-pointer shadow-xl">
         Proceed to Checkout
       </button>
     </div>
   </div>
 
-  <!-- ================= CHECKOUT MODAL ================= -->
-  <div id="checkout-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="bg-[#0d0d0d] border border-white/15 rounded-2xl max-w-md w-full p-6 relative space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
-      <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm cursor-pointer">✕</button>
-      
+  <div id="checkout-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-black/15 rounded-2xl max-w-md w-full p-6 relative space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
+      <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black text-sm cursor-pointer">✕</button>
       <div>
         <span class="text-[9px] uppercase tracking-[0.3em] text-neutral-500 font-mono-code">DISPATCH DESK</span>
-        <h3 class="text-sm font-bold uppercase tracking-wider text-white mt-0.5">Shipping Details</h3>
+        <h3 class="text-sm font-bold uppercase tracking-wider text-black mt-0.5">Shipping Details</h3>
       </div>
-
       <form id="checkout-form" class="space-y-3">
-        <input type="text" id="order-name" required placeholder="Full Name" class="w-full bg-[#141414] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/40" />
-        <input type="tel" id="order-phone" required placeholder="WhatsApp Mobile (10 Digits)" class="w-full bg-[#141414] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/40 font-mono-code" />
-        <input type="email" id="order-email" required placeholder="Email Address" class="w-full bg-[#141414] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/40" />
-        <input type="text" id="order-instagram" placeholder="Instagram Handle (Optional)" class="w-full bg-[#141414] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/40" />
-        <textarea id="order-address" required rows="2" placeholder="Full Delivery Address with Landmark & PIN Code" class="w-full bg-[#141414] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-white/40"></textarea>
-        
-        <div class="p-3.5 bg-[#141414] border border-white/10 rounded-xl space-y-1.5">
+        <input type="text" id="order-name" required placeholder="Full Name" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black/40" />
+        <input type="tel" id="order-phone" required placeholder="WhatsApp Mobile (10 Digits)" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black/40 font-mono-code" />
+        <input type="email" id="order-email" required placeholder="Email Address" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black/40" />
+        <input type="text" id="order-instagram" placeholder="Instagram Handle (Optional)" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black/40" />
+        <textarea id="order-address" required rows="2" placeholder="Full Delivery Address with Landmark & PIN Code" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black/40"></textarea>
+        <div class="p-3.5 bg-neutral-100 border border-black/10 rounded-xl space-y-1.5">
           <div class="flex items-center justify-between text-xs">
-            <span class="text-white font-semibold">Payment Mode</span>
-            <span class="text-white font-mono-code">Cash on Delivery (COD)</span>
+            <span class="text-black font-semibold">Payment Mode</span>
+            <span class="text-black font-mono-code">Cash on Delivery (COD)</span>
           </div>
-          <div class="flex items-center justify-between text-[11px] text-neutral-400 font-mono-code">
+          <div class="flex items-center justify-between text-[11px] text-neutral-600 font-mono-code">
             <span>Express Delivery Fee</span>
             <span>+ ₹120</span>
           </div>
-          <div class="flex items-center justify-between text-xs font-bold text-white pt-1.5 border-t border-white/10 font-mono-code">
+          <div class="flex items-center justify-between text-xs font-bold text-black pt-1.5 border-t border-black/10 font-mono-code">
             <span>Final Amount on Delivery:</span>
             <span id="checkout-final-amount">₹0</span>
           </div>
         </div>
-
-        <button type="submit" id="btn-submit-order" class="w-full py-3.5 bg-white hover:bg-neutral-200 text-black font-bold text-xs uppercase tracking-[0.15em] rounded-xl transition shadow-xl cursor-pointer">
+        <button type="submit" id="btn-submit-order" class="w-full py-3.5 bg-black hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-[0.15em] rounded-xl transition shadow-xl cursor-pointer">
           <span>Place Order (Cash on Delivery)</span>
         </button>
       </form>
     </div>
   </div>
 
-  <!-- ================= FIT MATRIX MODAL ================= -->
-  <div id="size-guide-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="bg-[#0d0d0d] border border-white/15 rounded-2xl max-w-lg w-full p-6 relative space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
-      <button onclick="closeSizeGuideModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm cursor-pointer">✕</button>
-      
-      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+  <div id="size-guide-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-black/15 rounded-2xl max-w-lg w-full p-6 relative space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <button onclick="closeSizeGuideModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black text-sm cursor-pointer">✕</button>
+      <div class="flex items-center justify-between border-b border-black/10 pb-3">
         <div>
           <span class="text-[9px] uppercase tracking-[0.3em] text-neutral-500 font-mono-code">MEASUREMENTS</span>
-          <h3 class="text-sm font-bold uppercase tracking-wider text-white mt-0.5">220 GSM Fit Matrix</h3>
+          <h3 class="text-sm font-bold uppercase tracking-wider text-black mt-0.5">220 GSM Fit Matrix</h3>
         </div>
-        <div class="flex bg-[#161616] p-0.5 rounded-lg border border-white/10 text-[10px] font-mono-code">
-          <button id="unit-in-btn" onclick="toggleSizeUnit('in')" class="px-2.5 py-1 bg-white text-black font-bold rounded cursor-pointer">IN</button>
-          <button id="unit-cm-btn" onclick="toggleSizeUnit('cm')" class="px-2.5 py-1 text-neutral-400 font-bold rounded cursor-pointer">CM</button>
+        <div class="flex bg-neutral-100 p-0.5 rounded-lg border border-black/10 text-[10px] font-mono-code">
+          <button id="unit-in-btn" onclick="toggleSizeUnit('in')" class="px-2.5 py-1 bg-black text-white font-bold rounded cursor-pointer">IN</button>
+          <button id="unit-cm-btn" onclick="toggleSizeUnit('cm')" class="px-2.5 py-1 text-neutral-600 font-bold rounded cursor-pointer">CM</button>
         </div>
       </div>
-
       <div class="overflow-x-auto">
-        <table class="w-full text-[11px] text-neutral-300 border border-white/10 rounded-xl overflow-hidden font-mono-code text-left">
-          <thead class="bg-white/5 text-white uppercase text-[10px]">
+        <table class="w-full text-[11px] text-neutral-700 border border-black/10 rounded-xl overflow-hidden font-mono-code text-left">
+          <thead class="bg-black/5 text-black uppercase text-[10px]">
             <tr>
               <th class="p-3">Size</th>
               <th class="p-3" id="th-chest">Chest</th>
@@ -487,25 +465,98 @@
               <th class="p-3">Drape</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-white/5" id="size-table-body"></tbody>
+          <tbody class="divide-y divide-black/5" id="size-table-body"></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- ================= POLICY MODAL ================= -->
-  <div id="policy-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="bg-[#0d0d0d] border border-white/10 rounded-2xl max-w-lg w-full p-6 relative space-y-4 shadow-2xl">
-      <button onclick="closePolicyModal()" class="absolute top-4 right-4 text-neutral-400 hover:text-white text-sm cursor-pointer">✕</button>
-      <h3 id="policy-modal-title" class="text-xs font-bold uppercase tracking-wider text-white font-cinzel"></h3>
-      <div id="policy-modal-body" class="text-[11px] text-neutral-400 space-y-3 leading-relaxed"></div>
+  <div id="admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-black/15 rounded-2xl max-w-4xl w-full p-6 relative space-y-6 max-h-[92vh] overflow-y-auto shadow-2xl">
+      <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black text-sm cursor-pointer">✕</button>
+      <div class="flex items-center justify-between border-b border-black/10 pb-4">
+        <div>
+          <span class="text-[9px] uppercase tracking-[0.3em] text-neutral-500 font-mono-code">STUDIO CMS</span>
+          <h3 class="text-base font-bold uppercase tracking-wider text-black">Catalog & Hero Management</h3>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="switchAdminTab('add-product')" id="tab-btn-add" class="px-3 py-1.5 bg-black text-white text-xs font-bold uppercase font-mono-code rounded-lg cursor-pointer">Add Drop +</button>
+          <button onclick="switchAdminTab('change-hero')" id="tab-btn-hero" class="px-3 py-1.5 bg-neutral-200 hover:bg-neutral-300 text-black text-xs font-bold uppercase font-mono-code rounded-lg cursor-pointer">Change Hero 🖼️</button>
+          <button onclick="switchAdminTab('manage-products')" id="tab-btn-manage" class="px-3 py-1.5 bg-neutral-200 hover:bg-neutral-300 text-black text-xs font-bold uppercase font-mono-code rounded-lg cursor-pointer">Manage Stock</button>
+        </div>
+      </div>
+
+      <div id="admin-tab-add" class="space-y-4">
+        <form id="admin-add-product-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label class="text-[10px] uppercase font-mono-code text-neutral-600">Drop Title</label>
+            <input type="text" id="adm-name" required placeholder="e.g. Sukuna Cursed Drop" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2 text-xs text-black focus:outline-none" />
+          </div>
+          <div class="space-y-1">
+            <label class="text-[10px] uppercase font-mono-code text-neutral-600">Selling Price (₹ INR)</label>
+            <input type="number" id="adm-price" required placeholder="599" value="599" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2 text-xs text-black focus:outline-none font-mono-code" />
+          </div>
+          <div class="space-y-2 md:col-span-2">
+            <label class="text-[10px] uppercase font-mono-code text-neutral-600 block">Product Photo (Upload from Gallery)</label>
+            <div class="flex flex-col sm:flex-row items-center gap-4 p-4 bg-neutral-100 border border-black/10 rounded-xl">
+              <input type="file" id="adm-file-input" accept="image/*" class="block w-full text-xs text-neutral-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-black file:text-white hover:file:bg-neutral-800 cursor-pointer font-mono-code" />
+              <div id="adm-preview-box" class="hidden w-16 h-16 bg-white rounded-xl border border-black/15 overflow-hidden flex items-center justify-center shrink-0">
+                <img id="adm-preview-img" src="" alt="Preview" class="w-full h-full object-contain" />
+              </div>
+            </div>
+          </div>
+          <div class="md:col-span-2 pt-2">
+            <button type="submit" class="w-full py-3.5 bg-black text-white font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-xl cursor-pointer">
+              Publish Drop
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div id="admin-tab-hero" class="space-y-4 hidden">
+        <div class="p-4 bg-neutral-100 border border-black/10 rounded-2xl space-y-4">
+          <div>
+            <span class="text-[9px] uppercase tracking-[0.3em] text-neutral-500 font-mono-code">STOREFRONT CUSTOMIZATION</span>
+            <h4 class="text-sm font-bold uppercase text-black mt-1">Update Front Hero Banner Photo</h4>
+            <p class="text-[11px] text-neutral-600">Select any aesthetic model photo from your gallery to set as the main website front banner.</p>
+          </div>
+          <div class="space-y-2">
+            <input type="file" id="adm-hero-file-input" accept="image/*" class="block w-full text-xs text-neutral-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-black file:text-white hover:file:bg-neutral-800 cursor-pointer font-mono-code" />
+          </div>
+          <div id="adm-hero-preview-box" class="hidden space-y-2">
+            <label class="text-[10px] uppercase font-mono-code text-neutral-600">Selected Photo Preview:</label>
+            <div class="w-full h-52 bg-white rounded-xl border border-black/15 overflow-hidden flex items-center justify-center">
+              <img id="adm-hero-preview-img" src="" alt="Hero Preview" class="w-full h-full object-cover" />
+            </div>
+          </div>
+          <div class="flex items-center gap-3 pt-2">
+            <button type="button" onclick="saveNewHeroBanner()" class="flex-1 py-3 bg-black text-white font-bold text-xs uppercase tracking-wider rounded-xl transition hover:bg-neutral-800 cursor-pointer shadow-lg">
+              Set as Live Hero Banner
+            </button>
+            <button type="button" onclick="resetHeroBannerToDefault()" class="px-4 py-3 bg-neutral-200 hover:bg-neutral-300 text-black text-xs font-bold uppercase font-mono-code rounded-xl transition cursor-pointer">
+              Reset Default
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="admin-tab-manage" class="space-y-4 hidden">
+        <div id="admin-product-list" class="space-y-3 max-h-[55vh] overflow-y-auto"></div>
+      </div>
     </div>
   </div>
 
-  <!-- GLOBAL TOAST -->
-  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-[#141414] border border-white/15 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300">
+  <div id="policy-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-black/10 rounded-2xl max-w-lg w-full p-6 relative space-y-4 shadow-2xl">
+      <button onclick="closePolicyModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black text-sm cursor-pointer">✕</button>
+      <h3 id="policy-modal-title" class="text-xs font-bold uppercase tracking-wider text-black font-cinzel"></h3>
+      <div id="policy-modal-body" class="text-[11px] text-neutral-600 space-y-3 leading-relaxed"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-black text-white border border-black/15 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300">
     <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-    <span id="toast-msg" class="text-xs text-white font-medium font-mono-code"></span>
+    <span id="toast-msg" class="text-xs font-medium font-mono-code"></span>
   </div>
 
   <script src="script.js"></script>
