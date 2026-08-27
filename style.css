@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-  --bg-primary: #000000;
-  --bg-card: #080808;
-  --bg-surface: #0f0f0f;
-  --border-subtle: rgba(255, 255, 255, 0.1);
-  --border-active: rgba(255, 255, 255, 0.4);
-  --text-main: #ffffff;
-  --text-muted: #888888;
+  --bg-primary: #ffffff;
+  --bg-card: #f9f9f9;
+  --bg-surface: #ffffff;
+  --border-subtle: rgba(0, 0, 0, 0.12);
+  --border-active: rgba(0, 0, 0, 0.4);
+  --text-main: #000000;
+  --text-muted: #666666;
 }
 
 * {
@@ -16,27 +16,42 @@
   padding: 0;
 }
 
+html,
 body {
-  background-color: var(--bg-primary);
-  color: var(--text-main);
+  width: 100%;
+  min-height: 100%;
+  background: #ffffff !important;
+  color: #000000;
+}
+
+body {
   font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
+main,
+section,
+header,
+footer,
+div {
+  background-color: transparent;
+}
+
 .font-cinzel { font-family: 'Cinzel', serif; }
 .font-mono-code { font-family: 'JetBrains Mono', monospace; }
 
-/* Custom Monochrome Scrollbar */
+/* Custom Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #000000; }
-::-webkit-scrollbar-thumb { background: #333333; border-radius: 2px; }
+::-webkit-scrollbar-track { background: #ffffff; }
+::-webkit-scrollbar-thumb { background: #cccccc; border-radius: 2px; }
 
 /* Infinite Announcement Marquee */
 .marquee-container {
   overflow: hidden;
   white-space: nowrap;
   display: flex;
+  background: #ffffff;
 }
 
 .marquee-content {
@@ -49,15 +64,29 @@ body {
   100% { transform: translateX(-50%); }
 }
 
-/* Hero Pop-Up & Background Animations */
-@keyframes heroPopUp {
+/* ================= LUXURY SLOW & SMOOTH ANIMATIONS ================= */
+
+/* Hero Text Elegant Slide-In */
+@keyframes luxurySlideIn {
   0% {
     opacity: 0;
-    transform: translateY(35px) scale(0.96);
+    transform: translateY(30px) translateX(-25px);
   }
-  70% {
+  100% {
     opacity: 1;
-    transform: translateY(-4px) scale(1.01);
+    transform: translateY(0) translateX(0);
+  }
+}
+
+.hero-slide-anim {
+  animation: luxurySlideIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+/* Butter-Smooth & Slow Scroll Reveal (Luxury Logic) */
+@keyframes smoothLuxuryFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.97);
   }
   100% {
     opacity: 1;
@@ -65,74 +94,86 @@ body {
   }
 }
 
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(50px) scale(0.97);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.active {
+  animation: smoothLuxuryFadeUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+/* Hero Keyframes */
+@keyframes heroPopUp {
+  0% { opacity: 0; transform: translateY(35px) scale(0.96); }
+  70% { opacity: 1; transform: translateY(-4px) scale(1.01); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 @keyframes heroBgReveal {
-  0% {
-    opacity: 0;
-    transform: scale(1.06);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
+  0% { opacity: 0; transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 .hero-popup-content {
-  animation: heroPopUp 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: heroPopUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .hero-bg-animate {
-  animation: heroBgReveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: heroBgReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Clean Product Cards */
+/* PRODUCT CARDS */
 .clean-product-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  background: var(--bg-card);
+  background: var(--bg-card) !important;
   border: 1px solid var(--border-subtle);
-  border-radius: 14px;
+  border-radius: 12px;
   overflow: hidden;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
 }
 
 .clean-product-card:hover {
   transform: translateY(-4px);
   border-color: var(--border-active);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
 
 .product-media {
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1.15;
-  background: #040404;
+  background: #ffffff !important;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .product-media img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .clean-product-card:hover .product-media img {
   transform: scale(1.06);
 }
 
-/* Modal Sizing Selector */
+/* SIZE BUTTONS */
 .size-pill {
-  padding: 0.25rem 0.55rem;
-  font-size: 10px;
+  padding: 0.2rem 0.4rem;
+  font-size: 9px;
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: 4px;
   border: 1px solid var(--border-subtle);
-  background: #111111;
+  background: #ffffff;
   color: var(--text-muted);
   transition: all 0.2s ease;
   cursor: pointer;
@@ -140,50 +181,38 @@ body {
 }
 
 .size-pill:hover {
-  border-color: rgba(255, 255, 255, 0.5);
-  color: #ffffff;
+  border-color: rgba(0, 0, 0, 0.5);
+  color: #000000;
 }
 
 .size-pill.active {
-  background: #ffffff;
-  color: #000000;
-  border-color: #ffffff;
+  background: #000000;
+  color: #ffffff;
+  border-color: #000000;
 }
 
-/* Filter Tag Pills */
+/* CATEGORY / FILTER BUTTONS */
 .category-pill {
-  padding: 0.45rem 1rem;
-  background: #080808;
+  padding: 0.4rem 0.9rem;
+  background: #f4f4f4;
   border: 1px solid var(--border-subtle);
   border-radius: 9999px;
   font-size: 11px;
   font-weight: 500;
-  color: #888888;
+  color: #666666;
   transition: all 0.2s ease;
   cursor: pointer;
 }
 
 .category-pill:hover {
-  background: #141414;
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.4);
+  background: #e5e5e5;
+  color: #000000;
+  border-color: rgba(0, 0, 0, 0.3);
 }
 
 .category-pill.active {
-  background: #ffffff;
-  color: #000000;
-  border-color: #ffffff;
+  background: #000000;
+  color: #ffffff;
+  border-color: #000000;
   font-weight: 700;
-}
-
-/* Reveal Observer Animations */
-.reveal {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.reveal.active {
-  opacity: 1;
-  transform: translateY(0);
 }
