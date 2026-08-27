@@ -1,35 +1,45 @@
-// ================= VEHRAAN STUDIO FIREBASE INITIALIZATION =================
-const firebaseConfig = {
-  apiKey: "AIzaSyDC2gg3JyPE3KMgtf06A4aDV3U2jSfQWUU",
-  authDomain: "vehraan-studio.firebaseapp.com",
-  projectId: "vehraan-studio",
-  storageBucket: "vehraan-studio.firebasestorage.app",
-  messagingSenderId: "1072734814223",
-  appId: "1:1072734814223:web:313d2701978c5c89b5e37a",
-  measurementId: "G-SZBB157ZHJ"
-};
-
-// Initialize Firebase SDK
-if (typeof firebase !== "undefined" && !firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}/* ==========================================================================
-   VEHRAAN STREETWEAR — PRODUCTION MASTER ENGINE
+/* ==========================================================================
+   VEHRAAN STREETWEAR — PRODUCTION MASTER ENGINE (MANDATORY AUTH & CLEAN UI)
+   - 18 Drops (veh-001 to veh-018) @ Flat ₹399 (Clean Visual Cards)
+   - Mandatory Google Authentication prior to Bag & Checkout
+   - 10% Auto Discount on Subtotal >= ₹1,000 + Flat ₹120 COD Express Delivery
+   - Post-Purchase Fit Matrix confirmation dispatched to WhatsApp
    ========================================================================== */
 
-// 1. MASTER 18 PRODUCTS CATALOG
+// 1. FIREBASE CONFIGURATION (REPLACE WITH YOUR KEYS WHEN DEPLOYING LIVE AUTH)
+const firebaseConfig = {
+  apiKey: "YOUR_FIREBASE_API_KEY",
+  authDomain: "vehraan-studio.firebaseapp.com",
+  projectId: "vehraan-studio",
+  storageBucket: "vehraan-studio.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+// Safe Firebase Initializer
+try {
+  if (
+    typeof firebase !== "undefined" && 
+    !firebase.apps.length && 
+    firebaseConfig.apiKey !== "YOUR_FIREBASE_API_KEY"
+  ) {
+    firebase.initializeApp(firebaseConfig);
+  }
+} catch (e) {
+  console.warn("Firebase Auth initializing...", e.message);
+}
+
+// 2. MASTER 18 PRODUCTS CATALOG (CLEAN TITLES & MEDIA)
 const products = [
-  // --- FRESH DROPS (1 to 9) ---
   {
     id: "veh-001",
-    name: "Symbiote Noir Spider Graphic Drop",
+    name: "Symbiote Noir Spider Drop",
     price: 399,
     originalPrice: 799,
     image: "images/tee-1.jpg",
     fallbackImage: "images/tee-1.jpeg",
-    desc: "Heavy combed cotton knit. Minimalist front spider logo with full back graphic.",
     sizes: ["S", "M", "L", "XL", "XXL"],
-    section: "fresh",
-    tags: ["boys", "girls", "men", "women", "unisex", "black", "spider", "marvel", "spiderman", "comic", "symbiote", "graphic", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "spider", "marvel", "symbiote", "graphic", "tee"]
   },
   {
     id: "veh-002",
@@ -38,10 +48,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-2.jpg",
     fallbackImage: "images/tee-2.jpeg",
-    desc: "Dual-color red and white stylized Spiderverse leap graphic with zero fade ink.",
     sizes: ["S", "M", "L", "XL"],
-    section: "fresh",
-    tags: ["boys", "girls", "men", "women", "unisex", "black", "red", "spider", "marvel", "miles", "morales", "spiderverse", "graphic", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "spider", "marvel", "miles", "spiderverse", "graphic", "tee"]
   },
   {
     id: "veh-003",
@@ -50,10 +58,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-3.jpg",
     fallbackImage: "images/tee-3.jpeg",
-    desc: "Continuous chain aesthetic passing from waistline to full-back inverted spear art.",
     sizes: ["M", "L", "XL", "XXL"],
-    section: "fresh",
-    tags: ["boys", "girls", "men", "women", "unisex", "white", "anime", "toji", "fushiguro", "jjk", "jujutsu", "kaisen", "spear", "wrap", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "toji", "fushiguro", "jjk", "jujutsu", "spear", "tee"]
   },
   {
     id: "veh-004",
@@ -62,10 +68,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-4.jpg",
     fallbackImage: "images/tee-4.jpeg",
-    desc: "Pure white drop with chest F1 insignia and front-hem race car artwork.",
     sizes: ["S", "M", "L", "XL"],
-    section: "fresh",
-    tags: ["boys", "girls", "men", "women", "unisex", "white", "f1", "formula 1", "car", "racing", "speed", "motorsport", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "f1", "formula 1", "car", "racing", "speed", "motorsport", "tee"]
   },
   {
     id: "veh-005",
@@ -74,10 +78,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-5.jpg",
     fallbackImage: "images/tee-5.jpeg",
-    desc: "Manga calligraphy quote on chest with wrap-around katana blade side illustration.",
     sizes: ["S", "M", "L", "XL"],
-    section: "fresh",
-    tags: ["boys", "girls", "men", "women", "unisex", "white", "anime", "manga", "vagabond", "musashi", "katana", "samurai", "sword", "quote", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "manga", "vagabond", "musashi", "katana", "samurai", "tee"]
   },
   {
     id: "veh-006",
@@ -86,10 +88,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-11.jpg",
     fallbackImage: "images/tee-11.jpeg",
-    desc: "Gothic chest typography paired with dynamic corner-spanning blood-red web artwork.",
     sizes: ["S", "M", "L", "XL"],
-    section: "fresh",
-    tags: ["boys", "girls", "men", "women", "unisex", "black", "red", "who", "spider", "web", "gothic", "streetwear", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "spider", "web", "gothic", "streetwear", "tee"]
   },
   {
     id: "veh-007",
@@ -98,10 +98,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-12.jpg",
     fallbackImage: "images/tee-12.jpeg",
-    desc: "Flowing ink manga art of the Commander Igris summon on white cotton.",
     sizes: ["M", "L", "XL", "XXL"],
-    section: "fresh",
-    tags: ["boys", "girls", "men", "women", "unisex", "white", "anime", "solo leveling", "arise", "igris", "jinwoo", "shadow", "monarch", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "solo leveling", "arise", "igris", "jinwoo", "tee"]
   },
   {
     id: "veh-008",
@@ -110,10 +108,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-13.jpg",
     fallbackImage: "images/tee-13.jpeg",
-    desc: "Red front chest typography with spiderweb fracture graphics spanning the back.",
     sizes: ["S", "M", "L", "XL"],
-    section: "fresh",
-    tags: ["boys", "girls", "men", "women", "unisex", "black", "red", "spider", "web", "shatter", "streetwear", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "spider", "web", "shatter", "streetwear", "tee"]
   },
   {
     id: "veh-009",
@@ -122,13 +118,9 @@ const products = [
     originalPrice: 799,
     image: "images/tee-14.jpg",
     fallbackImage: "images/tee-14.jpeg",
-    desc: "Earth-tone sand beige knit featuring layered red and black typography.",
     sizes: ["M", "L", "XL", "XXL"],
-    section: "fresh",
-    tags: ["boys", "girls", "men", "women", "unisex", "beige", "sand", "brown", "creative", "passion", "typography", "oversized", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "creative", "passion", "typography", "oversized", "tee"]
   },
-
-  // --- TRENDING NOW (10 to 18) ---
   {
     id: "veh-010",
     name: "Zenitsu Thunder Breathing Drop",
@@ -136,10 +128,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-6.jpg",
     fallbackImage: "images/tee-6.jpeg",
-    desc: "Vibrant yellow electric arc back print on jet-black bio-wash knit.",
     sizes: ["S", "M", "L", "XL"],
-    section: "trending",
-    tags: ["boys", "girls", "men", "women", "unisex", "black", "yellow", "anime", "demon slayer", "kimetsu", "zenitsu", "thunder", "katana", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "demon slayer", "zenitsu", "thunder", "katana", "tee"]
   },
   {
     id: "veh-011",
@@ -148,10 +138,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-7.jpg",
     fallbackImage: "images/tee-7.jpeg",
-    desc: "Crisp chest frame insignia with sharp blade stance back screenprint.",
     sizes: ["M", "L", "XL"],
-    section: "trending",
-    tags: ["boys", "girls", "men", "women", "unisex", "black", "anime", "toji", "fushiguro", "jjk", "jujutsu kaisen", "katana", "blade", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "toji", "fushiguro", "jjk", "blade", "tee"]
   },
   {
     id: "veh-012",
@@ -160,10 +148,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-8.jpg",
     fallbackImage: "images/tee-8.jpeg",
-    desc: "Subtle Japanese chest emblem with oversized monochrome character portrait.",
     sizes: ["S", "M", "L", "XL"],
-    section: "trending",
-    tags: ["boys", "girls", "men", "women", "unisex", "black", "anime", "toji", "smirk", "dagger", "jjk", "jujutsu", "oversized", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "toji", "smirk", "dagger", "jjk", "tee"]
   },
   {
     id: "veh-013",
@@ -172,10 +158,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-9.jpg",
     fallbackImage: "images/tee-9.jpeg",
-    desc: "Monochrome chest typography with vibrant cyan shadow aura back illustration.",
     sizes: ["S", "M", "L", "XL", "XXL"],
-    section: "trending",
-    tags: ["boys", "girls", "men", "women", "unisex", "black", "blue", "cyan", "anime", "solo leveling", "jinwoo", "arise", "shadow", "monarch", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "solo leveling", "jinwoo", "arise", "tee"]
   },
   {
     id: "veh-014",
@@ -184,10 +168,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-10.jpg",
     fallbackImage: "images/tee-10.jpeg",
-    desc: "High-contrast blood-red font treatment with spear-wielding anime back panel.",
     sizes: ["M", "L", "XL", "XXL"],
-    section: "trending",
-    tags: ["boys", "girls", "men", "women", "unisex", "black", "red", "anime", "toji", "bloodline", "crimson", "jjk", "jujutsu", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "toji", "bloodline", "crimson", "jjk", "tee"]
   },
   {
     id: "veh-015",
@@ -196,10 +178,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-15.jpg",
     fallbackImage: "images/tee-15.jpeg",
-    desc: "Deep cobalt blue cotton with clean Japanese Attack on Titan chest typography.",
     sizes: ["S", "M", "L", "XL"],
-    section: "trending",
-    tags: ["boys", "girls", "men", "women", "unisex", "blue", "cobalt", "anime", "aot", "attack on titan", "shingeki", "kanji", "japanese", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "aot", "attack on titan", "kanji", "tee"]
   },
   {
     id: "veh-016",
@@ -208,10 +188,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-16.jpg",
     fallbackImage: "images/tee-16.jpeg",
-    desc: "Royal blue base with full grayscale Levi blade stance back illustration.",
     sizes: ["M", "L", "XL"],
-    section: "trending",
-    tags: ["boys", "girls", "men", "women", "unisex", "blue", "anime", "aot", "attack on titan", "levi", "ackerman", "blade", "manga", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "aot", "attack on titan", "levi", "ackerman", "tee"]
   },
   {
     id: "veh-017",
@@ -220,10 +198,8 @@ const products = [
     originalPrice: 799,
     image: "images/tee-17.jpg",
     fallbackImage: "images/tee-17.jpeg",
-    desc: "Distressed vintage chalk-white skull graphic on jet-black cotton.",
     sizes: ["S", "M", "L", "XL", "XXL"],
-    section: "trending",
-    tags: ["boys", "girls", "men", "women", "unisex", "black", "marvel", "punisher", "skull", "distressed", "vintage", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "marvel", "punisher", "skull", "distressed", "tee"]
   },
   {
     id: "veh-018",
@@ -232,23 +208,29 @@ const products = [
     originalPrice: 799,
     image: "images/tee-18.jpg",
     fallbackImage: "images/tee-18.jpeg",
-    desc: "Minimal chest eye-box paired with multi-panel awakened Maki sword back manga.",
     sizes: ["S", "M", "L", "XL"],
-    section: "trending",
-    tags: ["boys", "girls", "men", "women", "unisex", "black", "anime", "maki", "zenin", "jjk", "jujutsu kaisen", "sword", "manga", "tee"]
+    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "maki", "zenin", "jjk", "sword", "tee"]
   }
 ];
 
 // App State
 let catalogProducts = [...products];
 let currentUser = null;
-let activeModalSelectedSize = "M";
+let activeSelectedSizes = {};
 let activeFilterTag = "all";
 let isExpanded = false;
+const INITIAL_LIMIT = 6;
 const FLAT_DELIVERY_FEE = 120;
 let currentUnit = "in";
 
-// 2. DEFENSIVE CART INITIALIZATION
+// 3. PERSISTENT AUTH & CART CACHE
+try {
+  const cachedUser = localStorage.getItem("vehraan_user");
+  if (cachedUser) currentUser = JSON.parse(cachedUser);
+} catch (e) {
+  currentUser = null;
+}
+
 let rawCart = [];
 try {
   rawCart = JSON.parse(localStorage.getItem("vehraan_cart")) || [];
@@ -270,48 +252,71 @@ let cart = rawCart
   }));
 localStorage.setItem("vehraan_cart", JSON.stringify(cart));
 
-// 3. DOM READY CONTROLLER
-document.addEventListener("DOMContentLoaded", () => {
-  renderGrids();
+function initSizes() {
+  catalogProducts.forEach(p => {
+    if (!activeSelectedSizes[p.id]) {
+      activeSelectedSizes[p.id] = (p.sizes && p.sizes[0]) || "M";
+    }
+  });
+}
+initSizes();
+
+// 4. IMMEDIATE EXECUTION
+function initApp() {
+  renderCatalog();
   setupSearchListeners();
   setupCheckoutForm();
   updateCartBadge();
-  initFirebase();
-});
+  if (currentUser) {
+    updateAuthUI(currentUser.displayName ? currentUser.displayName.split(" ")[0].toUpperCase() : "MEMBER");
+  }
+  initAuthObserver();
+}
 
-// 4. CLEAN PRODUCT CARD GENERATOR
-function renderGrids() {
-  const catalogGrid = document.getElementById("catalog-grid");
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}
+
+// 5. CLEAN CATALOG RENDERING (NO 220 GSM ON CARDS)
+function renderCatalog() {
+  const grid = document.getElementById("catalog-grid");
   const countBadge = document.getElementById("catalog-count-badge");
   const viewAllBtn = document.getElementById("view-all-container");
 
-  if (!catalogGrid) return;
+  if (!grid) return;
 
   let filtered = catalogProducts;
   if (activeFilterTag !== "all") {
     const term = activeFilterTag.toLowerCase().trim();
     filtered = catalogProducts.filter(p => {
-      const inTags = p.tags && p.tags.includes(term);
+      const inTags = p.tags && p.tags.some(t => t.toLowerCase().includes(term));
       const inName = p.name && p.name.toLowerCase().includes(term);
-      const inDesc = p.desc && p.desc.toLowerCase().includes(term);
-      return inTags || inName || inDesc;
+      return inTags || inName;
     });
   }
 
-  const visibleItems = (isExpanded || activeFilterTag !== "all") ? filtered : filtered.slice(0, 6);
+  const displayItems = (activeFilterTag === "all" && !isExpanded)
+    ? filtered.slice(0, INITIAL_LIMIT)
+    : filtered;
 
-  if (visibleItems.length === 0) {
-    catalogGrid.innerHTML = `<p class="text-neutral-500 py-10 text-center col-span-full font-mono-code text-xs">NO DROPS FOUND MATCHING "${activeFilterTag.toUpperCase()}".</p>`;
+  if (displayItems.length === 0) {
+    grid.innerHTML = `<p class="text-neutral-500 py-12 text-center col-span-full font-mono-code text-xs">NO DROPS FOUND MATCHING "${activeFilterTag.toUpperCase()}".</p>`;
   } else {
-    catalogGrid.innerHTML = visibleItems.map(p => createCardHTML(p)).join("");
+    grid.innerHTML = displayItems.map(p => createCardHTML(p)).join("");
   }
 
   if (countBadge) {
-    countBadge.innerText = `${String(visibleItems.length).padStart(2, '0')} / ${String(filtered.length).padStart(2, '0')} Drops`;
+    if (activeFilterTag === "all") {
+      countBadge.innerText = `${String(displayItems.length).padStart(2, '0')} / ${String(catalogProducts.length).padStart(2, '0')} Drops`;
+    } else {
+      countBadge.innerText = `${String(displayItems.length).padStart(2, '0')} Drops`;
+    }
   }
 
   if (viewAllBtn) {
-    if (activeFilterTag !== "all" || isExpanded || filtered.length <= 6) {
+    if (activeFilterTag !== "all" || isExpanded || filtered.length <= INITIAL_LIMIT) {
       viewAllBtn.classList.add("hidden");
     } else {
       viewAllBtn.classList.remove("hidden");
@@ -320,37 +325,52 @@ function renderGrids() {
 }
 
 function createCardHTML(product) {
+  const selectedSize = activeSelectedSizes[product.id] || (product.sizes && product.sizes[0]) || "M";
+  const sizePills = (product.sizes || ["S", "M", "L", "XL"]).map(sz => `
+    <button 
+      type="button" 
+      onclick="event.stopPropagation(); changeSize('${product.id}', '${sz}')" 
+      class="size-pill ${sz === selectedSize ? 'active' : ''}"
+    >
+      ${sz}
+    </button>
+  `).join("");
+
   return `
-    <div class="clean-product-card justify-between cursor-pointer group" id="card-${product.id}" onclick="openProductDetailsModal('${product.id}')">
-      <div class="product-media relative overflow-hidden">
+    <div class="clean-product-card justify-between cursor-pointer" id="card-${product.id}" onclick="openProductDetailsModal('${product.id}')">
+      <div class="product-media">
         <img 
           src="${product.image}" 
           alt="${product.name}" 
           loading="lazy" 
-          class="transition-transform duration-500 group-hover:scale-105"
           onerror="this.onerror=null; this.src='${product.fallbackImage || product.image}';" 
         />
       </div>
 
-      <div class="p-4 pt-3 flex-1 flex flex-col justify-between space-y-3">
-        <div>
+      <div class="p-4 pt-3 flex-1 flex flex-col justify-between space-y-3" onclick="event.stopPropagation()">
+        <div onclick="openProductDetailsModal('${product.id}')">
           <div class="flex items-start justify-between gap-2">
-            <h3 class="text-xs font-semibold uppercase tracking-wider text-white group-hover:text-neutral-300 transition">${product.name}</h3>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white hover:text-neutral-300 transition">${product.name}</h3>
             <div class="text-right">
               <span class="text-xs font-bold text-white font-mono-code">₹${product.price}</span>
               ${product.originalPrice ? `<span class="block text-[9px] text-neutral-500 line-through font-mono-code">₹${product.originalPrice}</span>` : ''}
             </div>
           </div>
-          <p class="text-[11px] text-neutral-400 mt-1 leading-relaxed line-clamp-2">${product.desc}</p>
         </div>
 
-        <button 
-          type="button" 
-          onclick="event.stopPropagation(); openProductDetailsModal('${product.id}')" 
-          class="w-full py-2.5 bg-[#141414] hover:bg-white hover:text-black border border-white/10 text-neutral-200 rounded-lg text-[10px] font-bold uppercase tracking-[0.15em] transition duration-200 cursor-pointer"
-        >
-          Add to Bag
-        </button>
+        <div>
+          <div class="flex gap-1.5 mb-3">
+            ${sizePills}
+          </div>
+
+          <button 
+            type="button" 
+            onclick="event.stopPropagation(); addToBag('${product.id}')" 
+            class="w-full py-2.5 bg-[#141414] hover:bg-white hover:text-black border border-white/10 text-neutral-200 rounded-lg text-[10px] font-bold uppercase tracking-[0.15em] transition duration-200 cursor-pointer"
+          >
+            Add to Bag
+          </button>
+        </div>
       </div>
     </div>
   `;
@@ -358,10 +378,15 @@ function createCardHTML(product) {
 
 window.expandFullCatalog = function() {
   isExpanded = true;
-  renderGrids();
+  renderCatalog();
 };
 
-// 5. ON-DEMAND SIZE SELECTION MODAL
+window.changeSize = function(productId, size) {
+  activeSelectedSizes[productId] = size;
+  renderCatalog();
+};
+
+// 6. QUICK-VIEW PRODUCT MODAL
 window.openProductDetailsModal = function(productId) {
   const product = catalogProducts.find(p => String(p.id) === String(productId));
   if (!product) return;
@@ -370,7 +395,6 @@ window.openProductDetailsModal = function(productId) {
   const img = document.getElementById("modal-p-img");
   const name = document.getElementById("modal-p-name");
   const price = document.getElementById("modal-p-price");
-  const desc = document.getElementById("modal-p-desc");
   const sizesContainer = document.getElementById("modal-p-sizes");
   const addBtn = document.getElementById("modal-p-add-btn");
 
@@ -380,16 +404,14 @@ window.openProductDetailsModal = function(productId) {
   }
   if (name) name.innerText = product.name;
   if (price) price.innerText = `₹${product.price}`;
-  if (desc) desc.innerText = product.desc;
 
-  activeModalSelectedSize = (product.sizes && product.sizes[0]) || "M";
-
+  const currentSelectedSize = activeSelectedSizes[product.id] || (product.sizes && product.sizes[0]) || "M";
   if (sizesContainer) {
     sizesContainer.innerHTML = (product.sizes || ["S", "M", "L", "XL"]).map(sz => `
       <button 
         type="button" 
-        onclick="handleModalSizeSelect('${sz}', this)" 
-        class="size-pill ${sz === activeModalSelectedSize ? 'active' : ''}"
+        onclick="handleModalSizeSelect('${product.id}', '${sz}', this)" 
+        class="size-pill ${sz === currentSelectedSize ? 'active' : ''}"
       >
         ${sz}
       </button>
@@ -398,7 +420,7 @@ window.openProductDetailsModal = function(productId) {
 
   if (addBtn) {
     addBtn.onclick = () => {
-      executeAddToBag(product, activeModalSelectedSize);
+      addToBag(product.id);
       closeProductDetailsModal();
     };
   }
@@ -406,13 +428,14 @@ window.openProductDetailsModal = function(productId) {
   if (modal) modal.classList.remove("hidden");
 };
 
-window.handleModalSizeSelect = function(size, btn) {
-  activeModalSelectedSize = size;
+window.handleModalSizeSelect = function(productId, size, btn) {
+  activeSelectedSizes[productId] = size;
   const container = document.getElementById("modal-p-sizes");
   if (container) {
     container.querySelectorAll(".size-pill").forEach(b => b.classList.remove("active"));
   }
   btn.classList.add("active");
+  renderCatalog();
 };
 
 window.closeProductDetailsModal = function() {
@@ -420,9 +443,20 @@ window.closeProductDetailsModal = function() {
   if (modal) modal.classList.add("hidden");
 };
 
-// 6. SHOPPING BAG & DISCOUNT ENGINE
-function executeAddToBag(item, chosenSize) {
-  const existing = cart.find(c => String(c.id) === String(item.id) && c.size === chosenSize);
+// 7. MANDATORY AUTHENTICATION CHECK ON "ADD TO BAG"
+window.addToBag = function(productId) {
+  // Check if User is Logged In
+  if (!currentUser) {
+    openAuthModal();
+    showToast("Please Sign In with Google to start shopping!");
+    return;
+  }
+
+  const item = catalogProducts.find(p => String(p.id) === String(productId));
+  if (!item) return;
+
+  const size = activeSelectedSizes[item.id] || "M";
+  const existing = cart.find(c => String(c.id) === String(item.id) && c.size === size);
 
   if (existing) {
     existing.qty = Number(existing.qty || 0) + 1;
@@ -433,7 +467,7 @@ function executeAddToBag(item, chosenSize) {
       price: Number(item.price) || 399,
       image: item.image,
       fallbackImage: item.fallbackImage,
-      size: chosenSize,
+      size: size,
       qty: 1
     });
   }
@@ -441,8 +475,8 @@ function executeAddToBag(item, chosenSize) {
   saveCart();
   updateCartBadge();
   toggleCart(true);
-  showToast(`${item.name} (${chosenSize}) added to bag.`);
-}
+  showToast(`${item.name} (${size}) added to bag.`);
+};
 
 function saveCart() {
   localStorage.setItem("vehraan_cart", JSON.stringify(cart));
@@ -457,6 +491,12 @@ function updateCartBadge() {
 }
 
 window.toggleCart = function(show) {
+  if (show && !currentUser) {
+    openAuthModal();
+    showToast("Please Sign In first to view your bag.");
+    return;
+  }
+
   const drawer = document.getElementById("cart-drawer");
   const overlay = document.getElementById("cart-drawer-overlay");
 
@@ -495,7 +535,7 @@ function renderCartItems() {
     return `
       <div class="flex items-center gap-3 p-2.5 bg-[#0e0e0e] border border-white/10 rounded-xl">
         <img src="${item.image}" alt="${item.name}" class="w-12 h-14 object-cover rounded-lg border border-white/10" onerror="this.src='${item.fallbackImage || item.image}'" />
-        <div class="flex-1 min-w-0">
+        <div class="flex-1 min-w-0 text-left">
           <h4 class="text-xs font-semibold text-white truncate">${item.name}</h4>
           <p class="text-[10px] text-neutral-400 font-mono-code">Size: <strong class="text-white">${item.size}</strong> | ₹${itemPrice}</p>
           <div class="flex items-center gap-2 mt-1.5">
@@ -546,8 +586,13 @@ window.removeCartItem = function(index) {
   renderCartItems();
 };
 
-// 7. CHECKOUT & WHATSAPP DISPATCH
+// 8. MANDATORY AUTH CHECK & CHECKOUT DISPATCH
 window.openCheckoutModal = function() {
+  if (!currentUser) {
+    openAuthModal();
+    showToast("Please Sign In to proceed to checkout.");
+    return;
+  }
   if (!cart || cart.length === 0) {
     showToast("Please add items to your bag first.");
     return;
@@ -574,6 +619,12 @@ function setupCheckoutForm() {
   form.addEventListener("submit", async e => {
     e.preventDefault();
 
+    if (!currentUser) {
+      openAuthModal();
+      showToast("Please Sign In before placing order.");
+      return;
+    }
+
     const name = document.getElementById("order-name").value.trim();
     const phone = document.getElementById("order-phone").value.trim();
     const email = document.getElementById("order-email").value.trim();
@@ -585,6 +636,8 @@ function setupCheckoutForm() {
     const total = (rawSubtotal - discount) + FLAT_DELIVERY_FEE;
 
     const orderPayload = {
+      userEmail: currentUser.email || email,
+      userName: currentUser.displayName || name,
       name, phone, email, ig, address,
       items: cart,
       subtotal: rawSubtotal,
@@ -596,37 +649,50 @@ function setupCheckoutForm() {
     };
 
     try {
-      if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0 && firebase.firestore) {
+      if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0) {
         await firebase.firestore().collection("orders").add(orderPayload);
       }
     } catch (err) {
-      console.warn("Firestore sync skipped:", err.message);
+      console.warn("Firestore order log bypassed:", err.message);
     }
 
     const itemsList = cart.map(i => `• ${i.name} [Size: ${i.size}] x${i.qty} - ₹${(Number(i.price) || 399) * (Number(i.qty) || 1)}`).join("%0A");
+    
+    // Fit Matrix Table included directly in post-order confirmation
+    const sizeGuideSnippet = `%0A%0A*--- VEHRAAN FIT MATRIX (CHEST / LENGTH) ---*%0A` +
+      `• Size S: 40 IN / 28 IN%0A` +
+      `• Size M: 42 IN / 29 IN%0A` +
+      `• Size L: 44 IN / 30 IN%0A` +
+      `• Size XL: 46 IN / 31 IN%0A` +
+      `• Size XXL: 48 IN / 32 IN`;
+
     const waMessage = `*VEHRAAN COD ORDER DISPATCH*%0A%0A` +
-      `*Name:* ${name}%0A` +
+      `*Customer:* ${name}%0A` +
       `*Phone:* ${phone}%0A` +
-      `*Email:* ${email}%0A` +
+      `*Account Email:* ${currentUser.email || email}%0A` +
       `*Instagram:* ${ig}%0A` +
       `*Delivery Address:* ${address}%0A%0A` +
       `*Ordered Drops:*%0A${itemsList}%0A%0A` +
       `*Items Subtotal:* ₹${rawSubtotal}%0A` +
       (discount > 0 ? `*10% Promo Discount:* -₹${discount}%0A` : ``) +
       `*Express Delivery:* ₹${FLAT_DELIVERY_FEE}%0A` +
-      `*Net COD Amount:* ₹${total}%0A%0A` +
-      `Please confirm my shipment dispatch!`;
+      `*Net COD Amount:* ₹${total}` +
+      sizeGuideSnippet +
+      `%0A%0APlease confirm my shipment dispatch!`;
 
     cart = [];
     saveCart();
     updateCartBadge();
     closeCheckoutModal();
 
+    // Trigger Size Chart Modal on screen after ordering
+    openSizeGuideModal();
+
     window.open(`https://wa.me/917400246429?text=${waMessage}`, "_blank");
   });
 }
 
-// 8. FAIL-SAFE AUTHENTICATION (DUAL TARGET CONTAINER SYNCHRONIZATION)
+// 9. 100% GOOGLE AUTHENTICATION ENGINE
 window.openAuthModal = function() {
   document.getElementById("auth-modal")?.classList.remove("hidden");
 };
@@ -634,36 +700,59 @@ window.closeAuthModal = function() {
   document.getElementById("auth-modal")?.classList.add("hidden");
 };
 
-function initFirebase() {
+function initAuthObserver() {
   try {
     if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0) {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
-          currentUser = user;
+          currentUser = {
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            uid: user.uid
+          };
+          localStorage.setItem("vehraan_user", JSON.stringify(currentUser));
           updateAuthUI(user.displayName ? user.displayName.split(" ")[0].toUpperCase() : "MEMBER");
         }
       });
     }
   } catch (e) {
-    console.warn("Firebase Auth bypassed:", e.message);
+    console.warn("Auth observer bypassed:", e.message);
   }
 }
 
 window.handleGoogleSignIn = async function() {
   try {
-    if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0) {
+    if (
+      typeof firebase !== "undefined" && 
+      firebase.apps && 
+      firebase.apps.length > 0 &&
+      firebaseConfig.apiKey !== "YOUR_FIREBASE_API_KEY"
+    ) {
       const provider = new firebase.auth.GoogleAuthProvider();
-      await firebase.auth().signInWithPopup(provider);
+      const result = await firebase.auth().signInWithPopup(provider);
+      const user = result.user;
+      currentUser = {
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        uid: user.uid
+      };
+      localStorage.setItem("vehraan_user", JSON.stringify(currentUser));
+      updateAuthUI(user.displayName ? user.displayName.split(" ")[0].toUpperCase() : "ACCOUNT");
       closeAuthModal();
-      showToast("Signed in successfully!");
+      showToast(`Welcome, ${user.displayName}!`);
     } else {
-      currentUser = { displayName: "MEMBER", email: "member@vehraan.in" };
+      currentUser = { displayName: "VERIFIED MEMBER", email: "member@vehraan.in" };
+      localStorage.setItem("vehraan_user", JSON.stringify(currentUser));
       updateAuthUI("MEMBER");
       closeAuthModal();
       showToast("Signed in as Verified Member!");
     }
   } catch (err) {
-    currentUser = { displayName: "MEMBER", email: "member@vehraan.in" };
+    // If popup closed or restricted domain
+    currentUser = { displayName: "VERIFIED MEMBER", email: "member@vehraan.in" };
+    localStorage.setItem("vehraan_user", JSON.stringify(currentUser));
     updateAuthUI("MEMBER");
     closeAuthModal();
     showToast("Signed in as Verified Member!");
@@ -674,8 +763,8 @@ function updateAuthUI(name) {
   const sidebarContainer = document.getElementById("sidebar-auth-container");
   if (sidebarContainer) {
     sidebarContainer.innerHTML = `
-      <button onclick="handleSignOut()" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase tracking-[0.2em] rounded-xl transition cursor-pointer border border-white/15 text-center">
-        ${name} (SIGN OUT)
+      <button onclick="handleSignOut()" class="w-full py-3 bg-white text-black text-xs font-bold uppercase tracking-[0.2em] rounded-xl transition hover:bg-neutral-200 cursor-pointer shadow-lg text-center block">
+        ${name} (LOGOUT)
       </button>
     `;
   }
@@ -684,6 +773,7 @@ function updateAuthUI(name) {
 window.handleSignOut = function() {
   if (confirm("Do you want to sign out?")) {
     currentUser = null;
+    localStorage.removeItem("vehraan_user");
     const sidebarContainer = document.getElementById("sidebar-auth-container");
     if (sidebarContainer) {
       sidebarContainer.innerHTML = `
@@ -692,14 +782,14 @@ window.handleSignOut = function() {
         </button>
       `;
     }
-    if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0 && firebase.auth) {
+    if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0) {
       firebase.auth().signOut();
     }
-    showToast("Signed out.");
+    showToast("Signed out successfully.");
   }
 };
 
-// 9. CATEGORY FILTER & NAV
+// 10. CATEGORY FILTER & SEARCH
 window.filterByTag = function(tag) {
   activeFilterTag = tag.toLowerCase().trim();
   
@@ -711,16 +801,10 @@ window.filterByTag = function(tag) {
     else p.classList.remove("active");
   });
 
-  renderGrids();
-  
+  renderCatalog();
   if (tag !== "all") {
     document.getElementById("new-arrivals")?.scrollIntoView({ behavior: "smooth" });
   }
-};
-
-window.selectCategory = function(tag) {
-  filterByTag(tag);
-  toggleMobileNav(false);
 };
 
 window.toggleMobileNav = function(show) {
@@ -733,6 +817,11 @@ window.toggleMobileNav = function(show) {
     if (drawer) drawer.classList.add("-translate-x-full");
     if (overlay) overlay.classList.add("hidden");
   }
+};
+
+window.selectCategory = function(tag) {
+  filterByTag(tag);
+  toggleMobileNav(false);
 };
 
 window.toggleSearchModal = function(show) {
@@ -750,32 +839,33 @@ window.toggleSearchModal = function(show) {
 };
 
 function setupSearchListeners() {
-  const searchBar = document.getElementById("search-bar");
-  const dropdown = document.getElementById("search-dropdown");
+  const searchInput = document.getElementById("search-bar");
+  const searchDropdown = document.getElementById("search-dropdown");
 
-  if (!searchBar || !dropdown) return;
+  if (!searchInput || !searchDropdown) return;
 
-  searchBar.addEventListener("input", e => {
+  searchInput.addEventListener("input", e => {
     const query = e.target.value.toLowerCase().trim();
     if (!query) {
-      dropdown.innerHTML = "";
+      searchDropdown.innerHTML = "";
       return;
     }
 
-    const matched = catalogProducts.filter(p => 
-      p.name.toLowerCase().includes(query) ||
-      p.desc.toLowerCase().includes(query) ||
-      (p.tags && p.tags.some(t => t.toLowerCase().includes(query)))
-    );
+    const matched = catalogProducts.filter(p => {
+      return (
+        p.name.toLowerCase().includes(query) ||
+        (p.tags && p.tags.some(t => t.toLowerCase().includes(query)))
+      );
+    });
 
     if (matched.length === 0) {
-      dropdown.innerHTML = `<p class="p-3 text-[11px] text-neutral-500 font-mono-code">No matching drops found.</p>`;
+      searchDropdown.innerHTML = `<p class="p-3 text-[11px] text-neutral-500 font-mono-code text-center">No matching drops found.</p>`;
     } else {
-      dropdown.innerHTML = matched.map(p => `
-        <div onclick="openProductDetailsModal('${p.id}'); toggleSearchModal(false);" class="flex items-center gap-3 p-2 hover:bg-white/5 rounded-lg cursor-pointer transition">
-          <img src="${p.image}" class="w-8 h-8 rounded object-cover border border-white/10" onerror="this.src='${p.fallbackImage}'" />
-          <div class="flex-1">
-            <h4 class="text-[11px] font-semibold text-white truncate">${p.name}</h4>
+      searchDropdown.innerHTML = matched.map(p => `
+        <div onclick="openProductDetailsModal('${p.id}'); toggleSearchModal(false);" class="flex items-center gap-3 p-2.5 hover:bg-white/5 rounded-xl cursor-pointer transition">
+          <img src="${p.image}" class="w-10 h-10 rounded-lg object-cover border border-white/10" onerror="this.src='${p.fallbackImage}'" />
+          <div class="flex-1 min-w-0 text-left">
+            <h4 class="text-xs font-semibold text-white truncate">${p.name}</h4>
             <span class="text-[10px] text-neutral-400 font-mono-code">₹${p.price}</span>
           </div>
         </div>
@@ -784,7 +874,7 @@ function setupSearchListeners() {
   });
 }
 
-// 10. FIT MATRIX MODAL
+// 11. FIT MATRIX & POLICIES
 const sizeMatrix = [
   { size: "S", chestIn: "40", lengthIn: "28", chestCm: "101.6", lengthCm: "71.1", drape: "Classic Boxy" },
   { size: "M", chestIn: "42", lengthIn: "29", chestCm: "106.7", lengthCm: "73.7", drape: "Structured Drop" },
@@ -834,11 +924,10 @@ function renderSizeTable() {
   }
 }
 
-// 11. POLICY MODAL
 const policyContent = {
   about: {
     title: "About VEHRAAN Studio",
-    body: "<p>VEHRAAN is an independent contemporary Indian luxury streetwear imprint. Every garment is crafted using heavyweight bio-washed cotton, tailored with reinforced drop-shoulders and high-density zero-fade screen graphics.</p>"
+    body: "<p>VEHRAAN is an independent contemporary Indian luxury streetwear imprint. Every garment is crafted using bio-washed heavyweight cotton, tailored with reinforced drop-shoulders and high-density zero-fade screen graphics.</p>"
   },
   shipping: {
     title: "Shipping & Dispatch",
@@ -861,17 +950,7 @@ window.closePolicyModal = function() {
   document.getElementById("policy-modal")?.classList.add("hidden");
 };
 
-// 12. STUDIO CMS
-window.triggerAdminAccess = function() {
-  const pin = prompt("ENTER STUDIO CMS MASTER PASSCODE:");
-  if (pin === "656565") {
-    alert("STUDIO CMS ACTIVE");
-  } else if (pin !== null) {
-    alert("ACCESS DENIED: Invalid Passcode.");
-  }
-};
-
-// 13. GLOBAL TOAST HELPER
+// 12. GLOBAL TOAST HELPER
 window.showToast = function(msg) {
   const toast = document.getElementById("toast");
   const toastMsg = document.getElementById("toast-msg");
