@@ -10,9 +10,28 @@
   <link rel="stylesheet" href="style.css" />
 
   <!-- Firebase Compat SDKs -->
+  
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<script>
+  console.log("Script block started. typeof firebase:", typeof firebase);
+  const firebaseConfig = {
+    apiKey: "AIzaSyDC2gg3JyPE3KMgtf06A4aDV3U2jSfQWUU",
+    authDomain: "vehraan-studio.firebaseapp.com",
+    projectId: "vehraan-studio",
+    storageBucket: "vehraan-studio.firebasestorage.app",
+    messagingSenderId: "1072734814223",
+    appId: "1:1072734814223:web:313d2701978c5c89b5e37a"
+  };
+  try {
+    firebase.initializeApp(firebaseConfig);
+    console.log("✅ Firebase initialized successfully. Apps:", firebase.apps.length);
+  } catch (err) {
+    console.error("❌ Firebase init FAILED:", err);
+  }
+</script>
 </head>
 <body class="bg-white text-black min-h-screen flex flex-col justify-between selection:bg-black selection:text-white">
 
