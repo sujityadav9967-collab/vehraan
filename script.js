@@ -1,13 +1,13 @@
 /* ==========================================================================
-   VEHRAAN STREETWEAR — PRODUCTION MASTER SCRIPT (DYNAMIC CMS)
-   - Dynamic Section Creator & Real-time CMS Product Sync
-   - Live Product Price Editing & Stock Management (Delete/Update)
-   - Streamlined 4-5 Category Filter Pills
-   - Updated Fit Matrix (S-38, M-40, L-42) & No Exchange Policy
-   ========================================================================== */
+    VEHRAAN STREETWEAR — PRODUCTION MASTER SCRIPT (DYNAMIC CMS)
+    - Dynamic Section Creator & Real-time CMS Product Sync
+    - Live Product Price Editing, Stock Management (In/Out of Stock) & Delete
+    - Streamlined 4-5 Category Filter Pills
+    - Updated Fit Matrix (S-38, M-40, L-42) & No Exchange Policy
+    ========================================================================== */
 
 // 1. DEFAULT PRODUCTS CATALOG
-const defaultProducts = [
+let defaultProducts = [
   {
     id: "veh-001",
     name: "Symbiote Noir Spider Drop",
@@ -16,7 +16,8 @@ const defaultProducts = [
     image: "images/tee-1.jpg",
     fallbackImage: "images/tee-1.jpeg",
     sizes: ["S", "M", "L", "XL", "XXL"],
-    tags: ["all", "men", "women", "spider", "marvel", "graphic", "tee"]
+    tags: ["all", "men", "women", "spider", "marvel", "graphic", "tee"],
+    inStock: true
   },
   {
     id: "veh-002",
@@ -26,7 +27,8 @@ const defaultProducts = [
     image: "images/tee-2.jpg",
     fallbackImage: "images/tee-2.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "men", "women", "spider", "marvel", "spiderverse", "graphic", "tee"]
+    tags: ["all", "men", "women", "spider", "marvel", "spiderverse", "graphic", "tee"],
+    inStock: true
   },
   {
     id: "veh-003",
@@ -36,7 +38,8 @@ const defaultProducts = [
     image: "images/tee-3.jpg",
     fallbackImage: "images/tee-3.jpeg",
     sizes: ["M", "L", "XL", "XXL"],
-    tags: ["all", "men", "women", "anime", "toji", "jjk", "tee"]
+    tags: ["all", "men", "women", "anime", "toji", "jjk", "tee"],
+    inStock: true
   },
   {
     id: "veh-004",
@@ -46,7 +49,8 @@ const defaultProducts = [
     image: "images/tee-4.jpg",
     fallbackImage: "images/tee-4.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "men", "women", "f1", "motorsport", "tee"]
+    tags: ["all", "men", "women", "f1", "motorsport", "tee"],
+    inStock: true
   },
   {
     id: "veh-005",
@@ -56,7 +60,8 @@ const defaultProducts = [
     image: "images/tee-5.jpg",
     fallbackImage: "images/tee-5.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "men", "women", "anime", "vagabond", "samurai", "tee"]
+    tags: ["all", "men", "women", "anime", "vagabond", "samurai", "tee"],
+    inStock: true
   },
   {
     id: "veh-006",
@@ -66,7 +71,8 @@ const defaultProducts = [
     image: "images/tee-11.jpg",
     fallbackImage: "images/tee-11.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "men", "women", "spider", "streetwear", "tee"]
+    tags: ["all", "men", "women", "spider", "streetwear", "tee"],
+    inStock: true
   },
   {
     id: "veh-007",
@@ -76,7 +82,8 @@ const defaultProducts = [
     image: "images/tee-12.jpg",
     fallbackImage: "images/tee-12.jpeg",
     sizes: ["M", "L", "XL", "XXL"],
-    tags: ["all", "men", "women", "anime", "solo leveling", "tee"]
+    tags: ["all", "men", "women", "anime", "solo leveling", "tee"],
+    inStock: true
   },
   {
     id: "veh-008",
@@ -86,7 +93,8 @@ const defaultProducts = [
     image: "images/tee-13.jpg",
     fallbackImage: "images/tee-13.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "men", "women", "spider", "streetwear", "tee"]
+    tags: ["all", "men", "women", "spider", "streetwear", "tee"],
+    inStock: true
   },
   {
     id: "veh-009",
@@ -96,7 +104,8 @@ const defaultProducts = [
     image: "images/tee-14.jpg",
     fallbackImage: "images/tee-14.jpeg",
     sizes: ["M", "L", "XL", "XXL"],
-    tags: ["all", "men", "women", "typography", "tee"]
+    tags: ["all", "men", "women", "typography", "tee"],
+    inStock: true
   },
   {
     id: "veh-010",
@@ -106,7 +115,8 @@ const defaultProducts = [
     image: "images/tee-6.jpg",
     fallbackImage: "images/tee-6.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "men", "women", "anime", "demon slayer", "tee"]
+    tags: ["all", "men", "women", "anime", "demon slayer", "tee"],
+    inStock: true
   },
   {
     id: "veh-011",
@@ -116,7 +126,8 @@ const defaultProducts = [
     image: "images/tee-7.jpg",
     fallbackImage: "images/tee-7.jpeg",
     sizes: ["M", "L", "XL"],
-    tags: ["all", "men", "women", "anime", "toji", "tee"]
+    tags: ["all", "men", "women", "anime", "toji", "tee"],
+    inStock: true
   },
   {
     id: "veh-012",
@@ -126,7 +137,8 @@ const defaultProducts = [
     image: "images/tee-8.jpg",
     fallbackImage: "images/tee-8.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "men", "women", "anime", "toji", "tee"]
+    tags: ["all", "men", "women", "anime", "toji", "tee"],
+    inStock: true
   },
   {
     id: "veh-013",
@@ -136,7 +148,8 @@ const defaultProducts = [
     image: "images/tee-9.jpg",
     fallbackImage: "images/tee-9.jpeg",
     sizes: ["S", "M", "L", "XL", "XXL"],
-    tags: ["all", "men", "women", "anime", "solo leveling", "tee"]
+    tags: ["all", "men", "women", "anime", "solo leveling", "tee"],
+    inStock: true
   },
   {
     id: "veh-014",
@@ -146,7 +159,8 @@ const defaultProducts = [
     image: "images/tee-10.jpg",
     fallbackImage: "images/tee-10.jpeg",
     sizes: ["M", "L", "XL", "XXL"],
-    tags: ["all", "men", "women", "anime", "toji", "tee"]
+    tags: ["all", "men", "women", "anime", "toji", "tee"],
+    inStock: true
   },
   {
     id: "veh-015",
@@ -158,7 +172,8 @@ const defaultProducts = [
     fallbackImage: "images/tee-15.jpeg",
     fallbackBackImage: "images/tee-16.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "men", "women", "anime", "aot", "levi", "tee"]
+    tags: ["all", "men", "women", "anime", "aot", "levi", "tee"],
+    inStock: true
   },
   {
     id: "veh-016",
@@ -168,7 +183,8 @@ const defaultProducts = [
     image: "images/tee-17.jpg",
     fallbackImage: "images/tee-17.jpeg",
     sizes: ["S", "M", "L", "XL", "XXL"],
-    tags: ["all", "men", "women", "marvel", "punisher", "tee"]
+    tags: ["all", "men", "women", "marvel", "punisher", "tee"],
+    inStock: true
   },
   {
     id: "veh-017",
@@ -178,7 +194,8 @@ const defaultProducts = [
     image: "images/tee-18.jpg",
     fallbackImage: "images/tee-18.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "men", "women", "anime", "maki", "jjk", "tee"]
+    tags: ["all", "men", "women", "anime", "maki", "jjk", "tee"],
+    inStock: true
   }
 ];
 
@@ -267,7 +284,7 @@ function initScrollAnimations() {
     threshold: 0.05
   };
 
-  const observer = new IntersectionObserver((entries, observerInstance) => {
+  const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add("active");
@@ -288,7 +305,7 @@ function initHeroBanner() {
   }
 }
 
-// 4. STREAMLINED CATEGORY PILLS RENDERER (Clean 4-5 core filters)
+// 4. STREAMLINED CATEGORY PILLS RENDERER
 function renderCategoryFilters() {
   const container = document.getElementById("category-filters-container");
   if (!container) return;
@@ -348,6 +365,8 @@ function renderCatalog() {
 
 function createCardHTML(product) {
   const selectedSize = activeSelectedSizes[product.id] || (product.sizes && product.sizes[0]) || "M";
+  const isAvailable = product.inStock !== false;
+
   const sizePills = (product.sizes || ["S", "M", "L", "XL"]).map(sz => `
     <button 
       type="button" 
@@ -375,8 +394,27 @@ function createCardHTML(product) {
     </div>
   `;
 
+  const actionButtonHTML = isAvailable ? `
+    <button 
+      type="button" 
+      onclick="event.stopPropagation(); addToBag('${product.id}')" 
+      class="w-full py-2.5 bg-black hover:bg-neutral-800 text-white rounded-lg text-[10px] font-bold uppercase tracking-[0.15em] transition duration-200 cursor-pointer shadow-sm"
+    >
+      Add to Bag
+    </button>
+  ` : `
+    <button 
+      type="button" 
+      disabled 
+      class="w-full py-2.5 bg-neutral-200 text-neutral-500 rounded-lg text-[10px] font-bold uppercase tracking-[0.15em] cursor-not-allowed"
+    >
+      Out of Stock
+    </button>
+  `;
+
   return `
-    <div class="clean-product-card justify-between cursor-pointer" id="card-${product.id}" onclick="openProductDetailsModal('${product.id}')">
+    <div class="clean-product-card justify-between cursor-pointer relative ${!isAvailable ? 'opacity-75' : ''}" id="card-${product.id}" onclick="openProductDetailsModal('${product.id}')">
+      ${!isAvailable ? '<span class="absolute top-2 right-2 z-10 bg-red-600 text-white text-[9px] font-mono-code px-2 py-0.5 rounded uppercase font-bold">Sold Out</span>' : ''}
       ${mediaHTML}
 
       <div class="p-3 pt-3 flex-1 flex flex-col justify-between space-y-2.5" onclick="event.stopPropagation()">
@@ -394,14 +432,7 @@ function createCardHTML(product) {
           <div class="flex gap-1 mb-2.5 overflow-x-auto pb-1">
             ${sizePills}
           </div>
-
-          <button 
-            type="button" 
-            onclick="event.stopPropagation(); addToBag('${product.id}')" 
-            class="w-full py-2.5 bg-black hover:bg-neutral-800 text-white rounded-lg text-[10px] font-bold uppercase tracking-[0.15em] transition duration-200 cursor-pointer shadow-sm"
-          >
-            Add to Bag
-          </button>
+          ${actionButtonHTML}
         </div>
       </div>
     </div>
@@ -429,6 +460,7 @@ window.openProductDetailsModal = function(productId) {
   const price = document.getElementById("modal-p-price");
   const sizesContainer = document.getElementById("modal-p-sizes");
   const addBtn = document.getElementById("modal-p-add-btn");
+  const isAvailable = product.inStock !== false;
 
   if (imgContainer) {
     if (product.backImage) {
@@ -466,7 +498,14 @@ window.openProductDetailsModal = function(productId) {
   }
 
   if (addBtn) {
+    addBtn.innerText = isAvailable ? "Add to Bag" : "Out of Stock";
+    addBtn.disabled = !isAvailable;
+    addBtn.className = isAvailable 
+      ? "w-full py-3 bg-black hover:bg-neutral-800 text-white rounded-xl text-xs font-bold uppercase tracking-widest cursor-pointer transition shadow-sm"
+      : "w-full py-3 bg-neutral-200 text-neutral-500 rounded-xl text-xs font-bold uppercase tracking-widest cursor-not-allowed";
+
     addBtn.onclick = () => {
+      if (!isAvailable) return;
       addToBag(product.id);
       closeProductDetailsModal();
     };
@@ -498,7 +537,10 @@ window.addToBag = function(productId) {
   }
 
   const item = catalogProducts.find(p => String(p.id) === String(productId));
-  if (!item) return;
+  if (!item || item.inStock === false) {
+    showToast("Sorry, this item is currently out of stock.");
+    return;
+  }
 
   const size = activeSelectedSizes[item.id] || "M";
   const existing = cart.find(c => String(c.id) === String(item.id) && c.size === size);
@@ -631,12 +673,20 @@ window.removeCartItem = function(index) {
   renderCartItems();
 };
 
-// 8. CHECKOUT, WHATSAPP DISPATCH & FIREBASE ORDER SAVING
+// 8. CHECKOUT, WHATSAPP DISPATCH & MANDATORY AUTH CHECK
 window.openCheckoutModal = function() {
+  // MANDATORY AUTH CHECK: Stop checkout if user is not logged in
+  if (!currentUser) {
+    openAuthModal();
+    showToast("Please sign in with Google to proceed to checkout!");
+    return;
+  }
+
   if (!cart || cart.length === 0) {
     showToast("Please add items to your bag first.");
     return;
   }
+
   toggleCart(false);
   const modal = document.getElementById("checkout-modal");
   const finalAmountElem = document.getElementById("checkout-final-amount");
@@ -838,7 +888,7 @@ function setupSearchListeners() {
   });
 }
 
-// 11. FIT MATRIX & POLICIES (Updated: S-38, M-40, L-42 & No Exchange/No Refund)
+// 11. FIT MATRIX & POLICIES
 const sizeMatrix = [
   { size: "S", chestIn: "38", lengthIn: "28", chestCm: "96.5", lengthCm: "71.1", drape: "Classic Boxy" },
   { size: "M", chestIn: "40", lengthIn: "29", chestCm: "101.6", lengthCm: "73.7", drape: "Structured Drop" },
@@ -899,7 +949,7 @@ window.closePolicyModal = function() {
   document.getElementById("policy-modal")?.classList.add("hidden");
 };
 
-// 12. STUDIO CMS & SECURE ADMIN PANEL (Dynamic Section Creator & Stock Management)
+// 12. STUDIO CMS & ADMIN PANEL (Pricing, Stock Status & Deletions)
 window.triggerAdminAccess = async function() {
   if (!currentUser || !firebase.auth().currentUser) {
     showToast("Please sign in with your admin account first.");
@@ -989,7 +1039,8 @@ function setupAdminForm() {
       image: uploadedProductBase64,
       fallbackImage: uploadedProductBase64,
       sizes: ["S", "M", "L", "XL", "XXL"],
-      tags: ["all", selectedCategory]
+      tags: ["all", selectedCategory],
+      inStock: true
     };
 
     try {
@@ -1015,34 +1066,53 @@ function setupAdminForm() {
 function loadManageProducts() {
   const container = document.getElementById("admin-product-list");
   if (!container) return;
-  container.innerHTML = catalogProducts.map((p, idx) => `
-    <div class="flex items-center justify-between p-3 bg-neutral-100 border border-black/10 rounded-xl gap-2">
-      <img src="${p.image}" class="w-10 h-10 object-cover rounded border" />
-      <div class="flex-1 min-w-0">
-        <h4 class="text-xs font-semibold text-black truncate">${p.name}</h4>
-        <div class="flex items-center gap-1 mt-1">
-          <span class="text-[10px] text-neutral-600 font-mono-code">₹</span>
-          <input type="number" id="price-input-${idx}" value="${p.price}" class="w-20 bg-white border border-black/15 rounded px-2 py-0.5 text-xs font-mono-code" />
-          <button onclick="updateProductPrice('${p.id}', ${idx})" class="px-2 py-0.5 bg-black text-white text-[10px] rounded cursor-pointer">Save</button>
+  
+  container.innerHTML = catalogProducts.map((p, idx) => {
+    const isAvailable = p.inStock !== false;
+    return `
+      <div class="flex items-center justify-between p-3 bg-neutral-100 border border-black/10 rounded-xl gap-2">
+        <img src="${p.image}" class="w-10 h-10 object-cover rounded border" />
+        <div class="flex-1 min-w-0">
+          <h4 class="text-xs font-semibold text-black truncate">${p.name}</h4>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="text-[10px] text-neutral-600 font-mono-code">₹</span>
+            <input type="number" id="price-input-${idx}" value="${p.price}" class="w-16 bg-white border border-black/15 rounded px-2 py-0.5 text-xs font-mono-code" />
+            
+            <select id="stock-select-${idx}" class="bg-white border border-black/15 rounded px-2 py-0.5 text-[10px] font-mono-code ${isAvailable ? 'text-green-700 font-bold' : 'text-red-600 font-bold'}">
+              <option value="true" ${isAvailable ? 'selected' : ''}>In Stock</option>
+              <option value="false" ${!isAvailable ? 'selected' : ''}>Out of Stock</option>
+            </select>
+
+            <button onclick="updateProductDetails('${p.id}', ${idx})" class="px-2 py-0.5 bg-black text-white text-[10px] rounded cursor-pointer">Save</button>
+          </div>
         </div>
+        <button onclick="deleteProduct('${p.id}', ${idx})" class="px-3 py-1 bg-red-100 text-red-600 text-xs rounded border border-red-200 cursor-pointer">Delete</button>
       </div>
-      <button onclick="deleteProduct('${p.id}', ${idx})" class="px-3 py-1 bg-red-100 text-red-600 text-xs rounded border border-red-200 cursor-pointer">Delete</button>
-    </div>
-  `).join("");
+    `;
+  }).join("");
 }
 
-window.updateProductPrice = async function(productId, index) {
+window.updateProductDetails = async function(productId, index) {
   const newPrice = Number(document.getElementById(`price-input-${index}`).value) || 599;
+  const stockValue = document.getElementById(`stock-select-${index}`).value === "true";
+
   catalogProducts[index].price = newPrice;
+  catalogProducts[index].inStock = stockValue;
 
   try {
     if (typeof firebase !== "undefined" && firebase.firestore) {
-      await firebase.firestore().collection("products").doc(productId).update({ price: newPrice });
+      await firebase.firestore().collection("products").doc(productId).update({ 
+        price: newPrice,
+        inStock: stockValue 
+      });
     }
-  } catch (err) { console.log("Price update local only"); }
+  } catch (err) { 
+    console.log("Cloud update failed, updated locally."); 
+  }
 
   renderCatalog();
-  showToast("Product price updated successfully!");
+  loadManageProducts();
+  showToast("Product updated successfully!");
 };
 
 window.deleteProduct = async function(productId, index) {
