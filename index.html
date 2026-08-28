@@ -10,28 +10,25 @@
   <link rel="stylesheet" href="style.css" />
 
   <!-- Firebase Compat SDKs -->
-  
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
-<script>
-  console.log("Script block started. typeof firebase:", typeof firebase);
-  const firebaseConfig = {
-    apiKey: "AIzaSyDC2gg3JyPE3KMgtf06A4aDV3U2jSfQWUU",
-    authDomain: "vehraan-studio.firebaseapp.com",
-    projectId: "vehraan-studio",
-    storageBucket: "vehraan-studio.firebasestorage.app",
-    messagingSenderId: "1072734814223",
-    appId: "1:1072734814223:web:313d2701978c5c89b5e37a"
-  };
-  try {
-    firebase.initializeApp(firebaseConfig);
-    console.log("✅ Firebase initialized successfully. Apps:", firebase.apps.length);
-  } catch (err) {
-    console.error("❌ Firebase init FAILED:", err);
-  }
-</script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDC2gg3JyPE3KMgtf06A4aDV3U2jSfQWUU",
+      authDomain: "vehraan-studio.firebaseapp.com",
+      projectId: "vehraan-studio",
+      storageBucket: "vehraan-studio.firebasestorage.app",
+      messagingSenderId: "1072734814223",
+      appId: "1:1072734814223:web:313d2701978c5c89b5e37a"
+    };
+    try {
+      firebase.initializeApp(firebaseConfig);
+    } catch (err) {
+      console.error("Firebase init FAILED:", err);
+    }
+  </script>
 </head>
 <body class="bg-white text-black min-h-screen flex flex-col justify-between selection:bg-black selection:text-white">
 
@@ -106,7 +103,7 @@
       <nav class="space-y-2 text-xs uppercase tracking-[0.18em] font-semibold text-neutral-800">
         <button onclick="selectCategory('all')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-neutral-100 transition flex items-center justify-between cursor-pointer">
           <span>All Styles</span>
-          <span class="text-[9px] text-neutral-500 font-mono-code">17 Drops</span>
+          <span class="text-[9px] text-neutral-500 font-mono-code">Drops</span>
         </button>
         <button onclick="selectCategory('men')" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-neutral-100 transition flex items-center justify-between cursor-pointer">
           <span>Men</span>
@@ -136,7 +133,6 @@
       </nav>
     </div>
 
-    <!-- Drawer Sign In / Account Container -->
     <div class="border-t border-black/10 pt-4 space-y-3">
       <div id="sidebar-auth-container">
         <button onclick="openAuthModal(); toggleMobileNav(false);" class="w-full py-3 bg-black text-white text-xs font-bold uppercase tracking-[0.2em] rounded-xl transition hover:bg-neutral-800 cursor-pointer shadow-lg text-center block">
@@ -167,7 +163,7 @@
   <!-- ================= MAIN CONTENT ================= -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-16 flex-1 w-full">
     
-    <!-- ================= 3. CLEAN HERO BANNER WITH SLIDE ANIM ================= -->
+    <!-- Hero Banner -->
     <section class="relative rounded-3xl overflow-hidden border border-black/15 bg-neutral-100 min-h-[520px] sm:min-h-[600px] flex items-end my-4 shadow-xl">
       <div class="absolute inset-0 w-full h-full overflow-hidden z-0">
         <img 
@@ -186,11 +182,9 @@
           FEEL THE <br />
           <span class="text-neutral-600">WEIGHT.</span>
         </h1>
-
         <p class="text-xs sm:text-sm font-semibold tracking-[0.25em] uppercase text-neutral-700 font-mono-code pt-1">
           BUILT FOR STREET.
         </p>
-
         <div class="pt-4">
           <a href="#new-arrivals" onclick="filterByTag('all')" class="inline-block px-9 py-3.5 bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-[0.2em] rounded-full transition duration-200 shadow-xl cursor-pointer">
             Shop Drops
@@ -199,42 +193,34 @@
       </div>
     </section>
 
-    <!-- ================= 4. COMPACT 4-BOX TRUST ROW ================= -->
+    <!-- Trust Row (Updated to No Exchange / No Refund) -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-3 py-2 reveal-on-scroll">
       <div class="p-4 bg-[#f9f9f9] border border-black/10 rounded-xl space-y-1 text-left">
         <span class="text-xs font-bold text-black uppercase font-mono-code block">10% Off ₹1,000+</span>
         <p class="text-[10px] text-neutral-600 leading-snug">Auto-applied above ₹1,000.</p>
       </div>
-
       <div class="p-4 bg-[#f9f9f9] border border-black/10 rounded-xl space-y-1 text-left">
         <span class="text-xs font-bold text-black uppercase font-mono-code block">Express COD</span>
         <p class="text-[10px] text-neutral-600 leading-snug">Doorstep delivery across India.</p>
       </div>
-
       <div class="p-4 bg-[#f9f9f9] border border-black/10 rounded-xl space-y-1 text-left">
         <span class="text-xs font-bold text-black uppercase font-mono-code block">220 GSM Bio-Wash</span>
         <p class="text-[10px] text-neutral-600 leading-snug">Heavy combed cotton blanks.</p>
       </div>
-
       <div class="p-4 bg-[#f9f9f9] border border-black/10 rounded-xl space-y-1 text-left">
-        <span class="text-xs font-bold text-black uppercase font-mono-code block">7-Day Fit Swap</span>
-        <p class="text-[10px] text-neutral-600 leading-snug">Doorstep size exchanges.</p>
+        <span class="text-xs font-bold text-black uppercase font-mono-code block">No Exchange / Refund</span>
+        <p class="text-[10px] text-neutral-600 leading-snug">All capsule sales are final.</p>
       </div>
     </section>
 
-    <!-- ================= 5. CATEGORY FILTER PILLS ================= -->
+    <!-- Dynamic Category Filter Pills -->
     <div class="space-y-3 text-center reveal-on-scroll">
-      <div class="flex flex-wrap items-center justify-center gap-2">
-        <button onclick="filterByTag('all')" class="category-pill active">All Styles</button>
-        <button onclick="filterByTag('men')" class="category-pill">Men</button>
-        <button onclick="filterByTag('women')" class="category-pill">Women</button>
-        <button onclick="filterByTag('anime')" class="category-pill">Anime</button>
-        <button onclick="filterByTag('spider')" class="category-pill">Spiderverse</button>
-        <button onclick="filterByTag('f1')" class="category-pill">Motorsport</button>
+      <div id="category-filters-container" class="flex flex-wrap items-center justify-center gap-2">
+        <!-- Rendered dynamically by script.js -->
       </div>
     </div>
 
-    <!-- ================= DYNAMIC PRODUCT GRID (MOBILE 2-COLUMNS) ================= -->
+    <!-- Product Grid -->
     <section id="new-arrivals" class="space-y-6 reveal-on-scroll">
       <div class="flex items-center justify-between border-b border-black/10 pb-3">
         <div>
@@ -244,79 +230,35 @@
         <span id="catalog-count-badge" class="text-[9px] uppercase font-mono-code text-neutral-600 bg-black/5 px-2.5 py-1 rounded border border-black/10">06 / 17 Drops</span>
       </div>
 
-      <!-- Mobile grid-cols-2 ensures 2 items side-by-side on mobile screens -->
       <div id="catalog-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8"></div>
 
       <div id="view-all-container" class="pt-6 text-center">
         <button onclick="expandFullCatalog()" class="px-8 py-3.5 bg-black hover:bg-neutral-800 text-white border border-black text-xs font-bold uppercase tracking-[0.2em] rounded-full transition duration-200 cursor-pointer shadow-xl">
-          View All Drops (17)
+          View All Drops
         </button>
-      </div>
-    </section>
-
-    <!-- ================= 6. STREET REVIEWS ================= -->
-    <section class="space-y-6 reveal-on-scroll">
-      <div class="flex items-center justify-between border-b border-black/10 pb-3">
-        <div>
-          <h2 class="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-black font-cinzel">Street Reviews</h2>
-          <p class="text-[10px] text-neutral-500 font-mono-code mt-0.5">Verified customer drape ratings</p>
-        </div>
-        <span class="text-[9px] uppercase font-mono-code text-black font-bold">★ 4.9 / 5.0 Rating</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="p-5 bg-[#f9f9f9] border border-black/10 rounded-2xl space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-black">Rohit M.</span>
-            <span class="text-black text-xs">★★★★★</span>
-          </div>
-          <p class="text-[11px] text-neutral-600 leading-relaxed">"The 220 GSM cotton drape is crazy good. Thick collar ribbing and the Toji back print has zero fade after wash."</p>
-          <span class="text-[9px] font-mono-code text-neutral-500 block">Verified Buyer • Mumbai</span>
-        </div>
-
-        <div class="p-5 bg-[#f9f9f9] border border-black/10 rounded-2xl space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-black">Aarav K.</span>
-            <span class="text-black text-xs">★★★★★</span>
-          </div>
-          <p class="text-[11px] text-neutral-600 leading-relaxed">"Flat ₹599 with COD is unbelievable quality for this fabric weight. Perfect drop shoulder boxy fit."</p>
-          <span class="text-[9px] font-mono-code text-neutral-500 block">Verified Buyer • Delhi</span>
-        </div>
-
-        <div class="p-5 bg-[#f9f9f9] border border-black/10 rounded-2xl space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-black">Sanya P.</span>
-            <span class="text-black text-xs">★★★★★</span>
-          </div>
-          <p class="text-[11px] text-neutral-600 leading-relaxed">"Loved the Ghost Spider tee. Shipped in 2 days and the WhatsApp support team is super responsive."</p>
-          <span class="text-[9px] font-mono-code text-neutral-500 block">Verified Buyer • Bengaluru</span>
-        </div>
       </div>
     </section>
 
   </main>
 
-  <!-- ================= 7. FOOTER ================= -->
+  <!-- ================= FOOTER ================= -->
   <footer class="bg-white border-t border-black/10 py-12 mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
-      
       <div class="space-y-2 md:col-span-2">
         <span class="text-sm font-bold tracking-[0.3em] uppercase text-black font-cinzel">VEHRAAN</span>
         <p class="text-[11px] text-neutral-600 leading-relaxed max-w-sm">
           Contemporary Indian luxury streetwear imprint engineered with heavy-gauge 220 GSM bio-washed textiles and high-density screen graphics.
         </p>
       </div>
-
       <div class="space-y-2">
         <h4 class="text-xs font-bold uppercase tracking-wider text-black">Navigation</h4>
         <ul class="text-[11px] text-neutral-600 space-y-1.5">
           <li><button onclick="openPolicyModal('about')" class="hover:text-black cursor-pointer">About Us</button></li>
           <li><button onclick="openPolicyModal('shipping')" class="hover:text-black cursor-pointer">Shipping & Dispatch</button></li>
-          <li><button onclick="openPolicyModal('returns')" class="hover:text-black cursor-pointer">Returns Policy</button></li>
+          <li><button onclick="openPolicyModal('returns')" class="hover:text-black cursor-pointer">Returns & Policy</button></li>
           <li><button onclick="openSizeGuideModal()" class="hover:text-black cursor-pointer">Fit Matrix</button></li>
         </ul>
       </div>
-
       <div class="space-y-2">
         <h4 class="text-xs font-bold uppercase tracking-wider text-black">Support Desk</h4>
         <ul class="text-[11px] text-neutral-600 space-y-1.5 font-mono-code">
@@ -325,10 +267,9 @@
           <li>Payment: Cash on Delivery (COD)</li>
         </ul>
       </div>
-
     </div>
 
-    <!-- Hidden Admin Copyright Bar (PIN: 656565) -->
+    <!-- Admin Trigger Bar (Secured via Google Auth email vehraan@gmail.com) -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 mt-8 border-t border-black/10 flex flex-col sm:flex-row items-center justify-between text-[10px] text-neutral-500 font-mono-code">
       <span onclick="triggerAdminAccess()" class="cursor-pointer hover:text-black transition select-none py-2 inline-block">
         © 2026 VEHRAAN. ALL RIGHTS RESERVED.
@@ -337,26 +278,23 @@
     </div>
   </footer>
 
-  <!-- ================= MODALS & DRAWERS (UNCHANGED WORKING) ================= -->
+  <!-- ================= MODALS ================= -->
   <div id="product-details-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 hidden">
     <div class="bg-white border border-black/15 rounded-2xl max-w-2xl w-full p-6 sm:p-8 relative shadow-2xl max-h-[92vh] overflow-y-auto">
       <button onclick="closeProductDetailsModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black text-lg p-2 transition cursor-pointer">✕</button>
-
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
         <div id="modal-image-container" class="w-full aspect-[1/1.15] bg-[#f8f8f8] rounded-xl border border-black/10 p-4 flex items-center justify-center overflow-hidden">
           <img id="modal-p-img" src="" alt="Product Image" class="w-full h-full object-contain" />
         </div>
-
         <div class="space-y-4 text-left">
           <div>
-            <span id="modal-p-badge" class="text-[9px] uppercase tracking-[0.25em] text-neutral-600 font-mono-code bg-black/5 px-2.5 py-1 rounded border border-black/10 inline-block mb-2">220 GSM HEAVYWEIGHT</span>
+            <span class="text-[9px] uppercase tracking-[0.25em] text-neutral-600 font-mono-code bg-black/5 px-2.5 py-1 rounded border border-black/10 inline-block mb-2">220 GSM HEAVYWEIGHT</span>
             <h2 id="modal-p-name" class="text-base sm:text-lg font-bold uppercase tracking-wider text-black font-cinzel"></h2>
             <div class="flex items-center gap-3 mt-1">
               <span id="modal-p-price" class="text-sm font-bold text-black font-mono-code">₹599</span>
               <span class="text-[10px] text-neutral-600 font-mono-code">Cash on Delivery Available</span>
             </div>
           </div>
-
           <div class="space-y-1.5 pt-2">
             <div class="flex items-center justify-between">
               <label class="text-[10px] uppercase font-mono-code text-neutral-700">Select Fit Size</label>
@@ -364,7 +302,6 @@
             </div>
             <div id="modal-p-sizes" class="flex gap-2"></div>
           </div>
-
           <div class="pt-3">
             <button id="modal-p-add-btn" class="w-full py-3.5 bg-black hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-[0.15em] rounded-xl transition duration-200 shadow-xl cursor-pointer">
               ADD TO BAG
@@ -381,7 +318,7 @@
       <div class="text-center space-y-1">
         <span class="text-[9px] uppercase tracking-[0.3em] text-neutral-500 font-mono-code">MEMBER ACCESS</span>
         <h3 class="text-sm font-bold uppercase tracking-wider text-black">Sign In</h3>
-        <p class="text-[11px] text-neutral-600 leading-relaxed">Sign in to start shopping and view your cart.</p>
+        <p class="text-[11px] text-neutral-600 leading-relaxed">Sign in with Google to start shopping and view your bag.</p>
       </div>
       <button onclick="handleGoogleSignIn()" class="w-full py-3 bg-black hover:bg-neutral-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition duration-200 flex items-center justify-center gap-3 shadow-lg cursor-pointer">
         <span>Continue with Google</span>
@@ -400,7 +337,7 @@
         <button onclick="toggleCart(false)" class="text-neutral-500 hover:text-black text-sm cursor-pointer">✕</button>
       </div>
       <div id="discount-banner" class="mt-3 p-2.5 bg-black/5 border border-black/10 rounded-xl text-left">
-        <p id="discount-status-text" class="text-[10px] text-neutral-700 font-mono-code"></p>
+        <p id="discount-status-text" class="text-[10px] text-neutral-700 font-mono-code">Add ₹1,000+ items to unlock flat 10% discount!</p>
       </div>
       <div id="cart-items-container" class="mt-4 space-y-3 overflow-y-auto max-h-[50vh]"></div>
     </div>
@@ -421,7 +358,7 @@
         <span class="text-black font-bold uppercase tracking-wider font-mono-code">Total (COD):</span>
         <span id="cart-total-price" class="font-bold text-black font-mono-code text-sm">₹0</span>
       </div>
-      <button id="btn-proceed" onclick="openCheckoutModal()" class="w-full py-3.5 bg-black hover:bg-neutral-800 text-white rounded-xl text-xs font-bold uppercase tracking-[0.2em] transition mt-2 cursor-pointer shadow-xl">
+      <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-black hover:bg-neutral-800 text-white rounded-xl text-xs font-bold uppercase tracking-[0.2em] transition mt-2 cursor-pointer shadow-xl">
         Proceed to Checkout
       </button>
     </div>
@@ -435,27 +372,23 @@
         <h3 class="text-sm font-bold uppercase tracking-wider text-black mt-0.5">Shipping Details</h3>
       </div>
       <form id="checkout-form" class="space-y-3">
-        <input type="text" id="order-name" required placeholder="Full Name" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black/40" />
-        <input type="tel" id="order-phone" required placeholder="WhatsApp Mobile (10 Digits)" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black/40 font-mono-code" />
-        <input type="email" id="order-email" required placeholder="Email Address" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black/40" />
-        <input type="text" id="order-instagram" placeholder="Instagram Handle (Optional)" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black/40" />
-        <textarea id="order-address" required rows="2" placeholder="Full Delivery Address with Landmark & PIN Code" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none focus:border-black/40"></textarea>
+        <input type="text" id="order-name" required placeholder="Full Name" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none" />
+        <input type="tel" id="order-phone" required placeholder="WhatsApp Mobile (10 Digits)" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none font-mono-code" />
+        <input type="email" id="order-email" required placeholder="Email Address" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none" />
+        <input type="text" id="order-instagram" placeholder="Instagram Handle (Optional)" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none" />
+        <textarea id="order-address" required rows="2" placeholder="Full Delivery Address with Landmark & PIN Code" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none"></textarea>
         <div class="p-3.5 bg-neutral-100 border border-black/10 rounded-xl space-y-1.5">
           <div class="flex items-center justify-between text-xs">
             <span class="text-black font-semibold">Payment Mode</span>
             <span class="text-black font-mono-code">Cash on Delivery (COD)</span>
           </div>
-          <div class="flex items-center justify-between text-[11px] text-neutral-600 font-mono-code">
-            <span>Express Delivery Fee</span>
-            <span>+ ₹120</span>
-          </div>
           <div class="flex items-center justify-between text-xs font-bold text-black pt-1.5 border-t border-black/10 font-mono-code">
-            <span>Final Amount on Delivery:</span>
-            <span id="checkout-final-amount">₹0</span>
+            <span>Express Delivery Fee:</span>
+            <span>₹120</span>
           </div>
         </div>
-        <button type="submit" id="btn-submit-order" class="w-full py-3.5 bg-black hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-[0.15em] rounded-xl transition shadow-xl cursor-pointer">
-          <span>Place Order (Cash on Delivery)</span>
+        <button type="submit" class="w-full py-3.5 bg-black hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-[0.15em] rounded-xl transition shadow-xl cursor-pointer">
+          Place Order (Cash on Delivery)
         </button>
       </form>
     </div>
@@ -467,7 +400,7 @@
       <div class="flex items-center justify-between border-b border-black/10 pb-3">
         <div>
           <span class="text-[9px] uppercase tracking-[0.3em] text-neutral-500 font-mono-code">MEASUREMENTS</span>
-          <h3 class="text-sm font-bold uppercase tracking-wider text-black mt-0.5">220 GSM Fit Matrix</h3>
+          <h3 class="text-sm font-bold uppercase tracking-wider text-black mt-0.5">220 GSM Fit Matrix (S-38, M-40, L-42)</h3>
         </div>
         <div class="flex bg-neutral-100 p-0.5 rounded-lg border border-black/10 text-[10px] font-mono-code">
           <button id="unit-in-btn" onclick="toggleSizeUnit('in')" class="px-2.5 py-1 bg-black text-white font-bold rounded cursor-pointer">IN</button>
@@ -479,8 +412,8 @@
           <thead class="bg-black/5 text-black uppercase text-[10px]">
             <tr>
               <th class="p-3">Size</th>
-              <th class="p-3" id="th-chest">Chest</th>
-              <th class="p-3" id="th-length">Length</th>
+              <th class="p-3" id="th-chest">Chest (IN)</th>
+              <th class="p-3">Length</th>
               <th class="p-3">Drape</th>
             </tr>
           </thead>
@@ -490,6 +423,7 @@
     </div>
   </div>
 
+  <!-- ================= ADMIN STUDIO CMS MODAL WITH DYNAMIC SECTION CREATOR ================= -->
   <div id="admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 hidden">
     <div class="bg-white border border-black/15 rounded-2xl max-w-4xl w-full p-6 relative space-y-6 max-h-[92vh] overflow-y-auto shadow-2xl">
       <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black text-sm cursor-pointer">✕</button>
@@ -499,48 +433,65 @@
           <h3 class="text-base font-bold uppercase tracking-wider text-black">Catalog & Hero Management</h3>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="switchAdminTab('add-product')" id="tab-btn-add" class="px-3 py-1.5 bg-black text-white text-xs font-bold uppercase font-mono-code rounded-lg cursor-pointer">Add Drop +</button>
-          <button onclick="switchAdminTab('change-hero')" id="tab-btn-hero" class="px-3 py-1.5 bg-neutral-200 hover:bg-neutral-300 text-black text-xs font-bold uppercase font-mono-code rounded-lg cursor-pointer">Change Hero 🖼️</button>
-          <button onclick="switchAdminTab('manage-products')" id="tab-btn-manage" class="px-3 py-1.5 bg-neutral-200 hover:bg-neutral-300 text-black text-xs font-bold uppercase font-mono-code rounded-lg cursor-pointer">Manage Stock</button>
+          <button onclick="switchAdminTab('add-product')" class="px-3 py-1.5 bg-black text-white text-xs font-bold uppercase font-mono-code rounded-lg cursor-pointer">Add Drop +</button>
+          <button onclick="switchAdminTab('change-hero')" class="px-3 py-1.5 bg-neutral-200 hover:bg-neutral-300 text-black text-xs font-bold uppercase font-mono-code rounded-lg cursor-pointer">Change Hero 🖼️</button>
         </div>
       </div>
 
+      <!-- Tab 1: Add Drop with Dynamic Section Selector & Custom Creator -->
       <div id="admin-tab-add" class="space-y-4">
         <form id="admin-add-product-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="space-y-1">
             <label class="text-[10px] uppercase font-mono-code text-neutral-600">Drop Title</label>
             <input type="text" id="adm-name" required placeholder="e.g. Sukuna Cursed Drop" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2 text-xs text-black focus:outline-none" />
           </div>
+
           <div class="space-y-1">
             <label class="text-[10px] uppercase font-mono-code text-neutral-600">Selling Price (₹ INR)</label>
             <input type="number" id="adm-price" required placeholder="599" value="599" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2 text-xs text-black focus:outline-none font-mono-code" />
           </div>
+
+          <!-- Section Selector Dropdown -->
+          <div class="space-y-1 md:col-span-2">
+            <label class="text-[10px] uppercase font-mono-code text-neutral-600">Select Section / Category</label>
+            <select id="adm-category-select" onchange="handleCategorySelection()" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none font-mono-code">
+              <!-- Populated dynamically via script.js -->
+            </select>
+          </div>
+
+          <!-- Hidden Custom Section Input -->
+          <div id="adm-custom-category-box" class="space-y-1 md:col-span-2 hidden">
+            <label class="text-[10px] uppercase font-mono-code text-neutral-600">New Custom Section Name</label>
+            <input type="text" id="adm-custom-category-input" placeholder="e.g. limited-edition" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2 text-xs text-black focus:outline-none font-mono-code" />
+          </div>
+
           <div class="space-y-2 md:col-span-2">
             <label class="text-[10px] uppercase font-mono-code text-neutral-600 block">Product Photo (Upload from Gallery)</label>
             <div class="flex flex-col sm:flex-row items-center gap-4 p-4 bg-neutral-100 border border-black/10 rounded-xl">
-              <input type="file" id="adm-file-input" accept="image/*" class="block w-full text-xs text-neutral-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-black file:text-white hover:file:bg-neutral-800 cursor-pointer font-mono-code" />
+              <input type="file" id="adm-file-input" accept="image/*" class="block w-full text-xs text-neutral-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-black file:text-white cursor-pointer font-mono-code" />
               <div id="adm-preview-box" class="hidden w-16 h-16 bg-white rounded-xl border border-black/15 overflow-hidden flex items-center justify-center shrink-0">
                 <img id="adm-preview-img" src="" alt="Preview" class="w-full h-full object-contain" />
               </div>
             </div>
           </div>
+
           <div class="md:col-span-2 pt-2">
             <button type="submit" class="w-full py-3.5 bg-black text-white font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-xl cursor-pointer">
-              Publish Drop
+              Publish Drop Live
             </button>
           </div>
         </form>
       </div>
 
+      <!-- Tab 2: Change Hero Banner -->
       <div id="admin-tab-hero" class="space-y-4 hidden">
         <div class="p-4 bg-neutral-100 border border-black/10 rounded-2xl space-y-4">
           <div>
             <span class="text-[9px] uppercase tracking-[0.3em] text-neutral-500 font-mono-code">STOREFRONT CUSTOMIZATION</span>
             <h4 class="text-sm font-bold uppercase text-black mt-1">Update Front Hero Banner Photo</h4>
-            <p class="text-[11px] text-neutral-600">Select any aesthetic model photo from your gallery to set as the main website front banner.</p>
           </div>
           <div class="space-y-2">
-            <input type="file" id="adm-hero-file-input" accept="image/*" class="block w-full text-xs text-neutral-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-black file:text-white hover:file:bg-neutral-800 cursor-pointer font-mono-code" />
+            <input type="file" id="adm-hero-file-input" accept="image/*" class="block w-full text-xs text-neutral-600 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-black file:text-white cursor-pointer font-mono-code" />
           </div>
           <div id="adm-hero-preview-box" class="hidden space-y-2">
             <label class="text-[10px] uppercase font-mono-code text-neutral-600">Selected Photo Preview:</label>
@@ -557,10 +508,6 @@
             </button>
           </div>
         </div>
-      </div>
-
-      <div id="admin-tab-manage" class="space-y-4 hidden">
-        <div id="admin-product-list" class="space-y-3 max-h-[55vh] overflow-y-auto"></div>
       </div>
     </div>
   </div>
