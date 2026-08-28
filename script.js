@@ -1,15 +1,13 @@
 /* ==========================================================================
-   VEHRAAN STREETWEAR — PRODUCTION MASTER SCRIPT (CLEAN ENGINE)
-   - 17 Drops (veh-001 to veh-017) @ Flat ₹599 (AOT Dual View Merged)
-   - Mandatory Auth Before Bagging
-   - 10% Automated Discount above ₹1,000
-   - COD + Fit Confirmation WhatsApp Dispatch & Firestore Order Saving
-   - Real Google Authentication & Email-Based Admin Security
+   VEHRAAN STREETWEAR — PRODUCTION MASTER SCRIPT (DYNAMIC CMS)
    - Dynamic Section Creator & Real-time CMS Product Sync
+   - Live Product Price Editing & Stock Management (Delete/Update)
+   - Streamlined 4-5 Category Filter Pills
+   - Updated Fit Matrix (S-38, M-40, L-42) & No Exchange Policy
    ========================================================================== */
 
-// 1. MASTER 17 PRODUCTS CATALOG (FLAT ₹599)
-const products = [
+// 1. DEFAULT PRODUCTS CATALOG
+const defaultProducts = [
   {
     id: "veh-001",
     name: "Symbiote Noir Spider Drop",
@@ -18,7 +16,7 @@ const products = [
     image: "images/tee-1.jpg",
     fallbackImage: "images/tee-1.jpeg",
     sizes: ["S", "M", "L", "XL", "XXL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "spider", "marvel", "symbiote", "graphic", "tee"]
+    tags: ["all", "men", "women", "spider", "marvel", "graphic", "tee"]
   },
   {
     id: "veh-002",
@@ -28,7 +26,7 @@ const products = [
     image: "images/tee-2.jpg",
     fallbackImage: "images/tee-2.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "spider", "marvel", "miles", "spiderverse", "graphic", "tee"]
+    tags: ["all", "men", "women", "spider", "marvel", "spiderverse", "graphic", "tee"]
   },
   {
     id: "veh-003",
@@ -38,7 +36,7 @@ const products = [
     image: "images/tee-3.jpg",
     fallbackImage: "images/tee-3.jpeg",
     sizes: ["M", "L", "XL", "XXL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "toji", "fushiguro", "jjk", "jujutsu", "spear", "tee"]
+    tags: ["all", "men", "women", "anime", "toji", "jjk", "tee"]
   },
   {
     id: "veh-004",
@@ -48,7 +46,7 @@ const products = [
     image: "images/tee-4.jpg",
     fallbackImage: "images/tee-4.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "f1", "formula 1", "car", "racing", "speed", "motorsport", "tee"]
+    tags: ["all", "men", "women", "f1", "motorsport", "tee"]
   },
   {
     id: "veh-005",
@@ -58,7 +56,7 @@ const products = [
     image: "images/tee-5.jpg",
     fallbackImage: "images/tee-5.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "manga", "vagabond", "musashi", "katana", "samurai", "tee"]
+    tags: ["all", "men", "women", "anime", "vagabond", "samurai", "tee"]
   },
   {
     id: "veh-006",
@@ -68,7 +66,7 @@ const products = [
     image: "images/tee-11.jpg",
     fallbackImage: "images/tee-11.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "spider", "web", "gothic", "streetwear", "tee"]
+    tags: ["all", "men", "women", "spider", "streetwear", "tee"]
   },
   {
     id: "veh-007",
@@ -78,7 +76,7 @@ const products = [
     image: "images/tee-12.jpg",
     fallbackImage: "images/tee-12.jpeg",
     sizes: ["M", "L", "XL", "XXL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "solo leveling", "arise", "igris", "jinwoo", "tee"]
+    tags: ["all", "men", "women", "anime", "solo leveling", "tee"]
   },
   {
     id: "veh-008",
@@ -88,7 +86,7 @@ const products = [
     image: "images/tee-13.jpg",
     fallbackImage: "images/tee-13.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "spider", "web", "shatter", "streetwear", "tee"]
+    tags: ["all", "men", "women", "spider", "streetwear", "tee"]
   },
   {
     id: "veh-009",
@@ -98,7 +96,7 @@ const products = [
     image: "images/tee-14.jpg",
     fallbackImage: "images/tee-14.jpeg",
     sizes: ["M", "L", "XL", "XXL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "creative", "passion", "typography", "oversized", "tee"]
+    tags: ["all", "men", "women", "typography", "tee"]
   },
   {
     id: "veh-010",
@@ -108,7 +106,7 @@ const products = [
     image: "images/tee-6.jpg",
     fallbackImage: "images/tee-6.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "demon slayer", "zenitsu", "thunder", "katana", "tee"]
+    tags: ["all", "men", "women", "anime", "demon slayer", "tee"]
   },
   {
     id: "veh-011",
@@ -118,7 +116,7 @@ const products = [
     image: "images/tee-7.jpg",
     fallbackImage: "images/tee-7.jpeg",
     sizes: ["M", "L", "XL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "toji", "fushiguro", "jjk", "blade", "tee"]
+    tags: ["all", "men", "women", "anime", "toji", "tee"]
   },
   {
     id: "veh-012",
@@ -128,7 +126,7 @@ const products = [
     image: "images/tee-8.jpg",
     fallbackImage: "images/tee-8.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "toji", "smirk", "dagger", "jjk", "tee"]
+    tags: ["all", "men", "women", "anime", "toji", "tee"]
   },
   {
     id: "veh-013",
@@ -138,7 +136,7 @@ const products = [
     image: "images/tee-9.jpg",
     fallbackImage: "images/tee-9.jpeg",
     sizes: ["S", "M", "L", "XL", "XXL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "solo leveling", "jinwoo", "arise", "tee"]
+    tags: ["all", "men", "women", "anime", "solo leveling", "tee"]
   },
   {
     id: "veh-014",
@@ -148,7 +146,7 @@ const products = [
     image: "images/tee-10.jpg",
     fallbackImage: "images/tee-10.jpeg",
     sizes: ["M", "L", "XL", "XXL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "toji", "bloodline", "crimson", "jjk", "tee"]
+    tags: ["all", "men", "women", "anime", "toji", "tee"]
   },
   {
     id: "veh-015",
@@ -160,7 +158,7 @@ const products = [
     fallbackImage: "images/tee-15.jpeg",
     fallbackBackImage: "images/tee-16.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "blue", "anime", "aot", "attack on titan", "levi", "ackerman", "kanji", "tee"]
+    tags: ["all", "men", "women", "anime", "aot", "levi", "tee"]
   },
   {
     id: "veh-016",
@@ -170,7 +168,7 @@ const products = [
     image: "images/tee-17.jpg",
     fallbackImage: "images/tee-17.jpeg",
     sizes: ["S", "M", "L", "XL", "XXL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "marvel", "punisher", "skull", "distressed", "tee"]
+    tags: ["all", "men", "women", "marvel", "punisher", "tee"]
   },
   {
     id: "veh-017",
@@ -180,12 +178,12 @@ const products = [
     image: "images/tee-18.jpg",
     fallbackImage: "images/tee-18.jpeg",
     sizes: ["S", "M", "L", "XL"],
-    tags: ["all", "boys", "girls", "men", "women", "unisex", "anime", "maki", "zenin", "jjk", "sword", "tee"]
+    tags: ["all", "men", "women", "anime", "maki", "jjk", "tee"]
   }
 ];
 
 // State
-let catalogProducts = [...products];
+let catalogProducts = [...defaultProducts];
 let currentUser = null;
 let activeSelectedSizes = {};
 let activeFilterTag = "all";
@@ -241,7 +239,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const snapshot = await firebase.firestore().collection("products").get();
       if (!snapshot.empty) {
         const firestoreProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        catalogProducts = [...firestoreProducts, ...products];
+        catalogProducts = [...firestoreProducts, ...defaultProducts];
         initSizes();
       }
     } catch (err) {
@@ -290,20 +288,13 @@ function initHeroBanner() {
   }
 }
 
-// 4. DYNAMIC CATEGORY FILTER PILLS RENDERER
+// 4. STREAMLINED CATEGORY PILLS RENDERER (Clean 4-5 core filters)
 function renderCategoryFilters() {
   const container = document.getElementById("category-filters-container");
   if (!container) return;
 
-  const tagSet = new Set(["all", "boys", "girls", "men", "women", "unisex", "spider", "anime", "f1"]);
-  catalogProducts.forEach(p => {
-    if (p.tags && Array.isArray(p.tags)) {
-      p.tags.forEach(t => tagSet.add(t.toLowerCase().trim()));
-    }
-  });
-
-  const categories = Array.from(tagSet);
-  container.innerHTML = categories.map(cat => `
+  const coreTags = ["all", "men", "women", "anime", "spider"];
+  container.innerHTML = coreTags.map(cat => `
     <button type="button" onclick="filterByTag('${cat}')" class="category-pill ${activeFilterTag === cat ? 'active' : ''}">
       ${cat.charAt(0).toUpperCase() + cat.slice(1)}
     </button>
@@ -908,7 +899,7 @@ window.closePolicyModal = function() {
   document.getElementById("policy-modal")?.classList.add("hidden");
 };
 
-// 12. STUDIO CMS & SECURE ADMIN PANEL (Dynamic Section Creator)
+// 12. STUDIO CMS & SECURE ADMIN PANEL (Dynamic Section Creator & Stock Management)
 window.triggerAdminAccess = async function() {
   if (!currentUser || !firebase.auth().currentUser) {
     showToast("Please sign in with your admin account first.");
@@ -930,8 +921,11 @@ window.closeAdminModal = function() {
 window.switchAdminTab = function(tab) {
   document.getElementById("admin-tab-add")?.classList.toggle("hidden", tab !== "add-product");
   document.getElementById("admin-tab-hero")?.classList.toggle("hidden", tab !== "change-hero");
+  document.getElementById("admin-tab-manage")?.classList.toggle("hidden", tab !== "manage-products");
+
   if (tab === "add-product") loadCategoryDropdown();
   if (tab === "change-hero") setupHeroUploadListener();
+  if (tab === "manage-products") loadManageProducts();
 };
 
 function loadCategoryDropdown() {
@@ -1017,6 +1011,53 @@ function setupAdminForm() {
     closeAdminModal();
   });
 }
+
+function loadManageProducts() {
+  const container = document.getElementById("admin-product-list");
+  if (!container) return;
+  container.innerHTML = catalogProducts.map((p, idx) => `
+    <div class="flex items-center justify-between p-3 bg-neutral-100 border border-black/10 rounded-xl gap-2">
+      <img src="${p.image}" class="w-10 h-10 object-cover rounded border" />
+      <div class="flex-1 min-w-0">
+        <h4 class="text-xs font-semibold text-black truncate">${p.name}</h4>
+        <div class="flex items-center gap-1 mt-1">
+          <span class="text-[10px] text-neutral-600 font-mono-code">₹</span>
+          <input type="number" id="price-input-${idx}" value="${p.price}" class="w-20 bg-white border border-black/15 rounded px-2 py-0.5 text-xs font-mono-code" />
+          <button onclick="updateProductPrice('${p.id}', ${idx})" class="px-2 py-0.5 bg-black text-white text-[10px] rounded cursor-pointer">Save</button>
+        </div>
+      </div>
+      <button onclick="deleteProduct('${p.id}', ${idx})" class="px-3 py-1 bg-red-100 text-red-600 text-xs rounded border border-red-200 cursor-pointer">Delete</button>
+    </div>
+  `).join("");
+}
+
+window.updateProductPrice = async function(productId, index) {
+  const newPrice = Number(document.getElementById(`price-input-${index}`).value) || 599;
+  catalogProducts[index].price = newPrice;
+
+  try {
+    if (typeof firebase !== "undefined" && firebase.firestore) {
+      await firebase.firestore().collection("products").doc(productId).update({ price: newPrice });
+    }
+  } catch (err) { console.log("Price update local only"); }
+
+  renderCatalog();
+  showToast("Product price updated successfully!");
+};
+
+window.deleteProduct = async function(productId, index) {
+  if (confirm("Remove this drop from store?")) {
+    catalogProducts.splice(index, 1);
+    try {
+      if (typeof firebase !== "undefined" && firebase.firestore) {
+        await firebase.firestore().collection("products").doc(productId).delete();
+      }
+    } catch (err) { console.log("Delete local only"); }
+    renderCatalog();
+    loadManageProducts();
+    showToast("Product removed.");
+  }
+};
 
 function setupHeroUploadListener() {
   document.getElementById("adm-hero-file-input")?.addEventListener("change", e => {
