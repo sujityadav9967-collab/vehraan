@@ -3,8 +3,8 @@
    - 17 Drops (veh-001 to veh-017) @ Flat ₹599 (AOT Dual View Merged)
    - Mandatory Auth Before Bagging
    - 10% Automated Discount above ₹1,000
-   - COD + Fit Confirmation WhatsApp Dispatch
-   - Studio CMS Passcode (656565) & Live Hero Banner Upload
+   - COD + Fit Confirmation WhatsApp Dispatch & Firestore Order Saving
+   - Real Google Authentication & Email-Based Admin Security
    - Scroll Reveal Intersection Observer Integration
    ========================================================================== */
 
@@ -252,7 +252,7 @@ function initScrollAnimations() {
   const observerOptions = {
     root: null,
     rootMargin: '0px',
-    threshold: 0.5
+    threshold: 0.05
   };
 
   const observer = new IntersectionObserver((entries, observerInstance) => {
@@ -662,7 +662,6 @@ function setupCheckoutForm() {
     };
 
     try {
-      // Save to Firebase Firestore Database if initialized
       if (typeof firebase !== "undefined" && firebase.firestore) {
         await firebase.firestore().collection("orders").add(orderData);
         console.log("Order successfully saved to Firebase Firestore!");
@@ -697,7 +696,8 @@ function setupCheckoutForm() {
     window.open(`https://wa.me/917400246429?text=${waMessage}`, "_blank");
   });
 }
-// 8. REAL GOOGLE SIGN-IN & FIRESTORE PROFILE SAVING
+
+// 8. REAL GOOGLE SIGN-IN & SECURE ADMIN ACCESS (STEP 3 FIXED)
 window.openAuthModal = function() {
   document.getElementById("auth-modal")?.classList.remove("hidden");
 };
@@ -707,47 +707,32 @@ window.closeAuthModal = function() {
 
 window.handleGoogleSignIn = async function() {
   try {
-    if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0) {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      const res = await firebase.auth().signInWithPopup(provider);
-      currentUser = res.user;
+    const provider = new firebase.auth.GoogleAuthProvider();
+    const res = await firebase.auth().signInWithPopup(provider);
+    currentUser = res.user;
 
-      // User profile data payload to save in Firestore 'users' collection
-      const userProfile = {
-        uid: currentUser.uid,
-        displayName: currentUser.displayName || "MEMBER",
-        email: currentUser.email,
-        photoURL: currentUser.photoURL || "",
-        lastLogin: new Date().toISOString()
-      };
+    const userProfile = {
+      uid: currentUser.uid,
+      displayName: currentUser.displayName || "MEMBER",
+      email: currentUser.email,
+      photoURL: currentUser.photoURL || "",
+      lastLogin: new Date().toISOString()
+    };
 
-      if (firebase.firestore) {
-        await firebase.firestore().collection("users").doc(currentUser.uid).set(userProfile, { merge: true });
-        console.log("User profile synchronized with Firestore!");
-      }
+    await firebase.firestore().collection("users").doc(currentUser.uid).set(userProfile, { merge: true });
 
-      localStorage.setItem("vehraan_user", JSON.stringify({ 
-        displayName: currentUser.displayName, 
-        email: currentUser.email 
-      }));
-      
-      updateAuthUI(currentUser.displayName ? currentUser.displayName.split(" ")[0].toUpperCase() : "MEMBER");
-      closeAuthModal();
-      showToast("Google Verified & Signed in successfully!");
-    } else {
-      currentUser = { displayName: "MEMBER", email: "member@vehraan.in" };
-      localStorage.setItem("vehraan_user", JSON.stringify(currentUser));
-      updateAuthUI("MEMBER");
-      closeAuthModal();
-      showToast("Signed in as Verified Member!");
-    }
+    localStorage.setItem("vehraan_user", JSON.stringify({
+      displayName: currentUser.displayName,
+      email: currentUser.email,
+      uid: currentUser.uid
+    }));
+
+    updateAuthUI(currentUser.displayName ? currentUser.displayName.split(" ")[0].toUpperCase() : "MEMBER");
+    closeAuthModal();
+    showToast("Signed in successfully!");
   } catch (err) {
     console.error("Google Sign-In Error: ", err);
-    currentUser = { displayName: "MEMBER", email: "member@vehraan.in" };
-    localStorage.setItem("vehraan_user", JSON.stringify(currentUser));
-    updateAuthUI("MEMBER");
-    closeAuthModal();
-    showToast("Signed in as Verified Member!");
+    showToast("Sign-in failed. Please try again.");
   }
 };
 
@@ -782,6 +767,7 @@ window.handleSignOut = function() {
     showToast("Signed out successfully.");
   }
 };
+
 // 9. NAVIGATION & SEARCH
 window.filterByTag = function(tag) {
   activeFilterTag = tag.toLowerCase().trim();
@@ -945,17 +931,22 @@ window.closePolicyModal = function() {
   document.getElementById("policy-modal")?.classList.add("hidden");
 };
 
-// 11. STUDIO CMS (PIN: 656565) & HERO BANNER MANAGER
-window.triggerAdminAccess = function() {
-  const pin = prompt("ENTER STUDIO CMS MASTER PASSCODE:");
-  if (pin === "656565") {
-    const modal = document.getElementById("admin-modal");
-    if (modal) {
-      modal.classList.remove("hidden");
-      switchAdminTab("add-product");
-    }
-  } else if (pin !== null && pin !== "") {
-    alert("ACCESS DENIED: Invalid Passcode.");
+// 11. STUDIO CMS & SECURE ADMIN ACCESS (STEP 3B FIXED)
+window.triggerAdminAccess = async function() {
+  if (!currentUser || !firebase.auth().currentUser) {
+    showToast("Please sign in with your admin Google account first.");
+    openAuthModal();
+    return;
+  }
+  const email = firebase.auth().currentUser.email;
+  if (email !== "vehraan@gmail.com") {
+    alert("ACCESS DENIED: This account is not authorized as admin.");
+    return;
+  }
+  const modal = document.getElementById("admin-modal");
+  if (modal) {
+    modal.classList.remove("hidden");
+    switchAdminTab("add-product");
   }
 };
 
@@ -1116,11 +1107,12 @@ window.showToast = function(msg) {
     toast.classList.add("opacity-0", "translate-y-20");
   }, 2500);
 };
+
 function initScrollAnimations() {
   const observerOptions = {
     root: null,
     rootMargin: '0px',
-    threshold: 0.05 // Triggers instantly as the element enters screen view
+    threshold: 0.05
   };
 
   const observer = new IntersectionObserver((entries, observerInstance) => {
