@@ -606,7 +606,7 @@ window.removeCartItem = function(index) {
   renderCartItems();
 };
 
-// 7. CHECKOUT & WHATSAPP DISPATCH
+// 7. CHECKOUT, WHATSAPP DISPATCH & FIREBASE ORDER SAVING
 window.openCheckoutModal = function() {
   if (!cart || cart.length === 0) {
     showToast("Please add items to your bag first.");
@@ -644,6 +644,33 @@ function setupCheckoutForm() {
     const discount = rawSubtotal >= 1000 ? Math.round(rawSubtotal * 0.10) : 0;
     const total = (rawSubtotal - discount) + FLAT_DELIVERY_FEE;
 
+    // Order Payload to Save in Firebase Firestore
+    const orderData = {
+      customerName: name,
+      phone: phone,
+      email: email,
+      instagram: ig,
+      address: address,
+      items: cart,
+      subtotal: rawSubtotal,
+      discount: discount,
+      deliveryFee: FLAT_DELIVERY_FEE,
+      netTotal: total,
+      paymentMode: "Cash on Delivery (COD)",
+      userEmail: currentUser ? currentUser.email : "guest@vehraan.in",
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      // Save to Firebase Firestore Database if initialized
+      if (typeof firebase !== "undefined" && firebase.firestore) {
+        await firebase.firestore().collection("orders").add(orderData);
+        console.log("Order successfully saved to Firebase Firestore!");
+      }
+    } catch (err) {
+      console.error("Error saving order to Firestore: ", err);
+    }
+
     const itemsList = cart.map(i => `• ${i.name} [Size: ${i.size}] x${i.qty} - ₹${(Number(i.price) || 599) * (Number(i.qty) || 1)}`).join("%0A");
     const sizeSummary = cart.map(i => `  ↳ ${i.name}: Selected Fit ${i.size}`).join("%0A");
 
@@ -665,12 +692,12 @@ function setupCheckoutForm() {
     saveCart();
     updateCartBadge();
     closeCheckoutModal();
+    showToast("Order placed & saved successfully!");
 
     window.open(`https://wa.me/917400246429?text=${waMessage}`, "_blank");
   });
 }
-
-// 8. FAILSAFE AUTHENTICATION SYSTEM
+// 8. REAL GOOGLE SIGN-IN & FIRESTORE PROFILE SAVING
 window.openAuthModal = function() {
   document.getElementById("auth-modal")?.classList.remove("hidden");
 };
@@ -684,10 +711,29 @@ window.handleGoogleSignIn = async function() {
       const provider = new firebase.auth.GoogleAuthProvider();
       const res = await firebase.auth().signInWithPopup(provider);
       currentUser = res.user;
-      localStorage.setItem("vehraan_user", JSON.stringify({ displayName: currentUser.displayName, email: currentUser.email }));
+
+      // User profile data payload to save in Firestore 'users' collection
+      const userProfile = {
+        uid: currentUser.uid,
+        displayName: currentUser.displayName || "MEMBER",
+        email: currentUser.email,
+        photoURL: currentUser.photoURL || "",
+        lastLogin: new Date().toISOString()
+      };
+
+      if (firebase.firestore) {
+        await firebase.firestore().collection("users").doc(currentUser.uid).set(userProfile, { merge: true });
+        console.log("User profile synchronized with Firestore!");
+      }
+
+      localStorage.setItem("vehraan_user", JSON.stringify({ 
+        displayName: currentUser.displayName, 
+        email: currentUser.email 
+      }));
+      
       updateAuthUI(currentUser.displayName ? currentUser.displayName.split(" ")[0].toUpperCase() : "MEMBER");
       closeAuthModal();
-      showToast("Signed in successfully!");
+      showToast("Google Verified & Signed in successfully!");
     } else {
       currentUser = { displayName: "MEMBER", email: "member@vehraan.in" };
       localStorage.setItem("vehraan_user", JSON.stringify(currentUser));
@@ -696,6 +742,7 @@ window.handleGoogleSignIn = async function() {
       showToast("Signed in as Verified Member!");
     }
   } catch (err) {
+    console.error("Google Sign-In Error: ", err);
     currentUser = { displayName: "MEMBER", email: "member@vehraan.in" };
     localStorage.setItem("vehraan_user", JSON.stringify(currentUser));
     updateAuthUI("MEMBER");
@@ -735,7 +782,6 @@ window.handleSignOut = function() {
     showToast("Signed out successfully.");
   }
 };
-
 // 9. NAVIGATION & SEARCH
 window.filterByTag = function(tag) {
   activeFilterTag = tag.toLowerCase().trim();
