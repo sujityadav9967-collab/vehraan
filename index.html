@@ -193,7 +193,7 @@
       </div>
     </section>
 
-    <!-- Trust Row (Updated to No Exchange / No Refund) -->
+    <!-- Trust Row -->
     <section class="grid grid-cols-2 md:grid-cols-4 gap-3 py-2 reveal-on-scroll">
       <div class="p-4 bg-[#f9f9f9] border border-black/10 rounded-xl space-y-1 text-left">
         <span class="text-xs font-bold text-black uppercase font-mono-code block">10% Off ₹1,000+</span>
@@ -269,7 +269,7 @@
       </div>
     </div>
 
-    <!-- Admin Trigger Bar (Secured via Google Auth email vehraan@gmail.com) -->
+    <!-- Admin Trigger Bar -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 mt-8 border-t border-black/10 flex flex-col sm:flex-row items-center justify-between text-[10px] text-neutral-500 font-mono-code">
       <span onclick="triggerAdminAccess()" class="cursor-pointer hover:text-black transition select-none py-2 inline-block">
         © 2026 VEHRAAN. ALL RIGHTS RESERVED.
@@ -423,23 +423,25 @@
     </div>
   </div>
 
-  <!-- ================= ADMIN STUDIO CMS MODAL WITH DYNAMIC SECTION CREATOR ================= -->
+  <!-- ================= ADMIN STUDIO CMS MODAL ================= -->
   <div id="admin-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 hidden">
     <div class="bg-white border border-black/15 rounded-2xl max-w-4xl w-full p-6 relative space-y-6 max-h-[92vh] overflow-y-auto shadow-2xl">
       <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black text-sm cursor-pointer">✕</button>
-      <div class="flex items-center justify-between border-b border-black/10 pb-4">
+      
+      <!-- Modal Header & Tabs -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-black/10 pb-4 gap-3">
         <div>
           <span class="text-[9px] uppercase tracking-[0.3em] text-neutral-500 font-mono-code">STUDIO CMS</span>
           <h3 class="text-base font-bold uppercase tracking-wider text-black">Catalog & Hero Management</h3>
         </div>
-      <div class="flex items-center gap-2">
-  <button type="button" onclick="switchAdminTab('add-product')" id="admin-btn-add" class="px-4 py-2 bg-black text-white rounded-lg text-xs font-bold uppercase">Add Drop +</button>
-  <button type="button" onclick="switchAdminTab('change-hero')" id="admin-btn-hero" class="px-4 py-2 bg-neutral-200 text-black rounded-lg text-xs font-bold uppercase">Change Hero 🖼️</button>
-  <button type="button" onclick="switchAdminTab('manage-products')" id="admin-btn-manage" class="px-4 py-2 bg-neutral-200 text-black rounded-lg text-xs font-bold uppercase">Manage Catalog ⚙️</button>
-</div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button type="button" onclick="switchAdminTab('add-product')" id="admin-btn-add" class="px-3.5 py-2 bg-black text-white rounded-lg text-xs font-bold uppercase">Add Drop +</button>
+          <button type="button" onclick="switchAdminTab('change-hero')" id="admin-btn-hero" class="px-3.5 py-2 bg-neutral-200 text-black rounded-lg text-xs font-bold uppercase">Change Hero 🖼️</button>
+          <button type="button" onclick="switchAdminTab('manage-products')" id="admin-btn-manage" class="px-3.5 py-2 bg-neutral-200 text-black rounded-lg text-xs font-bold uppercase">Manage Catalog ⚙️</button>
+        </div>
       </div>
 
-      <!-- Tab 1: Add Drop with Dynamic Section Selector & Custom Creator -->
+      <!-- Tab 1: Add Drop -->
       <div id="admin-tab-add" class="space-y-4">
         <form id="admin-add-product-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="space-y-1">
@@ -452,22 +454,13 @@
             <input type="number" id="adm-price" required placeholder="599" value="599" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2 text-xs text-black focus:outline-none font-mono-code" />
           </div>
 
-          <!-- Section Selector Dropdown -->
           <div class="space-y-1 md:col-span-2">
             <label class="text-[10px] uppercase font-mono-code text-neutral-600">Select Section / Category</label>
             <select id="adm-category-select" onchange="handleCategorySelection()" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2.5 text-xs text-black focus:outline-none font-mono-code">
-              <!-- Populated dynamically via script.js -->
+              <!-- Populated dynamically -->
             </select>
           </div>
-<!-- Manage Products / Stock & Price Editor Tab -->
-<div id="admin-tab-manage" class="hidden space-y-4">
-  <h3 class="text-sm font-bold uppercase tracking-wider text-black">Live Catalog Inventory</h3>
-  <p class="text-xs text-neutral-500">Edit prices, toggle stock availability, or delete existing drops instantly.</p>
-  <div id="admin-product-list" class="space-y-3 max-h-[350px] overflow-y-auto pr-1">
-    <!-- Dynamic Products will load here automatically -->
-  </div>
-</div>
-          <!-- Hidden Custom Section Input -->
+
           <div id="adm-custom-category-box" class="space-y-1 md:col-span-2 hidden">
             <label class="text-[10px] uppercase font-mono-code text-neutral-600">New Custom Section Name</label>
             <input type="text" id="adm-custom-category-input" placeholder="e.g. limited-edition" class="w-full bg-neutral-100 border border-black/10 rounded-xl px-4 py-2 text-xs text-black focus:outline-none font-mono-code" />
@@ -517,6 +510,16 @@
           </div>
         </div>
       </div>
+
+      <!-- Tab 3: Manage Catalog Inventory (Stock, Price, Delete) -->
+      <div id="admin-tab-manage" class="hidden space-y-4">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-black">Live Catalog Inventory</h3>
+        <p class="text-xs text-neutral-500">Edit prices, toggle stock availability, or delete existing drops instantly.</p>
+        <div id="admin-product-list" class="space-y-3 max-h-[350px] overflow-y-auto pr-1">
+          <!-- Dynamic Products loaded via script.js -->
+        </div>
+      </div>
+
     </div>
   </div>
 
