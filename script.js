@@ -5,7 +5,7 @@
    - 10% Automated Discount above ₹1,000
    - COD + Fit Confirmation WhatsApp Dispatch & Firestore Order Saving
    - Real Google Authentication & Email-Based Admin Security
-   - Scroll Reveal Intersection Observer Integration
+   - Dynamic Section Creator & Real-time CMS Product Sync
    ========================================================================== */
 
 // 1. MASTER 17 PRODUCTS CATALOG (FLAT ₹599)
@@ -196,7 +196,7 @@ let currentUnit = "in";
 let uploadedProductBase64 = "";
 let uploadedHeroBase64 = "";
 
-// 2. CACHE INITIALIZATION
+// 2. CACHE INITIALIZATION & FIRESTORE PRODUCT SYNC
 try {
   const cachedUser = localStorage.getItem("vehraan_user");
   if (cachedUser) currentUser = JSON.parse(cachedUser);
@@ -234,10 +234,24 @@ function initSizes() {
 }
 initSizes();
 
-// 3. INITIALIZATION WITH SCROLL OBSERVER
-document.addEventListener("DOMContentLoaded", () => {
+// 3. INITIALIZATION WITH SCROLL OBSERVER & CLOUD SYNC
+document.addEventListener("DOMContentLoaded", async () => {
+  if (typeof firebase !== "undefined" && firebase.firestore) {
+    try {
+      const snapshot = await firebase.firestore().collection("products").get();
+      if (!snapshot.empty) {
+        const firestoreProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        catalogProducts = [...firestoreProducts, ...products];
+        initSizes();
+      }
+    } catch (err) {
+      console.log("Using local default catalog.");
+    }
+  }
+
   initHeroBanner();
   renderCatalog();
+  renderCategoryFilters();
   setupSearchListeners();
   setupCheckoutForm();
   setupAdminForm();
@@ -276,7 +290,27 @@ function initHeroBanner() {
   }
 }
 
-// 4. CATALOG RENDERER
+// 4. DYNAMIC CATEGORY FILTER PILLS RENDERER
+function renderCategoryFilters() {
+  const container = document.getElementById("category-filters-container");
+  if (!container) return;
+
+  const tagSet = new Set(["all", "boys", "girls", "men", "women", "unisex", "spider", "anime", "f1"]);
+  catalogProducts.forEach(p => {
+    if (p.tags && Array.isArray(p.tags)) {
+      p.tags.forEach(t => tagSet.add(t.toLowerCase().trim()));
+    }
+  });
+
+  const categories = Array.from(tagSet);
+  container.innerHTML = categories.map(cat => `
+    <button type="button" onclick="filterByTag('${cat}')" class="category-pill ${activeFilterTag === cat ? 'active' : ''}">
+      ${cat.charAt(0).toUpperCase() + cat.slice(1)}
+    </button>
+  `).join("");
+}
+
+// 5. CATALOG RENDERER
 function renderCatalog() {
   const grid = document.getElementById("catalog-grid");
   const countBadge = document.getElementById("catalog-count-badge");
@@ -393,7 +427,7 @@ window.changeSize = function(productId, size) {
   renderCatalog();
 };
 
-// 5. QUICK-VIEW PRODUCT MODAL
+// 6. QUICK-VIEW PRODUCT MODAL
 window.openProductDetailsModal = function(productId) {
   const product = catalogProducts.find(p => String(p.id) === String(productId));
   if (!product) return;
@@ -464,7 +498,7 @@ window.closeProductDetailsModal = function() {
   document.getElementById("product-details-modal")?.classList.add("hidden");
 };
 
-// 6. MANDATORY AUTH CHECK ON "ADD TO BAG"
+// 7. MANDATORY AUTH CHECK ON "ADD TO BAG"
 window.addToBag = function(productId) {
   if (!currentUser) {
     openAuthModal();
@@ -606,7 +640,7 @@ window.removeCartItem = function(index) {
   renderCartItems();
 };
 
-// 7. CHECKOUT, WHATSAPP DISPATCH & FIREBASE ORDER SAVING
+// 8. CHECKOUT, WHATSAPP DISPATCH & FIREBASE ORDER SAVING
 window.openCheckoutModal = function() {
   if (!cart || cart.length === 0) {
     showToast("Please add items to your bag first.");
@@ -644,7 +678,6 @@ function setupCheckoutForm() {
     const discount = rawSubtotal >= 1000 ? Math.round(rawSubtotal * 0.10) : 0;
     const total = (rawSubtotal - discount) + FLAT_DELIVERY_FEE;
 
-    // Order Payload to Save in Firebase Firestore
     const orderData = {
       customerName: name,
       phone: phone,
@@ -664,10 +697,9 @@ function setupCheckoutForm() {
     try {
       if (typeof firebase !== "undefined" && firebase.firestore) {
         await firebase.firestore().collection("orders").add(orderData);
-        console.log("Order successfully saved to Firebase Firestore!");
       }
     } catch (err) {
-      console.error("Error saving order to Firestore: ", err);
+      console.error("Error saving order:", err);
     }
 
     const itemsList = cart.map(i => `• ${i.name} [Size: ${i.size}] x${i.qty} - ₹${(Number(i.price) || 599) * (Number(i.qty) || 1)}`).join("%0A");
@@ -697,7 +729,7 @@ function setupCheckoutForm() {
   });
 }
 
-// 8. REAL GOOGLE SIGN-IN & SECURE ADMIN ACCESS (STEP 3 FIXED)
+// 9. GOOGLE AUTH & SECURE ADMIN CHECK
 window.openAuthModal = function() {
   document.getElementById("auth-modal")?.classList.remove("hidden");
 };
@@ -731,7 +763,7 @@ window.handleGoogleSignIn = async function() {
     closeAuthModal();
     showToast("Signed in successfully!");
   } catch (err) {
-    console.error("Google Sign-In Error: ", err);
+    console.error("Google Sign-In Error:", err);
     showToast("Sign-in failed. Please try again.");
   }
 };
@@ -753,39 +785,20 @@ window.handleSignOut = function() {
   if (confirm("Do you want to sign out?")) {
     currentUser = null;
     localStorage.removeItem("vehraan_user");
-    const container = document.getElementById("sidebar-auth-container");
-    if (container) {
-      container.innerHTML = `
-        <button onclick="openAuthModal(); toggleMobileNav(false);" class="w-full py-3 bg-black text-white text-xs font-bold uppercase tracking-[0.2em] rounded-xl transition hover:bg-neutral-800 cursor-pointer shadow-lg text-center block">
-          Sign In / Account
-        </button>
-      `;
-    }
     if (typeof firebase !== "undefined" && firebase.auth && firebase.apps.length > 0) {
       firebase.auth().signOut();
     }
-    showToast("Signed out successfully.");
+    location.reload();
   }
 };
 
-// 9. NAVIGATION & SEARCH
+// 10. NAVIGATION & SEARCH
 window.filterByTag = function(tag) {
   activeFilterTag = tag.toLowerCase().trim();
   isExpanded = true;
-  
-  const pills = document.querySelectorAll(".category-pill");
-  pills.forEach(p => {
-    const text = p.innerText.toLowerCase();
-    if (activeFilterTag === "all" && text.includes("all")) p.classList.add("active");
-    else if (text.includes(activeFilterTag)) p.classList.add("active");
-    else p.classList.remove("active");
-  });
-
+  renderCategoryFilters();
   renderCatalog();
-  
-  if (tag !== "all") {
-    document.getElementById("new-arrivals")?.scrollIntoView({ behavior: "smooth" });
-  }
+  document.getElementById("new-arrivals")?.scrollIntoView({ behavior: "smooth" });
 };
 
 window.toggleMobileNav = function(show) {
@@ -810,10 +823,7 @@ window.toggleSearchModal = function(show) {
   const input = document.getElementById("search-bar");
   if (show) {
     modal?.classList.remove("hidden");
-    if (input) {
-      input.value = "";
-      input.focus();
-    }
+    if (input) { input.value = ""; input.focus(); }
   } else {
     modal?.classList.add("hidden");
   }
@@ -822,44 +832,28 @@ window.toggleSearchModal = function(show) {
 function setupSearchListeners() {
   const searchInput = document.getElementById("search-bar");
   const dropdown = document.getElementById("search-dropdown");
-
   if (!searchInput || !dropdown) return;
 
   searchInput.addEventListener("input", e => {
     const query = e.target.value.toLowerCase().trim();
-    if (!query) {
-      dropdown.innerHTML = "";
-      return;
-    }
-
-    const matched = catalogProducts.filter(p => 
-      p.name.toLowerCase().includes(query) || 
-      (p.tags && p.tags.some(t => t.toLowerCase().includes(query)))
-    );
-
-    if (matched.length === 0) {
-      dropdown.innerHTML = `<p class="p-3 text-[11px] text-neutral-500 font-mono-code">No matching drops found.</p>`;
-    } else {
-      dropdown.innerHTML = matched.map(p => `
-        <div onclick="openProductDetailsModal('${p.id}'); toggleSearchModal(false);" class="flex items-center gap-3 p-2 hover:bg-neutral-100 rounded-lg cursor-pointer transition">
-          <img src="${p.image}" class="w-8 h-8 rounded object-cover border border-black/10" onerror="this.src='${p.fallbackImage}'" />
-          <div class="flex-1">
-            <h4 class="text-[11px] font-semibold text-black truncate">${p.name}</h4>
-            <span class="text-[10px] text-neutral-500 font-mono-code">₹${p.price}</span>
-          </div>
-        </div>
-      `).join("");
-    }
+    if (!query) { dropdown.innerHTML = ""; return; }
+    const matched = catalogProducts.filter(p => p.name.toLowerCase().includes(query));
+    dropdown.innerHTML = matched.map(p => `
+      <div onclick="openProductDetailsModal('${p.id}'); toggleSearchModal(false);" class="flex items-center gap-3 p-2 hover:bg-neutral-100 rounded-lg cursor-pointer transition">
+        <img src="${p.image}" class="w-8 h-8 rounded object-cover border border-black/10" />
+        <div class="flex-1"><h4 class="text-[11px] font-semibold text-black truncate">${p.name}</h4><span class="text-[10px] text-neutral-500 font-mono-code">₹${p.price}</span></div>
+      </div>
+    `).join("");
   });
 }
 
-// 10. FIT MATRIX & POLICIES
+// 11. FIT MATRIX & POLICIES (Updated: S-38, M-40, L-42 & No Exchange/No Refund)
 const sizeMatrix = [
-  { size: "S", chestIn: "40", lengthIn: "28", chestCm: "101.6", lengthCm: "71.1", drape: "Classic Boxy" },
-  { size: "M", chestIn: "42", lengthIn: "29", chestCm: "106.7", lengthCm: "73.7", drape: "Structured Drop" },
-  { size: "L", chestIn: "44", lengthIn: "30", chestCm: "111.8", lengthCm: "76.2", drape: "Heavyweight Boxy" },
-  { size: "XL", chestIn: "46", lengthIn: "31", chestCm: "116.8", lengthCm: "78.7", drape: "Oversized Street" },
-  { size: "XXL", chestIn: "48", lengthIn: "32", chestCm: "121.9", lengthCm: "81.3", drape: "Maximum Drape" }
+  { size: "S", chestIn: "38", lengthIn: "28", chestCm: "96.5", lengthCm: "71.1", drape: "Classic Boxy" },
+  { size: "M", chestIn: "40", lengthIn: "29", chestCm: "101.6", lengthCm: "73.7", drape: "Structured Drop" },
+  { size: "L", chestIn: "42", lengthIn: "30", chestCm: "106.7", lengthCm: "76.2", drape: "Heavyweight Boxy" },
+  { size: "XL", chestIn: "44", lengthIn: "31", chestCm: "111.8", lengthCm: "78.7", drape: "Oversized Street" },
+  { size: "XXL", chestIn: "46", lengthIn: "32", chestCm: "116.8", lengthCm: "81.3", drape: "Maximum Drape" }
 ];
 
 window.openSizeGuideModal = function() {
@@ -875,22 +869,16 @@ window.toggleSizeUnit = function(unit) {
   document.getElementById("unit-in-btn")?.classList.toggle("bg-black", unit === "in");
   document.getElementById("unit-in-btn")?.classList.toggle("text-white", unit === "in");
   document.getElementById("unit-in-btn")?.classList.toggle("text-neutral-600", unit !== "in");
-
   document.getElementById("unit-cm-btn")?.classList.toggle("bg-black", unit === "cm");
   document.getElementById("unit-cm-btn")?.classList.toggle("text-white", unit === "cm");
   document.getElementById("unit-cm-btn")?.classList.toggle("text-neutral-600", unit !== "cm");
-
   renderSizeTable();
 };
 
 function renderSizeTable() {
   const tbody = document.getElementById("size-table-body");
   const thChest = document.getElementById("th-chest");
-  const thLength = document.getElementById("th-length");
-
   if (thChest) thChest.innerText = currentUnit === "in" ? "Chest (IN)" : "Chest (CM)";
-  if (thLength) thLength.innerText = currentUnit === "in" ? "Length (IN)" : "Length (CM)";
-
   if (tbody) {
     tbody.innerHTML = sizeMatrix.map(row => `
       <tr class="hover:bg-black/5 transition">
@@ -904,50 +892,35 @@ function renderSizeTable() {
 }
 
 const policyContent = {
-  about: {
-    title: "About VEHRAAN Studio",
-    body: "<p>VEHRAAN is an independent contemporary Indian luxury streetwear imprint. Every garment is crafted using 220 GSM bio-washed heavyweight cotton, tailored with reinforced drop-shoulders and high-density zero-fade screen graphics.</p>"
-  },
-  shipping: {
-    title: "Shipping & Dispatch",
-    body: "<p>We provide Cash on Delivery (COD) services across all India pincodes. Orders are processed within 24–48 hours and shipped via express courier with flat doorstep charges.</p>"
-  },
-  returns: {
-    title: "Returns & Exchanges",
-    body: "<p>We offer a 7-day doorstep size replacement policy if the garment fit does not match your preference. Products must remain unworn with original tags attached.</p>"
-  }
+  about: { title: "About VEHRAAN Studio", body: "<p>VEHRAAN is an independent contemporary Indian luxury streetwear imprint crafted using 220 GSM bio-washed heavyweight cotton.</p>" },
+  shipping: { title: "Shipping & Dispatch", body: "<p>Express Cash on Delivery available across India pincodes within 24-48 hours.</p>" },
+  returns: { title: "Returns & Exchanges", body: "<p><strong>No Exchange, No Refund.</strong> All sales are final due to limited edition capsule drops.</p>" }
 };
 
 window.openPolicyModal = function(type) {
   const p = policyContent[type];
   if (!p) return;
-  const title = document.getElementById("policy-modal-title");
-  const body = document.getElementById("policy-modal-body");
-  if (title) title.innerText = p.title;
-  if (body) body.innerHTML = p.body;
+  document.getElementById("policy-modal-title").innerText = p.title;
+  document.getElementById("policy-modal-body").innerHTML = p.body;
   document.getElementById("policy-modal")?.classList.remove("hidden");
 };
 window.closePolicyModal = function() {
   document.getElementById("policy-modal")?.classList.add("hidden");
 };
 
-// 11. STUDIO CMS & SECURE ADMIN ACCESS (STEP 3B FIXED)
+// 12. STUDIO CMS & SECURE ADMIN PANEL (Dynamic Section Creator)
 window.triggerAdminAccess = async function() {
   if (!currentUser || !firebase.auth().currentUser) {
-    showToast("Please sign in with your admin Google account first.");
+    showToast("Please sign in with your admin account first.");
     openAuthModal();
     return;
   }
-  const email = firebase.auth().currentUser.email;
-  if (email !== "vehraan@gmail.com") {
-    alert("ACCESS DENIED: This account is not authorized as admin.");
+  if (firebase.auth().currentUser.email !== "vehraan@gmail.com") {
+    alert("ACCESS DENIED: Unauthorized account.");
     return;
   }
-  const modal = document.getElementById("admin-modal");
-  if (modal) {
-    modal.classList.remove("hidden");
-    switchAdminTab("add-product");
-  }
+  document.getElementById("admin-modal")?.classList.remove("hidden");
+  switchAdminTab("add-product");
 };
 
 window.closeAdminModal = function() {
@@ -955,144 +928,127 @@ window.closeAdminModal = function() {
 };
 
 window.switchAdminTab = function(tab) {
-  const tabAdd = document.getElementById("admin-tab-add");
-  const tabHero = document.getElementById("admin-tab-hero");
-  const tabManage = document.getElementById("admin-tab-manage");
-
-  if (tabAdd) tabAdd.classList.toggle("hidden", tab !== "add-product");
-  if (tabHero) tabHero.classList.toggle("hidden", tab !== "change-hero");
-  if (tabManage) tabManage.classList.toggle("hidden", tab !== "manage-products");
-
+  document.getElementById("admin-tab-add")?.classList.toggle("hidden", tab !== "add-product");
+  document.getElementById("admin-tab-hero")?.classList.toggle("hidden", tab !== "change-hero");
+  if (tab === "add-product") loadCategoryDropdown();
   if (tab === "change-hero") setupHeroUploadListener();
-  if (tab === "manage-products") loadManageProducts();
+};
+
+function loadCategoryDropdown() {
+  const select = document.getElementById("adm-category-select");
+  if (!select) return;
+  const tags = ["all", "men", "women", "anime", "spider", "f1"];
+  catalogProducts.forEach(p => p.tags?.forEach(t => tags.push(t)));
+  const uniqueTags = Array.from(new Set(tags)).filter(t => t !== "tee" && t !== "unisex");
+  select.innerHTML = uniqueTags.map(t => `<option value="${t}">${t.toUpperCase()}</option>`).join("") + `<option value="custom">➕ Create New Section...</option>`;
+}
+
+window.handleCategorySelection = function() {
+  const select = document.getElementById("adm-category-select");
+  const customBox = document.getElementById("adm-custom-category-box");
+  if (select.value === "custom") {
+    customBox?.classList.remove("hidden");
+  } else {
+    customBox?.classList.add("hidden");
+  }
 };
 
 function setupAdminForm() {
   const form = document.getElementById("admin-add-product-form");
   const fileInput = document.getElementById("adm-file-input");
-  const previewBox = document.getElementById("adm-preview-box");
-  const previewImg = document.getElementById("adm-preview-img");
 
-  if (fileInput) {
-    fileInput.addEventListener("change", e => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = ev => {
-          uploadedProductBase64 = ev.target.result;
-          if (previewImg) previewImg.src = uploadedProductBase64;
-          if (previewBox) previewBox.classList.remove("hidden");
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-  }
-
-  if (form) {
-    form.addEventListener("submit", e => {
-      e.preventDefault();
-      const name = document.getElementById("adm-name").value.trim();
-      const price = Number(document.getElementById("adm-price").value) || 599;
-
-      if (!uploadedProductBase64) {
-        alert("Please select a product photo from your gallery first!");
-        return;
-      }
-
-      const newDrop = {
-        id: `veh-${Date.now().toString().slice(-4)}`,
-        name,
-        price,
-        originalPrice: 999,
-        image: uploadedProductBase64,
-        fallbackImage: uploadedProductBase64,
-        sizes: ["S", "M", "L", "XL"],
-        tags: ["all", "unisex", "tee", "drop", "fresh"]
+  fileInput?.addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        uploadedProductBase64 = ev.target.result;
+        document.getElementById("adm-preview-img").src = uploadedProductBase64;
+        document.getElementById("adm-preview-box").classList.remove("hidden");
       };
+      reader.readAsDataURL(file);
+    }
+  });
 
-      catalogProducts.unshift(newDrop);
-      renderCatalog();
-      form.reset();
-      uploadedProductBase64 = "";
-      if (previewBox) previewBox.classList.add("hidden");
-      showToast(`Published "${name}" at ₹${price}!`);
-      closeAdminModal();
-    });
-  }
+  form?.addEventListener("submit", async e => {
+    e.preventDefault();
+    const name = document.getElementById("adm-name").value.trim();
+    const price = Number(document.getElementById("adm-price").value) || 599;
+    let selectedCategory = document.getElementById("adm-category-select").value;
+
+    if (selectedCategory === "custom") {
+      const customCatInput = document.getElementById("adm-custom-category-input").value.toLowerCase().trim();
+      if (!customCatInput) { alert("Please enter a valid custom section name!"); return; }
+      selectedCategory = customCatInput;
+    }
+
+    if (!uploadedProductBase64) {
+      alert("Please select a product photo from your gallery first!");
+      return;
+    }
+
+    const newDrop = {
+      id: `veh-${Date.now().toString().slice(-4)}`,
+      name,
+      price,
+      originalPrice: 999,
+      image: uploadedProductBase64,
+      fallbackImage: uploadedProductBase64,
+      sizes: ["S", "M", "L", "XL", "XXL"],
+      tags: ["all", selectedCategory]
+    };
+
+    try {
+      if (typeof firebase !== "undefined" && firebase.firestore) {
+        await firebase.firestore().collection("products").doc(newDrop.id).set(newDrop);
+      }
+    } catch (err) {
+      console.error("Firestore product upload error:", err);
+    }
+
+    catalogProducts.unshift(newDrop);
+    renderCategoryFilters();
+    renderCatalog();
+    form.reset();
+    uploadedProductBase64 = "";
+    document.getElementById("adm-preview-box")?.classList.add("hidden");
+    document.getElementById("adm-custom-category-box")?.classList.add("hidden");
+    showToast(`Published "${name}" to ${selectedCategory.toUpperCase()} successfully!`);
+    closeAdminModal();
+  });
 }
 
 function setupHeroUploadListener() {
-  const fileInput = document.getElementById("adm-hero-file-input");
-  const previewBox = document.getElementById("adm-hero-preview-box");
-  const previewImg = document.getElementById("adm-hero-preview-img");
-
-  if (fileInput && !fileInput.dataset.listenerAttached) {
-    fileInput.dataset.listenerAttached = "true";
-    fileInput.addEventListener("change", e => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = ev => {
-          uploadedHeroBase64 = ev.target.result;
-          if (previewImg) previewImg.src = uploadedHeroBase64;
-          if (previewBox) previewBox.classList.remove("hidden");
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-  }
+  document.getElementById("adm-hero-file-input")?.addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        uploadedHeroBase64 = ev.target.result;
+        document.getElementById("adm-hero-preview-img").src = uploadedHeroBase64;
+        document.getElementById("adm-hero-preview-box").classList.remove("hidden");
+      };
+      reader.readAsDataURL(file);
+    }
+  });
 }
 
 window.saveNewHeroBanner = function() {
-  if (!uploadedHeroBase64) {
-    alert("Please select a photo from your gallery first!");
-    return;
-  }
+  if (!uploadedHeroBase64) { alert("Please select a photo first!"); return; }
   localStorage.setItem("vehraan_hero_img", uploadedHeroBase64);
-  const heroImg = document.getElementById("hero-banner-img");
-  if (heroImg) heroImg.src = uploadedHeroBase64;
-
-  showToast("Live Hero Banner updated successfully!");
+  document.getElementById("hero-banner-img").src = uploadedHeroBase64;
+  showToast("Hero banner updated successfully!");
   closeAdminModal();
 };
 
 window.resetHeroBannerToDefault = function() {
-  if (confirm("Reset hero banner to default front.png?")) {
-    localStorage.removeItem("vehraan_hero_img");
-    const heroImg = document.getElementById("hero-banner-img");
-    if (heroImg) heroImg.src = "images/front.png";
-    showToast("Hero banner reset to default.");
-    closeAdminModal();
-  }
+  localStorage.removeItem("vehraan_hero_img");
+  document.getElementById("hero-banner-img").src = "images/front.png";
+  showToast("Hero banner reset.");
+  closeAdminModal();
 };
 
-function loadManageProducts() {
-  const container = document.getElementById("admin-product-list");
-  if (!container) return;
-  container.innerHTML = catalogProducts.map((p, idx) => `
-    <div class="flex items-center justify-between p-3 bg-neutral-100 border border-black/10 rounded-xl">
-      <div class="flex items-center gap-3">
-        <img src="${p.image}" class="w-10 h-10 object-cover rounded border border-black/10" onerror="this.src='images/tee-1.jpg'" />
-        <div>
-          <h4 class="text-xs font-semibold text-black">${p.name}</h4>
-          <span class="text-[10px] text-neutral-600 font-mono-code">₹${p.price}</span>
-        </div>
-      </div>
-      <button onclick="deleteProduct(${idx})" class="px-3 py-1 bg-black/10 hover:bg-black/20 text-black text-xs rounded border border-black/15 cursor-pointer">Delete</button>
-    </div>
-  `).join("");
-}
-
-window.deleteProduct = function(index) {
-  if (confirm(`Remove "${catalogProducts[index].name}" from store?`)) {
-    catalogProducts.splice(index, 1);
-    renderCatalog();
-    loadManageProducts();
-    showToast("Product removed.");
-  }
-};
-
-// 12. TOAST HELPER
+// 13. TOAST HELPER
 window.showToast = function(msg) {
   const toast = document.getElementById("toast");
   const toastMsg = document.getElementById("toast-msg");
@@ -1107,23 +1063,3 @@ window.showToast = function(msg) {
     toast.classList.add("opacity-0", "translate-y-20");
   }, 2500);
 };
-
-function initScrollAnimations() {
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.05
-  };
-
-  const observer = new IntersectionObserver((entries, observerInstance) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("active");
-      }
-    });
-  }, observerOptions);
-
-  document.querySelectorAll(".reveal-on-scroll").forEach(el => {
-    observer.observe(el);
-  });
-}
