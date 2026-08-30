@@ -3,8 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VEHRAAN | Anime & Graphic Streetwear</title>
 
+  <!-- Favicon / Tab Logo -->
+  <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css" />
+  ...
+</head>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="style.css" />
@@ -127,6 +138,10 @@
           <span class="text-[9px] text-neutral-500 font-mono-code">Speed</span>
         </button>
         <div class="h-[1px] bg-black/5 my-2"></div>
+        <button onclick="openMyOrdersModal(); toggleMobileNav(false);" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-neutral-100 transition flex items-center justify-between cursor-pointer">
+          <span>My Orders & History</span>
+          <span class="text-[9px] text-neutral-500 font-mono-code">Track</span>
+        </button>
         <button onclick="openSizeGuideModal(); toggleMobileNav(false);" class="w-full text-left py-2.5 px-3 rounded-lg hover:bg-neutral-100 transition cursor-pointer">
           <span>Fit Matrix Guide</span>
         </button>
@@ -308,6 +323,20 @@
             </button>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Orders Modal -->
+  <div id="my-orders-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white border border-black/15 rounded-2xl max-w-lg w-full p-6 relative space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <button onclick="closeMyOrdersModal()" class="absolute top-4 right-4 text-neutral-500 hover:text-black text-sm cursor-pointer">✕</button>
+      <div>
+        <span class="text-[9px] uppercase tracking-[0.3em] text-neutral-500 font-mono-code">PURCHASE RECORD</span>
+        <h3 class="text-sm font-bold uppercase tracking-wider text-black mt-0.5">Your Ordered Drops</h3>
+      </div>
+      <div id="my-orders-container" class="space-y-3 max-h-[60vh] overflow-y-auto">
+        <!-- Dynamically populated -->
       </div>
     </div>
   </div>
