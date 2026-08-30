@@ -1,10 +1,9 @@
 /* ==========================================================================
-    VEHRAAN STREETWEAR — PRODUCTION MASTER SCRIPT (DYNAMIC CMS)
-    - Dynamic Section Creator & Real-time CMS Product Sync
-    - Live Product Price Editing, Stock Management (In/Out of Stock) & Delete
-    - Streamlined 4-5 Category Filter Pills
-    - Updated Fit Matrix (S-38, M-40, L-42) & No Exchange Policy
-    ========================================================================== */
+   VEHRAAN STREETWEAR — PRODUCTION MASTER SCRIPT (DYNAMIC CMS)
+   - Real-time Firestore Sync & Merge-based Updates
+   - Clean Product Cards (Sizes moved to Quick-View Modal / Bag)
+   - 7-Day Expected Delivery Date Calculator & My Orders History
+   ========================================================================== */
 
 // 1. DEFAULT PRODUCTS CATALOG
 let defaultProducts = [
@@ -211,7 +210,7 @@ let currentUnit = "in";
 let uploadedProductBase64 = "";
 let uploadedHeroBase64 = "";
 
-// 2. CACHE INITIALIZATION & FIRESTORE PRODUCT SYNC
+// 2. CACHE INITIALIZATION
 try {
   const cachedUser = localStorage.getItem("vehraan_user");
   if (cachedUser) currentUser = JSON.parse(cachedUser);
@@ -249,19 +248,52 @@ function initSizes() {
 }
 initSizes();
 
-// 3. INITIALIZATION WITH SCROLL OBSERVER & CLOUD SYNC
-document.addEventListener("DOMContentLoaded", async () => {
+// 3. REAL-TIME FIRESTORE LISTENER FOR PRODUCTS & HERO
+document.addEventListener("DOMContentLoaded", () => {
+  try {
+    const cachedUser = localStorage.getItem("vehraan_user");
+    if (cachedUser) currentUser = JSON.parse(cachedUser);
+  } catch (e) {
+    currentUser = null;
+  }
+
   if (typeof firebase !== "undefined" && firebase.firestore) {
-    try {
-      const snapshot = await firebase.firestore().collection("products").get();
-      if (!snapshot.empty) {
-        const firestoreProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        catalogProducts = [...firestoreProducts, ...defaultProducts];
-        initSizes();
+    firebase.firestore().collection("products").onSnapshot(snapshot => {
+      const firestoreMap = {};
+      snapshot.docs.forEach(doc => {
+        firestoreMap[doc.id] = { id: doc.id, ...doc.data() };
+      });
+
+      catalogProducts = defaultProducts.map(def => {
+        if (firestoreMap[def.id]) {
+          const merged = { ...def, ...firestoreMap[def.id] };
+          delete firestoreMap[def.id];
+          return merged;
+        }
+        return def;
+      });
+
+      Object.values(firestoreMap).forEach(customProd => {
+        catalogProducts.unshift(customProd);
+      });
+
+      catalogProducts = catalogProducts.filter(p => !p.hidden);
+
+      initSizes();
+      renderCatalog();
+      if (document.getElementById("admin-tab-manage") && !document.getElementById("admin-tab-manage").classList.contains("hidden")) {
+        loadManageProducts();
       }
-    } catch (err) {
-      console.log("Using local default catalog.");
-    }
+    });
+
+    firebase.firestore().collection("settings").doc("heroBanner").onSnapshot(doc => {
+      if (doc.exists && doc.data().imageUrl) {
+        const globalHeroUrl = doc.data().imageUrl;
+        localStorage.setItem("vehraan_hero_img", globalHeroUrl);
+        const heroImg = document.getElementById("hero-banner-img");
+        if (heroImg) heroImg.src = globalHeroUrl;
+      }
+    });
   }
 
   initHeroBanner();
@@ -272,18 +304,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   setupAdminForm();
   initScrollAnimations();
   updateCartBadge();
+  
   if (currentUser) {
     updateAuthUI(currentUser.displayName ? currentUser.displayName.split(" ")[0].toUpperCase() : "MEMBER");
   }
 });
 
 function initScrollAnimations() {
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.05
-  };
-
+  const observerOptions = { root: null, rootMargin: '0px', threshold: 0.05 };
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -292,9 +320,7 @@ function initScrollAnimations() {
     });
   }, observerOptions);
 
-  document.querySelectorAll(".reveal-on-scroll").forEach(el => {
-    observer.observe(el);
-  });
+  document.querySelectorAll(".reveal-on-scroll").forEach(el => observer.observe(el));
 }
 
 function initHeroBanner() {
@@ -364,18 +390,7 @@ function renderCatalog() {
 }
 
 function createCardHTML(product) {
-  const selectedSize = activeSelectedSizes[product.id] || (product.sizes && product.sizes[0]) || "M";
   const isAvailable = product.inStock !== false;
-
-  const sizePills = (product.sizes || ["S", "M", "L", "XL"]).map(sz => `
-    <button 
-      type="button" 
-      onclick="event.stopPropagation(); changeSize('${product.id}', '${sz}')" 
-      class="size-pill ${sz === selectedSize ? 'active' : ''}"
-    >
-      ${sz}
-    </button>
-  `).join("");
 
   const mediaHTML = product.backImage ? `
     <div class="product-media grid grid-cols-2 gap-1 p-2 bg-neutral-100">
@@ -397,7 +412,7 @@ function createCardHTML(product) {
   const actionButtonHTML = isAvailable ? `
     <button 
       type="button" 
-      onclick="event.stopPropagation(); addToBag('${product.id}')" 
+      onclick="event.stopPropagation(); openProductDetailsModal('${product.id}')" 
       class="w-full py-2.5 bg-black hover:bg-neutral-800 text-white rounded-lg text-[10px] font-bold uppercase tracking-[0.15em] transition duration-200 cursor-pointer shadow-sm"
     >
       Add to Bag
@@ -429,9 +444,6 @@ function createCardHTML(product) {
         </div>
 
         <div>
-          <div class="flex gap-1 mb-2.5 overflow-x-auto pb-1">
-            ${sizePills}
-          </div>
           ${actionButtonHTML}
         </div>
       </div>
@@ -439,15 +451,7 @@ function createCardHTML(product) {
   `;
 }
 
-window.expandFullCatalog = function() {
-  isExpanded = true;
-  renderCatalog();
-};
-
-window.changeSize = function(productId, size) {
-  activeSelectedSizes[productId] = size;
-  renderCatalog();
-};
+window.expandFullCatalog = function() { isExpanded = true; renderCatalog(); };
 
 // 6. QUICK-VIEW PRODUCT MODAL
 window.openProductDetailsModal = function(productId) {
@@ -501,8 +505,8 @@ window.openProductDetailsModal = function(productId) {
     addBtn.innerText = isAvailable ? "Add to Bag" : "Out of Stock";
     addBtn.disabled = !isAvailable;
     addBtn.className = isAvailable 
-      ? "w-full py-3 bg-black hover:bg-neutral-800 text-white rounded-xl text-xs font-bold uppercase tracking-widest cursor-pointer transition shadow-sm"
-      : "w-full py-3 bg-neutral-200 text-neutral-500 rounded-xl text-xs font-bold uppercase tracking-widest cursor-not-allowed";
+      ? "w-full py-3.5 bg-black hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-[0.15em] rounded-xl transition shadow-xl cursor-pointer"
+      : "w-full py-3.5 bg-neutral-200 text-neutral-500 rounded-xl text-xs font-bold uppercase tracking-[0.15em] cursor-not-allowed";
 
     addBtn.onclick = () => {
       if (!isAvailable) return;
@@ -521,7 +525,6 @@ window.handleModalSizeSelect = function(productId, size, btn) {
     container.querySelectorAll(".size-pill").forEach(b => b.classList.remove("active"));
   }
   btn.classList.add("active");
-  renderCatalog();
 };
 
 window.closeProductDetailsModal = function() {
@@ -673,9 +676,67 @@ window.removeCartItem = function(index) {
   renderCartItems();
 };
 
-// 8. CHECKOUT, WHATSAPP DISPATCH & MANDATORY AUTH CHECK
+// 8. EXPECTED DELIVERY DATE CALCULATOR (7 Days Forward)
+function getExpectedDeliveryDate() {
+  const deliveryDate = new Date();
+  deliveryDate.setDate(deliveryDate.getDate() + 7);
+  const options = { day: 'numeric', month: 'long', year: 'numeric' };
+  return deliveryDate.toLocaleDateString('en-IN', options);
+}
+
+// My Orders Modal Logic
+window.openMyOrdersModal = function() {
+  if (!currentUser) {
+    openAuthModal();
+    showToast("Please sign in to view your orders.");
+    return;
+  }
+  renderUserOrders();
+  document.getElementById("my-orders-modal")?.classList.remove("hidden");
+};
+
+window.closeMyOrdersModal = function() {
+  document.getElementById("my-orders-modal")?.classList.add("hidden");
+};
+
+function renderUserOrders() {
+  const container = document.getElementById("my-orders-container");
+  if (!container) return;
+
+  let savedOrders = [];
+  try {
+    savedOrders = JSON.parse(localStorage.getItem("vehraan_user_orders")) || [];
+  } catch (e) {
+    savedOrders = [];
+  }
+
+  if (savedOrders.length === 0) {
+    container.innerHTML = `<p class="py-12 text-center text-xs text-neutral-500 font-mono-code">No active orders found.</p>`;
+    return;
+  }
+
+  container.innerHTML = savedOrders.map(order => {
+    const itemsHTML = order.items.map(i => `• ${i.name} [Size: ${i.size}] x${i.qty} - ₹${i.price * i.qty}`).join("<br>");
+    return `
+      <div class="p-4 bg-neutral-100 border border-black/10 rounded-xl space-y-2 text-xs font-mono-code">
+        <div class="flex justify-between font-bold text-black border-b border-black/10 pb-1">
+          <span>Order ID: #${order.orderId || 'VEH-001'}</span>
+          <span class="text-green-700">Confirmed (COD)</span>
+        </div>
+        <div>
+          <strong class="text-black uppercase text-[10px]">Items Ordered:</strong>
+          <div class="text-neutral-700 text-[11px] mt-0.5">${itemsHTML}</div>
+        </div>
+        <div class="pt-1 text-[11px] text-neutral-600">
+          <strong>Expected Delivery:</strong> <span class="text-black font-bold">${order.expectedDelivery}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+// 9. CHECKOUT, WHATSAPP DISPATCH & MANDATORY AUTH CHECK
 window.openCheckoutModal = function() {
-  // MANDATORY AUTH CHECK: Stop checkout if user is not logged in
   if (!currentUser) {
     openAuthModal();
     showToast("Please sign in with Google to proceed to checkout!");
@@ -714,12 +775,14 @@ function setupCheckoutForm() {
     const email = document.getElementById("order-email").value.trim();
     const ig = document.getElementById("order-instagram")?.value.trim() || "N/A";
     const address = document.getElementById("order-address").value.trim();
+    const expectedDate = getExpectedDeliveryDate();
 
     const rawSubtotal = cart.reduce((sum, item) => sum + ((Number(item.price) || 599) * (Number(item.qty) || 1)), 0);
     const discount = rawSubtotal >= 1000 ? Math.round(rawSubtotal * 0.10) : 0;
     const total = (rawSubtotal - discount) + FLAT_DELIVERY_FEE;
 
     const orderData = {
+      orderId: `VEH-${Math.floor(1000 + Math.random() * 9000)}`,
       customerName: name,
       phone: phone,
       email: email,
@@ -731,16 +794,26 @@ function setupCheckoutForm() {
       deliveryFee: FLAT_DELIVERY_FEE,
       netTotal: total,
       paymentMode: "Cash on Delivery (COD)",
+      expectedDelivery: expectedDate,
       userEmail: currentUser ? currentUser.email : "guest@vehraan.in",
       createdAt: new Date().toISOString()
     };
+
+    // Save order locally for "My Orders" customer view
+    try {
+      let localOrders = JSON.parse(localStorage.getItem("vehraan_user_orders")) || [];
+      localOrders.unshift(orderData);
+      localStorage.setItem("vehraan_user_orders", JSON.stringify(localOrders));
+    } catch (err) {
+      console.error("Local order save error", err);
+    }
 
     try {
       if (typeof firebase !== "undefined" && firebase.firestore) {
         await firebase.firestore().collection("orders").add(orderData);
       }
     } catch (err) {
-      console.error("Error saving order:", err);
+      console.error("Error saving order to Firestore:", err);
     }
 
     const itemsList = cart.map(i => `• ${i.name} [Size: ${i.size}] x${i.qty} - ₹${(Number(i.price) || 599) * (Number(i.qty) || 1)}`).join("%0A");
@@ -752,6 +825,7 @@ function setupCheckoutForm() {
       `*Email:* ${email}%0A` +
       `*Instagram:* ${ig}%0A` +
       `*Delivery Address:* ${address}%0A%0A` +
+      `*Expected Delivery:* ${expectedDate}%0A%0A` +
       `*Ordered Drops:*%0A${itemsList}%0A%0A` +
       `*Fit Matrix Confirmation:*%0A${sizeSummary}%0A%0A` +
       `*Items Subtotal:* ₹${rawSubtotal}%0A` +
@@ -764,13 +838,13 @@ function setupCheckoutForm() {
     saveCart();
     updateCartBadge();
     closeCheckoutModal();
-    showToast("Order placed & saved successfully!");
+    showToast(`Order placed! Expected delivery by ${expectedDate}`);
 
     window.open(`https://wa.me/917400246429?text=${waMessage}`, "_blank");
   });
 }
 
-// 9. GOOGLE AUTH & SECURE ADMIN CHECK
+// 10. GOOGLE AUTH & SECURE ADMIN CHECK
 window.openAuthModal = function() {
   document.getElementById("auth-modal")?.classList.remove("hidden");
 };
@@ -833,7 +907,7 @@ window.handleSignOut = function() {
   }
 };
 
-// 10. NAVIGATION & SEARCH
+// 11. NAVIGATION & SEARCH
 window.filterByTag = function(tag) {
   activeFilterTag = tag.toLowerCase().trim();
   isExpanded = true;
@@ -888,7 +962,7 @@ function setupSearchListeners() {
   });
 }
 
-// 11. FIT MATRIX & POLICIES
+// 12. FIT MATRIX & POLICIES
 const sizeMatrix = [
   { size: "S", chestIn: "38", lengthIn: "28", chestCm: "96.5", lengthCm: "71.1", drape: "Classic Boxy" },
   { size: "M", chestIn: "40", lengthIn: "29", chestCm: "101.6", lengthCm: "73.7", drape: "Structured Drop" },
@@ -949,7 +1023,7 @@ window.closePolicyModal = function() {
   document.getElementById("policy-modal")?.classList.add("hidden");
 };
 
-// 12. STUDIO CMS & ADMIN PANEL (Pricing, Stock Status & Deletions)
+// 13. STUDIO CMS & ADMIN PANEL
 window.triggerAdminAccess = async function() {
   if (!currentUser || !firebase.auth().currentUser) {
     showToast("Please sign in with your admin account first.");
@@ -1045,20 +1119,17 @@ function setupAdminForm() {
 
     try {
       if (typeof firebase !== "undefined" && firebase.firestore) {
-        await firebase.firestore().collection("products").doc(newDrop.id).set(newDrop);
+        await firebase.firestore().collection("products").doc(newDrop.id).set(newDrop, { merge: true });
       }
     } catch (err) {
       console.error("Firestore product upload error:", err);
     }
 
-    catalogProducts.unshift(newDrop);
-    renderCategoryFilters();
-    renderCatalog();
     form.reset();
     uploadedProductBase64 = "";
     document.getElementById("adm-preview-box")?.classList.add("hidden");
     document.getElementById("adm-custom-category-box")?.classList.add("hidden");
-    showToast(`Published "${name}" to ${selectedCategory.toUpperCase()} successfully!`);
+    showToast(`Published "${name}" successfully!`);
     closeAdminModal();
   });
 }
@@ -1096,36 +1167,28 @@ window.updateProductDetails = async function(productId, index) {
   const newPrice = Number(document.getElementById(`price-input-${index}`).value) || 599;
   const stockValue = document.getElementById(`stock-select-${index}`).value === "true";
 
-  catalogProducts[index].price = newPrice;
-  catalogProducts[index].inStock = stockValue;
-
   try {
     if (typeof firebase !== "undefined" && firebase.firestore) {
-      await firebase.firestore().collection("products").doc(productId).update({ 
+      await firebase.firestore().collection("products").doc(productId).set({ 
         price: newPrice,
         inStock: stockValue 
-      });
+      }, { merge: true });
     }
   } catch (err) { 
-    console.log("Cloud update failed, updated locally."); 
+    console.log("Cloud update failed"); 
   }
 
-  renderCatalog();
-  loadManageProducts();
-  showToast("Product updated successfully!");
+  showToast("Product updated globally!");
 };
 
 window.deleteProduct = async function(productId, index) {
   if (confirm("Remove this drop from store?")) {
-    catalogProducts.splice(index, 1);
     try {
       if (typeof firebase !== "undefined" && firebase.firestore) {
-        await firebase.firestore().collection("products").doc(productId).delete();
+        await firebase.firestore().collection("products").doc(productId).set({ hidden: true }, { merge: true });
       }
-    } catch (err) { console.log("Delete local only"); }
-    renderCatalog();
-    loadManageProducts();
-    showToast("Product removed.");
+    } catch (err) { console.log("Delete failed"); }
+    showToast("Product removed globally.");
   }
 };
 
@@ -1144,22 +1207,36 @@ function setupHeroUploadListener() {
   });
 }
 
-window.saveNewHeroBanner = function() {
+window.saveNewHeroBanner = async function() {
   if (!uploadedHeroBase64) { alert("Please select a photo first!"); return; }
+  
   localStorage.setItem("vehraan_hero_img", uploadedHeroBase64);
   document.getElementById("hero-banner-img").src = uploadedHeroBase64;
-  showToast("Hero banner updated successfully!");
+
+  try {
+    if (typeof firebase !== "undefined" && firebase.firestore) {
+      await firebase.firestore().collection("settings").doc("heroBanner").set({ imageUrl: uploadedHeroBase64 }, { merge: true });
+    }
+  } catch (err) { console.log("Hero sync error"); }
+
+  showToast("Global Hero Banner updated successfully!");
   closeAdminModal();
 };
 
-window.resetHeroBannerToDefault = function() {
+window.resetHeroBannerToDefault = async function() {
   localStorage.removeItem("vehraan_hero_img");
   document.getElementById("hero-banner-img").src = "images/front.png";
-  showToast("Hero banner reset.");
+
+  try {
+    if (typeof firebase !== "undefined" && firebase.firestore) {
+      await firebase.firestore().collection("settings").doc("heroBanner").set({ imageUrl: "images/front.png" }, { merge: true });
+    }
+  } catch (err) { console.log("Hero reset error"); }
+
+  showToast("Hero banner reset globally.");
   closeAdminModal();
 };
 
-// 13. TOAST HELPER
 window.showToast = function(msg) {
   const toast = document.getElementById("toast");
   const toastMsg = document.getElementById("toast-msg");
