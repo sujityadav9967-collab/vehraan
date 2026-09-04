@@ -3,24 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>VEHRAAN | Anime & Graphic Streetwear</title>
 
-  <!-- Favicon / Tab Logo -->
+  <!-- Favicon -->
   <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
 
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="style.css" />
 
-</head>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- Firebase Compat SDKs -->
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -34,6 +29,7 @@
       messagingSenderId: "1072734814223",
       appId: "1:1072734814223:web:313d2701978c5c89b5e37a"
     };
+
     try {
       firebase.initializeApp(firebaseConfig);
     } catch (err) {
@@ -41,6 +37,8 @@
     }
   </script>
 </head>
+
+<body class="bg-white text-black min-h-screen flex flex-col justify-between selection:bg-black selection:text-white">
 <body class="bg-white text-black min-h-screen flex flex-col justify-between selection:bg-black selection:text-white">
 
   <!-- ================= 1. ANNOUNCEMENT MARQUEE TICKER ================= -->
